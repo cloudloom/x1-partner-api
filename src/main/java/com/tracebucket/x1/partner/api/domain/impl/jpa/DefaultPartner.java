@@ -1,0 +1,135 @@
+package com.tracebucket.x1.partner.api.domain.impl.jpa;
+
+import com.tracebucket.tron.ddd.annotation.DomainMethod;
+import com.tracebucket.tron.ddd.domain.BaseAggregateRoot;
+import com.tracebucket.x1.dictionary.api.domain.Address;
+import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
+import com.tracebucket.x1.partner.api.domain.Partner;
+
+import javax.persistence.*;
+import javax.servlet.http.Part;
+import java.util.HashSet;
+import java.util.Set;
+
+
+/**
+ * Created by sadath on 05-Aug-14.
+ */
+@Entity
+@Table(name = "PARTNER")
+public class DefaultPartner extends BaseAggregateRoot implements Partner{
+    @Column(name = "TITLE", nullable = false)
+    @Basic(fetch = FetchType.EAGER)
+    protected String title;
+
+    @Column(name = "IMAGE")
+    @Basic(fetch = FetchType.EAGER)
+    protected String image;
+
+    @Column(name = "WEBSITE")
+    @Basic(fetch = FetchType.EAGER)
+    protected String website;
+
+    @Column(name = "PARTNER_CATEGORY", nullable = false, columnDefinition = "ENUM('INDIVIDUAL', 'GROUP', 'ORGANIZATION') default 'ORGANIZATION'")
+    @Enumerated(EnumType.STRING)
+    @Basic(fetch = FetchType.EAGER)
+    protected PartnerCategory partnerCategory;
+
+    @Embedded
+    private DefaultOwner owner;
+
+
+    @OneToMany(cascade = CascadeType.ALL, /*orphanRemoval = true, */fetch = FetchType.EAGER)
+    @JoinColumn(name = "PARTNER__ID")
+    protected Set<DefaultPartnerRole> partnerRoles = new HashSet<DefaultPartnerRole>(0);
+
+    public DefaultPartner() {
+    }
+
+    public DefaultPartner(String title, String website){
+
+        this.title = title;
+        this.website = website;
+    }
+
+    public DefaultPartner(String title, String website, String image, PartnerCategory partnerCategory){
+
+        this.title = title;
+        this.website = website;
+        this.image = image;
+        this.partnerCategory = partnerCategory;
+    }
+
+    @Override
+    @DomainMethod(event = "PartnerCategorySet")
+    public void setPartnerCategory(PartnerCategory partnerCategory){
+
+        this.partnerCategory = partnerCategory;
+    }
+
+    @Override
+    @DomainMethod(event = "PartnerMoved")
+    public void movePartnerToCategory(PartnerCategory newPartnerCategory){
+        this.partnerCategory = newPartnerCategory;
+    }
+
+    @Override
+    @DomainMethod(event = "PartnerRoleAdded")
+    public void addPartnerRole(DefaultPartnerRole newPartnerRole){
+        this.partnerRoles.add(newPartnerRole);
+    }
+
+    @Override
+    public Boolean hasPartnerRole(DefaultPartnerRole partnerRole){
+        Long found = partnerRoles.parallelStream()
+            .filter(t -> t.getEntityId() == partnerRole.getEntityId())
+            .count();
+        return (found != null && found > 0) ? true : false;
+    }
+
+    @Override
+    @DomainMethod(event = "AddressAddedToRole")
+    public void addAddressToRole(DefaultPartnerRole partnerRole, Address address){
+       partnerRole.getAddresses().add(address);
+    }
+
+    @Override
+    @DomainMethod(event = "RoleAddressMoved")
+    public void moveRoleAddressTo(DefaultPartnerRole partnerRole, Address newAddress){
+
+        DefaultPartnerRole roleFound = partnerRoles.parallelStream()
+                .filter(t -> t.getEntityId().equals(partnerRole.getEntityId()))
+                .findFirst().get();
+
+        if(roleFound != null){
+            roleFound.getAddresses().add(newAddress);
+        }
+    }
+
+    @Override
+    @DomainMethod(event = "OwnerChanged")
+    public void changeOwner(DefaultOwner newOwner){
+        this.owner = newOwner;
+    }
+
+    @Override
+    public Set<DefaultPartnerRole> getAllAssignedRoles(){
+
+        return partnerRoles;  //iteration
+
+    }
+
+    @Override
+    public DefaultOwner getOwner() {
+        return owner;
+    }
+
+    @Override
+    @DomainMethod(event = "OwnerSet")
+    public void setOwner(DefaultOwner owner) {
+        this.owner = owner;
+    }
+
+    @Override
+    public PartnerCategory getPartnerCategory(){return this.partnerCategory;}
+}
