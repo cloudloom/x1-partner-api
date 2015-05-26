@@ -7,7 +7,6 @@ import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
 import com.tracebucket.x1.partner.api.domain.Partner;
 
 import javax.persistence.*;
-import javax.servlet.http.Part;
 import java.util.HashSet;
 import java.util.Set;
 

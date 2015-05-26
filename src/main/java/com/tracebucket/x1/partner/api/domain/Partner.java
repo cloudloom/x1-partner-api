@@ -1,6 +1,5 @@
 package com.tracebucket.x1.partner.api.domain;
 
-import com.tracebucket.tron.ddd.annotation.DomainMethod;
 import com.tracebucket.x1.dictionary.api.domain.Address;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultOwner;

@@ -1,12 +1,7 @@
 package com.tracebucket.x1.partner.api.rest.resources;
 
 import com.tracebucket.tron.assembler.BaseResource;
-import com.tracebucket.tron.ddd.domain.BaseValueObject;
-import com.tracebucket.x1.dictionary.api.domain.Address;
 import com.tracebucket.x1.dictionary.api.domain.AddressType;
-import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultAddress;
-
-import javax.persistence.*;
 
 /**
  * Created by sadath on 26-May-2015.

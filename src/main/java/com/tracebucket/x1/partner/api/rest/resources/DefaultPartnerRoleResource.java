@@ -1,12 +1,8 @@
 package com.tracebucket.x1.partner.api.rest.resources;
 
 import com.tracebucket.tron.assembler.BaseResource;
-import com.tracebucket.tron.ddd.domain.BaseEntity;
 import com.tracebucket.x1.dictionary.api.domain.Address;
-import com.tracebucket.x1.partner.api.domain.PartnerRole;
 
-import javax.persistence.*;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 

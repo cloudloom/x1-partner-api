@@ -1,6 +1,5 @@
 package com.tracebucket.x1.partner.api.service;
 
-import com.tracebucket.tron.ddd.annotation.PersistChanges;
 import com.tracebucket.tron.ddd.domain.AggregateId;
 import com.tracebucket.x1.dictionary.api.domain.Address;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;

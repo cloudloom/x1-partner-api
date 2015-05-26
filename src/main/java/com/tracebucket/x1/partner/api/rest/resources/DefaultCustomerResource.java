@@ -3,10 +3,7 @@ package com.tracebucket.x1.partner.api.rest.resources;
 import com.tracebucket.tron.assembler.BaseResource;
 import com.tracebucket.x1.dictionary.api.domain.Gender;
 import com.tracebucket.x1.partner.api.dictionary.Salutation;
-import com.tracebucket.x1.partner.api.domain.Customer;
 
-import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
 
 /**
