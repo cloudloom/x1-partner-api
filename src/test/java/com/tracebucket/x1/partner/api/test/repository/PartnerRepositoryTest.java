@@ -57,7 +57,7 @@ public class PartnerRepositoryTest {
         Assert.assertNotNull(partner);
         Assert.assertNotNull(partner.getAggregateId());
         Assert.assertEquals(PartnerCategory.GROUP, partner.getPartnerCategory());
-        Assert.assertEquals(1, partner.getAllAssignedRoles().size());
+        Assert.assertEquals(2, partner.getAllAssignedRoles().size());
     }
 
     @Test
