@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -27,7 +28,9 @@ import java.beans.PropertyVetoException;
  * Time: 4:00 PM
  */
 @Configuration(value = "x1PartnerJPAConfig")
-@EnableJpaRepositories(basePackages = {"com.tracebucket.x1.partner.api.repository.jpa"}, repositoryFactoryBeanClass = CustomRepositoryFactoryBean.class)
+@EnableJpaRepositories(entityManagerFactoryRef = "x1PartnerEntityManagerFactory",
+        transactionManagerRef = "x1PartnerTransactionManager",
+        basePackages = {"com.tracebucket.x1.partner.api.repository.jpa"}, repositoryFactoryBeanClass = CustomRepositoryFactoryBean.class)
 @EntityScan(basePackages = {"com.tracebucket.x1.partner.api.domain", "com.tracebucket.x1.dictionary.api.domain.jpa.impl"})
 @PropertySource(value = "classpath:jpa.properties")
 @EnableTransactionManagement(proxyTargetClass = true)
@@ -62,7 +65,7 @@ public class JPAConfiguration {
     @Value("${generateDdl}")
     private String generateDdl;
 
-    @Bean
+    @Bean(name = "x1PartnerDataSource")
     public HikariDataSource dataSource() throws PropertyVetoException
     {
         HikariConfig config = new HikariConfig();
@@ -76,7 +79,7 @@ public class JPAConfiguration {
         return dataSource;
     }
 
-    @Bean
+    @Bean(name = "x1PartnerJpaVendorAdapter")
     public JpaVendorAdapter jpaVendorAdapter()
     {
         HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
@@ -86,7 +89,8 @@ public class JPAConfiguration {
         return jpaVendorAdapter;
     }
 
-    @Bean
+    @Bean(name = "x1PartnerTransactionManager")
+    @Primary
     public PlatformTransactionManager transactionManager() throws PropertyVetoException
     {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
@@ -94,7 +98,8 @@ public class JPAConfiguration {
         return transactionManager;
     }
 
-    @Bean
+    @Bean(name = "x1PartnerEntityManagerFactory")
+    @Primary
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() throws PropertyVetoException
     {
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
