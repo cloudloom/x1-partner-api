@@ -1,6 +1,7 @@
 package com.tracebucket.x1.partner.api.domain;
 
 import com.tracebucket.x1.dictionary.api.domain.Person;
+import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultPerson;
 
 import java.util.Date;
 import java.util.Set;
@@ -19,6 +20,6 @@ public interface Affiliate {
     public void setLogo(String logo);
     public String getWebsite();
     public void setWebsite(String website);
-    public Set<Person> getPersons();
-    public void setPersons(Set<Person> persons);
+    public Set<DefaultPerson> getPersons();
+    public void setPersons(Set<DefaultPerson> persons);
 }

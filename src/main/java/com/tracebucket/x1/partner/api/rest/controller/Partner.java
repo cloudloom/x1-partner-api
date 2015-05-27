@@ -12,14 +12,16 @@ import org.springframework.http.ResponseEntity;
  * Created by sadath on 26-May-2015.
  */
 public interface Partner {
-    public ResponseEntity<DefaultPartner> createPartner(DefaultPartnerResource partner);
-    public ResponseEntity<DefaultPartner> findOne(String aggregateId);
+    public ResponseEntity<DefaultPartnerResource> createPartner(DefaultPartnerResource partner);
+    public ResponseEntity<DefaultPartnerResource> findOne(String aggregateId);
     public ResponseEntity<Boolean> deletePartner(String partnerAggregateId);
-    public ResponseEntity<DefaultPartner> setPartnerCategory(PartnerCategory partnerCategory, String partnerAggregateId);
-    public ResponseEntity<DefaultPartner> movePartnerToCategory(PartnerCategory newPartnerCategory, String partnerAggregateId);
-    public ResponseEntity<DefaultPartner> addPartnerRole(DefaultPartnerRoleResource newPartnerRole, String partnerAggregateId);
-    public ResponseEntity<DefaultPartner> addAddressToRole(DefaultPartnerRoleResource partnerRole, DefaultAddressResource address, String partnerAggregateId);
-    public ResponseEntity<DefaultPartner> moveRoleAddressTo(DefaultPartnerRoleResource partnerRole, DefaultAddressResource newAddress,String partnerAggregateId);
-    public ResponseEntity<DefaultPartner> changeOwner(DefaultOwnerResource newOwner, String partnerAggregateId);
+    public ResponseEntity<DefaultPartnerResource> setPartnerCategory(PartnerCategory partnerCategory, String partnerAggregateId);
+    public ResponseEntity<DefaultPartnerResource> movePartnerToCategory(PartnerCategory newPartnerCategory, String partnerAggregateId);
+    public ResponseEntity<DefaultPartnerResource> addPartnerRole(DefaultPartnerRoleResource newPartnerRole, String partnerAggregateId);
+    public ResponseEntity<DefaultPartnerResource> addAddressToRole(String partnerAggregateId, String partnerRoleUid,DefaultAddressResource address);
+    public ResponseEntity<DefaultPartnerResource> moveRoleAddressTo(String partnerAggregateId, String partnerRoleUid,DefaultAddressResource address);
+/*
+    public ResponseEntity<DefaultPartnerResource> changeOwner(DefaultOwnerResource newOwner, String partnerAggregateId);
+*/
     public ResponseEntity<Boolean> hasPartnerRole(DefaultPartnerRoleResource partnerRole, String partnerAggregateId);
 }

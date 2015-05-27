@@ -3,6 +3,8 @@ package com.tracebucket.x1.partner.api.domain.impl.jpa;
 import com.tracebucket.tron.ddd.annotation.DomainMethod;
 import com.tracebucket.tron.ddd.domain.BaseAggregateRoot;
 import com.tracebucket.x1.dictionary.api.domain.Address;
+import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultAddress;
+import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultPerson;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
 import com.tracebucket.x1.partner.api.domain.Partner;
 
@@ -89,7 +91,15 @@ public class DefaultPartner extends BaseAggregateRoot implements Partner{
     @Override
     @DomainMethod(event = "AddressAddedToRole")
     public void addAddressToRole(DefaultPartnerRole partnerRole, Address address){
-       partnerRole.getAddresses().add(address);
+        if(address != null) {
+            DefaultAddress defaultAddress = (DefaultAddress) address;
+            defaultAddress.setDefaultAddress(true);
+            partnerRole.getAddresses().add((DefaultAddress)address);
+        }
+    }
+
+    public DefaultOwner getOwner() {
+        return owner;
     }
 
     @Override
@@ -101,7 +111,15 @@ public class DefaultPartner extends BaseAggregateRoot implements Partner{
                 .findFirst().get();
 
         if(roleFound != null){
-            roleFound.getAddresses().add(newAddress);
+            Set<DefaultAddress> addresses = roleFound.getAddresses();
+            if(addresses != null) {
+                addresses.forEach(a -> {
+                    a.setDefaultAddress(false);
+                });
+            }
+            DefaultAddress defaultAddress = (DefaultAddress) newAddress;
+            defaultAddress.setDefaultAddress(true);
+            addresses.add(defaultAddress);
         }
     }
 
@@ -118,15 +136,24 @@ public class DefaultPartner extends BaseAggregateRoot implements Partner{
 
     }
 
-    @Override
-    public DefaultOwner getOwner() {
-        return owner;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    @Override
-    @DomainMethod(event = "OwnerSet")
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
     public void setOwner(DefaultOwner owner) {
         this.owner = owner;
+    }
+
+    public void setPartnerRoles(Set<DefaultPartnerRole> partnerRoles) {
+        this.partnerRoles = partnerRoles;
     }
 
     @Override

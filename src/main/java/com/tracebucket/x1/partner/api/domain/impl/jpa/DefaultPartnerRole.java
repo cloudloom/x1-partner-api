@@ -2,6 +2,7 @@ package com.tracebucket.x1.partner.api.domain.impl.jpa;
 
 import com.tracebucket.tron.ddd.domain.BaseEntity;
 import com.tracebucket.x1.dictionary.api.domain.Address;
+import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultAddress;
 import com.tracebucket.x1.partner.api.domain.PartnerRole;
 
 import javax.persistence.*;
@@ -24,7 +25,7 @@ public abstract class DefaultPartnerRole extends BaseEntity implements PartnerRo
 
     @ElementCollection
     @JoinTable(name = "PARTNER_ADDRESS", joinColumns = @JoinColumn(name = "PARTNER__ID"))
-    private Set<Address> addresses = new HashSet<Address>(0);
+    private Set<DefaultAddress> addresses = new HashSet<DefaultAddress>(0);
 
     public abstract String simpleName();
 
@@ -39,12 +40,12 @@ public abstract class DefaultPartnerRole extends BaseEntity implements PartnerRo
     }
 
     @Override
-    public Set<Address> getAddresses() {
+    public Set<DefaultAddress> getAddresses() {
         return addresses;
     }
 
     @Override
-    public void setAddresses(Set<Address> addresses) {
+    public void setAddresses(Set<DefaultAddress> addresses) {
         this.addresses = addresses;
     }
 }

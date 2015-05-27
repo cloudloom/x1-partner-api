@@ -2,7 +2,9 @@ package com.tracebucket.x1.partner.api.service.impl;
 
 import com.tracebucket.tron.ddd.annotation.PersistChanges;
 import com.tracebucket.tron.ddd.domain.AggregateId;
+import com.tracebucket.tron.ddd.domain.EntityId;
 import com.tracebucket.x1.dictionary.api.domain.Address;
+import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultAddress;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultOwner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartner;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Set;
 
 /**
  * Created by sadath on 26-May-2015.
@@ -58,7 +61,11 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
     @Override
     @PersistChanges(repository = "partnerRepository")
     public DefaultPartner movePartnerToCategory(PartnerCategory newPartnerCategory,AggregateId partnerAggregateId){
-        //TODO
+        DefaultPartner partner = partnerRepository.findOne(partnerAggregateId);
+        if(partner != null) {
+            partner.setPartnerCategory(newPartnerCategory);
+            return partner;
+        }
         return null;
     }
 
@@ -75,19 +82,37 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
 
     @Override
     @PersistChanges(repository = "partnerRepository")
-    public DefaultPartner addAddressToRole(DefaultPartnerRole partnerRole, Address address, AggregateId partnerAggregateId){
+    public DefaultPartner addAddressToRole(EntityId partnerRoleEntityId, Address address, AggregateId partnerAggregateId){
         DefaultPartner partner = partnerRepository.findOne(partnerAggregateId);
         if(partner != null) {
-            partner.addAddressToRole(partnerRole, address);
-            return partner;
+            Set<DefaultPartnerRole> partnerRoles = partner.getAllAssignedRoles();
+            if(partnerRoles != null) {
+                partnerRoles.stream().forEach(r -> {
+                    if (r.getEntityId().getId().equals(partnerRoleEntityId.getId())) {
+                        partner.addAddressToRole(r, address);
+                    }
+                });
+                return partner;
+            }
         }
         return null;
     }
 
     @Override
     @PersistChanges(repository = "partnerRepository")
-    public DefaultPartner moveRoleAddressTo(DefaultPartnerRole partnerRole, Address newAddress,AggregateId partnerAggregateId){
-        //TODO
+    public DefaultPartner moveRoleAddressTo(EntityId partnerRoleEntityId, Address newAddress, AggregateId partnerAggregateId){
+        DefaultPartner partner = partnerRepository.findOne(partnerAggregateId);
+        if(partner != null) {
+            Set<DefaultPartnerRole> partnerRoles = partner.getAllAssignedRoles();
+            if(partnerRoles != null) {
+                partnerRoles.stream().forEach(r -> {
+                    if(r.getEntityId().getId().equals(partnerRoleEntityId.getId())) {
+                        partner.moveRoleAddressTo(r, newAddress);
+                    }
+                });
+                return partner;
+            }
+        }
         return null;
     }
 
