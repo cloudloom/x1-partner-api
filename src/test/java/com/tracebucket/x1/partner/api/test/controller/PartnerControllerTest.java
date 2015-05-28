@@ -98,7 +98,6 @@ public class PartnerControllerTest {
 
     @Test
     public void testAddPartnerRole() throws Exception {
-
         createPartner();
         DefaultAffiliateResource defaultAffiliateResource = DefaultAffiliateResourceFixture.standardAffiliate();
         log.info("Add Partner Role : " + objectMapper.writeValueAsString(defaultAffiliateResource));
@@ -106,8 +105,8 @@ public class PartnerControllerTest {
         partner = restTemplate.getForObject(basePath + "/partner/" + partner.getUid(), DefaultPartnerResource.class);
         Assert.assertNotNull(partner.getUid());
         Assert.assertEquals(1, partner.getPartnerRoles().size());
-
     }
+
     @Test
     public void testAddAddressToRole() throws Exception {
         createPartner();
