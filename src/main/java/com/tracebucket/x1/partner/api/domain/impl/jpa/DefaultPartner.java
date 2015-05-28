@@ -158,4 +158,9 @@ public class DefaultPartner extends BaseAggregateRoot implements Partner{
 
     @Override
     public PartnerCategory getPartnerCategory(){return this.partnerCategory;}
+
+    @Override
+    public Set<DefaultPartnerRole> getPartnerRoles() {
+        return partnerRoles;
+    }
 }

@@ -10,7 +10,7 @@ import java.util.Set;
 /**
  * Created by sadath on 26-May-2015.
  */
-public class DefaultAffiliateResource extends BaseResource {
+public class DefaultAffiliateResource extends DefaultPartnerRoleResource {
     private static final String simpleName = "Affiliate";
     private String businessName;
     private String code;

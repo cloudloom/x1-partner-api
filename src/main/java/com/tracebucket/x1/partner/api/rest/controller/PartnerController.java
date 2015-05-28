@@ -139,7 +139,7 @@ public class PartnerController implements Partner{
         return new ResponseEntity<DefaultPartnerResource>(new DefaultPartnerResource(), HttpStatus.NOT_ACCEPTABLE);
     }
 
-/*    public ResponseEntity<DefaultPartnerResource> changeOwner(DefaultOwnerResource newOwner, String partnerAggregateId) {
+/*     public ResponseEntity<DefaultPartnerResource> changeOwner(DefaultOwnerResource newOwner, String partnerAggregateId) {
         return null;
     }*/
 

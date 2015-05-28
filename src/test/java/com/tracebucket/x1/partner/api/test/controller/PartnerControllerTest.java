@@ -3,9 +3,12 @@ package com.tracebucket.x1.partner.api.test.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tracebucket.x1.partner.api.DefaultPartnerStarter;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
+import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartnerRole;
+import com.tracebucket.x1.partner.api.rest.resources.DefaultAddressResource;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultAffiliateResource;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerResource;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerRoleResource;
+import com.tracebucket.x1.partner.api.test.fixture.DefaultAddressResourceFixture;
 import com.tracebucket.x1.partner.api.test.fixture.DefaultAffiliateResourceFixture;
 import com.tracebucket.x1.partner.api.test.fixture.DefaultPartnerResourceFixture;
 import org.junit.Assert;
@@ -22,6 +25,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Set;
 
 /**
  * Created by Vishwajit on 27-05-2015.
@@ -59,14 +64,6 @@ public class PartnerControllerTest {
     public void testCreate() throws Exception {
         createPartner();
         Assert.assertNotNull(partner.getUid());
-        DefaultPartnerResource partnerResource = DefaultPartnerResourceFixture.standardPartner();
-        partnerResource.setPartnerCategory(PartnerCategory.INDIVIDUAL);
-        log.info("Create Partner With Duplicate PartnerCategory : " + objectMapper.writeValueAsString(partnerResource));
-        try {
-            partner = restTemplate.postForObject(basePath + "/partner", partnerResource, DefaultPartnerResource.class);
-        } catch (HttpClientErrorException httpClientErrorException) {
-            Assert.assertEquals(HttpStatus.CONFLICT, httpClientErrorException.getStatusCode());
-        }
     }
 
     @Test
@@ -84,8 +81,7 @@ public class PartnerControllerTest {
     @Test
     public void testSetPartnerCategory() throws Exception {
         createPartner();
-        log.info("Set Partner Category : " + objectMapper.writeValueAsString(partner));
-        restTemplate.put(basePath+"/partner/"+partner.getUid()+"/partnercategory", partner);
+        restTemplate.put(basePath+"/partner/"+partner.getUid()+"/partnercategory", PartnerCategory.GROUP);
         partner = restTemplate.getForObject(basePath + "/partner/" + partner.getUid(), DefaultPartnerResource.class);
         Assert.assertNotNull(partner.getUid());
         Assert.assertEquals(PartnerCategory.GROUP, partner.getPartnerCategory());
@@ -93,7 +89,11 @@ public class PartnerControllerTest {
 
     @Test
     public void testMovePartnerCategory() throws Exception {
-        //TODO
+        createPartner();
+        restTemplate.put(basePath + "/partner/" + partner.getUid() + "/partner/tocategory", PartnerCategory.INDIVIDUAL);
+        partner = restTemplate.getForObject(basePath + "/partner/" + partner.getUid(), DefaultPartnerResource.class);
+        Assert.assertNotNull(partner.getUid());
+        Assert.assertEquals(PartnerCategory.INDIVIDUAL, partner.getPartnerCategory());
     }
 
     @Test
@@ -102,7 +102,7 @@ public class PartnerControllerTest {
         createPartner();
         DefaultAffiliateResource defaultAffiliateResource = DefaultAffiliateResourceFixture.standardAffiliate();
         log.info("Add Partner Role : " + objectMapper.writeValueAsString(defaultAffiliateResource));
-        restTemplate.put(basePath+"/partner/"+partner.getUid()+"/partnerrole", defaultAffiliateResource);
+        restTemplate.put(basePath+"/partner/"+partner.getUid()+"/partnerrole", (DefaultPartnerRoleResource)defaultAffiliateResource);
         partner = restTemplate.getForObject(basePath + "/partner/" + partner.getUid(), DefaultPartnerResource.class);
         Assert.assertNotNull(partner.getUid());
         Assert.assertEquals(1, partner.getPartnerRoles().size());
@@ -110,13 +110,30 @@ public class PartnerControllerTest {
     }
     @Test
     public void testAddAddressToRole() throws Exception {
-        //TODO
+        createPartner();
+        DefaultAffiliateResource defaultAffiliateResource = DefaultAffiliateResourceFixture.standardAffiliate();
+        log.info("Add Partner Role : " + objectMapper.writeValueAsString(defaultAffiliateResource));
+        restTemplate.put(basePath+"/partner/"+partner.getUid()+"/partnerrole", (DefaultPartnerRoleResource)defaultAffiliateResource);
+        partner = restTemplate.getForObject(basePath + "/partner/" + partner.getUid(), DefaultPartnerResource.class);
+        Assert.assertNotNull(partner.getUid());
+        Assert.assertEquals(1, partner.getPartnerRoles().size());
+        DefaultAddressResource addressResource = DefaultAddressResourceFixture.standardAddress();
+        Set<DefaultPartnerRoleResource> roleResourceSet = partner.getPartnerRoles();
+        if(roleResourceSet != null) {
+            for(DefaultPartnerRoleResource partnerRoleResource : roleResourceSet) {
+                restTemplate.put(basePath+"/partner/"+partner.getUid()+"/partnerRole/"+partnerRoleResource.getUid(), addressResource);
+                partner = restTemplate.getForObject(basePath + "/partner/" + partner.getUid(), DefaultPartnerResource.class);
+                Assert.assertNotNull(partner.getUid());
+                Assert.assertEquals(1, partner.getPartnerRoles().size());
+            }
+        }
+
     }
 
-    @Test
+/*    @Test
     public void testChangeOwner() throws Exception {
         //TODO
-    }
+    }*/
 
     @Test
     public void testMoveRoleAddressTo() throws Exception {

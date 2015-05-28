@@ -76,7 +76,6 @@ public class PartnerServiceTest {
      }
     @Test
      public void addPartnerRole() throws Exception{
-
         createPartner();
         partner = partnerService.addPartnerRole(DefaultAffiliateFixture.standardAffiliate(), partner.getAggregateId());
         Assert.assertNotNull(partner);
@@ -91,10 +90,10 @@ public class PartnerServiceTest {
         Set<DefaultPartnerRole> partnerRoles = partner.getAllAssignedRoles();
 
         Assert.assertNotNull(partner);
+        Assert.assertNotNull(partnerRoles);
 
         for(DefaultPartnerRole partnerRole: partnerRoles){
             partner = partnerService.addAddressToRole(partnerRole.getEntityId(),address, partner.getAggregateId());
-            partner.setPartnerRoles(partner.getAllAssignedRoles());
             break;
         }
 
@@ -111,13 +110,18 @@ public class PartnerServiceTest {
 
         createPartner();
         Set<DefaultPartnerRole> partnerRoles = partner.getAllAssignedRoles();
+        Assert.assertNotNull(partnerRoles);
+
         DefaultAddress address = DefaultAddressFixture.standardAddress();
+
         for(DefaultPartnerRole partnerRole: partnerRoles){
             partner = partnerService.moveRoleAddressTo(partnerRole.getEntityId(),address,partner.getAggregateId());
             break;
         }
 
         Set<DefaultPartnerRole> partnerRoles1 = partner.getAllAssignedRoles();
+        Assert.assertNotNull(partnerRoles1);
+
         for(DefaultPartnerRole partnerRole: partnerRoles1){
             Assert.assertEquals(1,partnerRole.getAddresses().size());
             break;
@@ -134,6 +138,20 @@ public class PartnerServiceTest {
         partner = partnerService.changeOwner(owner,partner.getAggregateId());
         Assert.assertNotNull(partner);
         Assert.assertEquals(owner, partner.getOwner());
+    }
+
+    @Test
+    public void hasPartnerRole() throws Exception{
+
+        createPartner();
+        Set<DefaultPartnerRole> partnerRoles = partner.getAllAssignedRoles();
+        Assert.assertNotNull(partnerRoles);
+
+        for(DefaultPartnerRole partnerRole : partnerRoles){
+            Assert.assertTrue(partnerService.hasPartnerRole(partnerRole,partner.getAggregateId()));
+            break;
+        }
+
     }
 
     @After
