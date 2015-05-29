@@ -28,9 +28,7 @@ import java.beans.PropertyVetoException;
  * Time: 4:00 PM
  */
 @Configuration(value = "x1PartnerJPAConfig")
-@EnableJpaRepositories(entityManagerFactoryRef = "x1PartnerEntityManagerFactory",
-        transactionManagerRef = "x1PartnerTransactionManager",
-        basePackages = {"com.tracebucket.x1.partner.api.repository.jpa"}, repositoryFactoryBeanClass = CustomRepositoryFactoryBean.class)
+@EnableJpaRepositories(basePackages = {"com.tracebucket.x1.partner.api.repository.jpa"}, repositoryFactoryBeanClass = CustomRepositoryFactoryBean.class)
 @EntityScan(basePackages = {"com.tracebucket.x1.partner.api.domain", "com.tracebucket.x1.dictionary.api.domain.jpa.impl"})
 @PropertySource(value = "classpath:jpa.properties")
 @EnableTransactionManagement(proxyTargetClass = true)
@@ -65,7 +63,7 @@ public class JPAConfiguration {
     @Value("${generateDdl}")
     private String generateDdl;
 
-    @Bean(name = "x1PartnerDataSource")
+    @Bean
     public HikariDataSource dataSource() throws PropertyVetoException
     {
         HikariConfig config = new HikariConfig();
@@ -79,7 +77,7 @@ public class JPAConfiguration {
         return dataSource;
     }
 
-    @Bean(name = "x1PartnerJpaVendorAdapter")
+    @Bean
     public JpaVendorAdapter jpaVendorAdapter()
     {
         HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
@@ -89,8 +87,7 @@ public class JPAConfiguration {
         return jpaVendorAdapter;
     }
 
-    @Bean(name = "x1PartnerTransactionManager")
-    @Primary
+    @Bean
     public PlatformTransactionManager transactionManager() throws PropertyVetoException
     {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
@@ -98,8 +95,7 @@ public class JPAConfiguration {
         return transactionManager;
     }
 
-    @Bean(name = "x1PartnerEntityManagerFactory")
-    @Primary
+    @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() throws PropertyVetoException
     {
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
