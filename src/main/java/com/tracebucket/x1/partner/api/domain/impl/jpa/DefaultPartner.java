@@ -4,7 +4,6 @@ import com.tracebucket.tron.ddd.annotation.DomainMethod;
 import com.tracebucket.tron.ddd.domain.BaseAggregateRoot;
 import com.tracebucket.x1.dictionary.api.domain.Address;
 import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultAddress;
-import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultPerson;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
 import com.tracebucket.x1.partner.api.domain.Partner;
 

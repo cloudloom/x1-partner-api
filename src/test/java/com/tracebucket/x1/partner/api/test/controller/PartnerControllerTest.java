@@ -3,7 +3,6 @@ package com.tracebucket.x1.partner.api.test.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tracebucket.x1.partner.api.DefaultPartnerStarter;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
-import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartnerRole;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultAddressResource;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultAffiliateResource;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerResource;
@@ -21,9 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Set;
@@ -96,7 +93,7 @@ public class PartnerControllerTest {
         Assert.assertEquals(PartnerCategory.INDIVIDUAL, partner.getPartnerCategory());
     }
 
-    @Test
+/*    @Test
     public void testAddPartnerRole() throws Exception {
         createPartner();
         DefaultAffiliateResource defaultAffiliateResource = DefaultAffiliateResourceFixture.standardAffiliate();
@@ -105,9 +102,9 @@ public class PartnerControllerTest {
         partner = restTemplate.getForObject(basePath + "/partner/" + partner.getUid(), DefaultPartnerResource.class);
         Assert.assertNotNull(partner.getUid());
         Assert.assertEquals(1, partner.getPartnerRoles().size());
-    }
+    }*/
 
-    @Test
+/*    @Test
     public void testAddAddressToRole() throws Exception {
         createPartner();
         DefaultAffiliateResource defaultAffiliateResource = DefaultAffiliateResourceFixture.standardAffiliate();
@@ -127,11 +124,11 @@ public class PartnerControllerTest {
             }
         }
 
-    }
+    }*/
 
 /*    @Test
     public void testChangeOwner() throws Exception {
-        //TODO
+
     }*/
 
     @Test

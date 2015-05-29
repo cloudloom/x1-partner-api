@@ -1,6 +1,5 @@
 package com.tracebucket.x1.partner.api.domain.impl.jpa;
 
-import com.tracebucket.x1.dictionary.api.domain.Person;
 import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultPerson;
 import com.tracebucket.x1.partner.api.domain.Affiliate;
 

@@ -1,9 +1,7 @@
 package com.tracebucket.x1.partner.api.rest.controller;
 
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
-import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartner;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultAddressResource;
-import com.tracebucket.x1.partner.api.rest.resources.DefaultOwnerResource;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerResource;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerRoleResource;
 import org.springframework.http.ResponseEntity;

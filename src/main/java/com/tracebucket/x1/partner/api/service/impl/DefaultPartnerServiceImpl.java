@@ -4,9 +4,7 @@ import com.tracebucket.tron.ddd.annotation.PersistChanges;
 import com.tracebucket.tron.ddd.domain.AggregateId;
 import com.tracebucket.tron.ddd.domain.EntityId;
 import com.tracebucket.x1.dictionary.api.domain.Address;
-import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultAddress;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
-import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultOwner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartnerRole;
 import com.tracebucket.x1.partner.api.repository.jpa.DefaultPartnerRepository;
@@ -116,7 +114,7 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
         return null;
     }
 
-    @Override
+/*    @Override
     @PersistChanges(repository = "partnerRepository")
     public DefaultPartner changeOwner(DefaultOwner newOwner, AggregateId partnerAggregateId){
         DefaultPartner partner = partnerRepository.findOne(partnerAggregateId);
@@ -125,7 +123,7 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
             return partner;
         }
         return null;
-    }
+    }*/
 
     @Override
     public Boolean hasPartnerRole(DefaultPartnerRole partnerRole, AggregateId partnerAggregateId){

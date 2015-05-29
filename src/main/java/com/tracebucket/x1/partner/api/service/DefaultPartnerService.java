@@ -4,7 +4,6 @@ import com.tracebucket.tron.ddd.domain.AggregateId;
 import com.tracebucket.tron.ddd.domain.EntityId;
 import com.tracebucket.x1.dictionary.api.domain.Address;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
-import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultOwner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartnerRole;
 
@@ -20,6 +19,8 @@ public interface DefaultPartnerService {
     public DefaultPartner addPartnerRole(DefaultPartnerRole newPartnerRole, AggregateId partnerAggregateId);
     public DefaultPartner addAddressToRole(EntityId partnerRoleEntityId, Address address, AggregateId partnerAggregateId);
     public DefaultPartner moveRoleAddressTo(EntityId partnerRoleEntityId, Address newAddress,AggregateId partnerAggregateId);
+/*
     public DefaultPartner changeOwner(DefaultOwner newOwner, AggregateId partnerAggregateId);
+*/
     public Boolean hasPartnerRole(DefaultPartnerRole partnerRole, AggregateId partnerAggregateId);
 }

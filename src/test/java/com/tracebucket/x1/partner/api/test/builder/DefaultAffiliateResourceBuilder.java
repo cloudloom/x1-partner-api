@@ -1,7 +1,6 @@
 package com.tracebucket.x1.partner.api.test.builder;
 
 import com.tracebucket.x1.dictionary.api.domain.Person;
-import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultPerson;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultAffiliateResource;
 
 import java.util.Date;

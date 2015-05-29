@@ -1,6 +1,5 @@
 package com.tracebucket.x1.partner.api.rest.resources;
 
-import com.tracebucket.tron.assembler.BaseResource;
 import com.tracebucket.x1.dictionary.api.domain.Person;
 
 import java.util.Date;

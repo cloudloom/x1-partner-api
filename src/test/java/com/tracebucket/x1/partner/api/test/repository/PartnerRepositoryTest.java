@@ -1,13 +1,8 @@
 package com.tracebucket.x1.partner.api.test.repository;
 
 import com.tracebucket.x1.partner.api.DefaultPartnerStarter;
-import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
-import com.tracebucket.x1.partner.api.domain.Affiliate;
-import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultAffiliate;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartner;
 import com.tracebucket.x1.partner.api.repository.jpa.DefaultPartnerRepository;
-import com.tracebucket.x1.partner.api.test.fixture.DefaultAddressFixture;
-import com.tracebucket.x1.partner.api.test.fixture.DefaultAffiliateFixture;
 import com.tracebucket.x1.partner.api.test.fixture.DefaultPartnerFixture;
 import org.junit.After;
 import org.junit.Assert;
@@ -19,15 +14,12 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import javax.transaction.Transactional;
-
 /**
  * Created by Vishwajit on 26-05-2015.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @SpringApplicationConfiguration(classes  = {DefaultPartnerStarter.class})
-@Transactional
 public class PartnerRepositoryTest {
 
     @Autowired
@@ -45,19 +37,6 @@ public class PartnerRepositoryTest {
     public void testCreate() throws Exception{
         createPartner();
         Assert.assertNotNull(partner);
-    }
-
-    @Test
-    @Rollback(value = false)
-    public void testUpdate() throws Exception {
-        createPartner();
-        partner.setPartnerCategory(PartnerCategory.GROUP);
-        partner.addPartnerRole(DefaultAffiliateFixture.standardAffiliate());
-        partner = partnerRepository.save(partner);
-        Assert.assertNotNull(partner);
-        Assert.assertNotNull(partner.getAggregateId());
-        Assert.assertEquals(PartnerCategory.GROUP, partner.getPartnerCategory());
-        Assert.assertEquals(2, partner.getAllAssignedRoles().size());
     }
 
     @Test

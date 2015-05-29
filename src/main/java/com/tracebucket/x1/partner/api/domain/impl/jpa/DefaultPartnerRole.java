@@ -1,7 +1,6 @@
 package com.tracebucket.x1.partner.api.domain.impl.jpa;
 
 import com.tracebucket.tron.ddd.domain.BaseEntity;
-import com.tracebucket.x1.dictionary.api.domain.Address;
 import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultAddress;
 import com.tracebucket.x1.partner.api.domain.PartnerRole;
 
