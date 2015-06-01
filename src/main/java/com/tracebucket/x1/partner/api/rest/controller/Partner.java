@@ -15,7 +15,7 @@ public interface Partner {
     public ResponseEntity<Boolean> deletePartner(String partnerAggregateId);
     public ResponseEntity<DefaultPartnerResource> setPartnerCategory(PartnerCategory partnerCategory, String partnerAggregateId);
     public ResponseEntity<DefaultPartnerResource> movePartnerToCategory(PartnerCategory newPartnerCategory, String partnerAggregateId);
-    public ResponseEntity<DefaultPartnerResource> addPartnerRole(DefaultPartnerRoleResource newPartnerRole, String partnerAggregateId);
+    public ResponseEntity<DefaultPartnerResource> addPartnerRole(DefaultPartnerResource partner);
     public ResponseEntity<DefaultPartnerResource> addAddressToRole(String partnerAggregateId, String partnerRoleUid,DefaultAddressResource address);
     public ResponseEntity<DefaultPartnerResource> moveRoleAddressTo(String partnerAggregateId, String partnerRoleUid,DefaultAddressResource address);
 /*

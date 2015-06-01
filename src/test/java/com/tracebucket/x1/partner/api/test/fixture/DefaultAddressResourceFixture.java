@@ -14,7 +14,7 @@ public class DefaultAddressResourceFixture {
     public static DefaultAddressResource standardAddress() {
         Set<AddressType> addressTypes = new HashSet<AddressType>();
         addressTypes.add(AddressType.HEAD_OFFICE);
-        DefaultAddressResource address = DefaultAddressResourceBuilder.anAddress()
+        DefaultAddressResource address = DefaultAddressResourceBuilder.anAddressBuilder()
                 .withName("MMP")
                 .withBuilding("XYZ Complex")
                 .withStreet("KR Road")
@@ -32,7 +32,7 @@ public class DefaultAddressResourceFixture {
     public static DefaultAddressResource headOffice() {
         Set<AddressType> addressTypes = new HashSet<AddressType>();
         addressTypes.add(AddressType.HEAD_OFFICE);
-        DefaultAddressResource address = DefaultAddressResourceBuilder.anAddress()
+        DefaultAddressResource address = DefaultAddressResourceBuilder.anAddressBuilder()
                 .withName("MMPBV")
                 .withBuilding("Vlasveen")
                 .withStreet("9301 PS")

@@ -12,7 +12,7 @@ public class DefaultAffiliateResourceFixture {
 
     public static DefaultAffiliateResource standardAffiliate() {
 
-        DefaultAffiliateResource partner = DefaultAffiliateResourceBuilder.aPartnerBuilder()
+        DefaultAffiliateResource partner = DefaultAffiliateResourceBuilder.anAffiliateBuilder()
                 .withBusinessName("MMPBV")
                 .withWebsite("www.mmpbv.nl")
                 .withCode("XYZ_123")

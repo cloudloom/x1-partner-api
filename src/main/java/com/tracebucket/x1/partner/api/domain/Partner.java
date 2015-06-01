@@ -23,4 +23,7 @@ public interface Partner {
     public void setOwner(DefaultOwner owner);
     public PartnerCategory getPartnerCategory();
     public Set<DefaultPartnerRole> getPartnerRoles();
+    public String getTitle();
+    public String getImage();
+    public String getWebsite();
 }

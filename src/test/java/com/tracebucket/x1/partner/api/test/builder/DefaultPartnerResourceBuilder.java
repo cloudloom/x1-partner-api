@@ -1,24 +1,24 @@
 package com.tracebucket.x1.partner.api.test.builder;
 
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
-import com.tracebucket.x1.partner.api.rest.resources.DefaultOwnerResource;
-import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerResource;
-import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerRoleResource;
-
-import java.util.HashSet;
-import java.util.Set;
+import com.tracebucket.x1.partner.api.rest.resources.*;
 
 /**
  * Created by Vishwajit on 27-05-2015.
  */
 public class DefaultPartnerResourceBuilder {
 
-    protected String title;
-    protected String image;
-    protected String website;
-    protected PartnerCategory partnerCategory;
+    private String title;
+    private String image;
+    private String website;
+    private PartnerCategory partnerCategory;
     private DefaultOwnerResource ownerResource;
-    protected Set<DefaultPartnerRoleResource> partnerRoleResources = new HashSet<DefaultPartnerRoleResource>(0);
+    private DefaultAffiliateResource affiliate;
+    private DefaultCustomerResource customer;
+    private DefaultEntertainmentCompanyResource entertainmentCompany;
+    private DefaultMuseumResource museum;
+    private DefaultTourCompanyResource tourCompany;
+    private DefaultTransportProviderResource transportProvider;
 
     private DefaultPartnerResourceBuilder(){ }
 
@@ -52,22 +52,49 @@ public class DefaultPartnerResourceBuilder {
         return this;
     }
 
-    public DefaultPartnerResourceBuilder withPartnerRoles(Set<DefaultPartnerRoleResource> partnerRoleResources) {
-        this.partnerRoleResources = partnerRoleResources;
+    public DefaultPartnerResourceBuilder withAffiliate(DefaultAffiliateResource affiliate) {
+        this.affiliate = affiliate;
+        return this;
+    }
+
+    public DefaultPartnerResourceBuilder withCustomer(DefaultCustomerResource customer) {
+        this.customer = customer;
+        return this;
+    }
+
+    public DefaultPartnerResourceBuilder withEntertainmentCompany(DefaultEntertainmentCompanyResource entertainmentCompany) {
+        this.entertainmentCompany = entertainmentCompany;
+        return this;
+    }
+
+    public DefaultPartnerResourceBuilder withMuseum(DefaultMuseumResource museum) {
+        this.museum = museum;
+        return this;
+    }
+
+    public DefaultPartnerResourceBuilder withTourCompany(DefaultTourCompanyResource tourCompany) {
+        this.tourCompany = tourCompany;
+        return this;
+    }
+
+    public DefaultPartnerResourceBuilder withTransportProvider(DefaultTransportProviderResource transportProvider) {
+        this.transportProvider = transportProvider;
         return this;
     }
 
     public DefaultPartnerResource build(){
-
         DefaultPartnerResource partner = new DefaultPartnerResource();
-
         partner.setTitle(title);
         partner.setImage(image);
         partner.setWebsite(website);
         partner.setPartnerCategory(partnerCategory);
         partner.setOwner(ownerResource);
-        partner.setPartnerRoles(partnerRoleResources);
-
+        partner.setAffiliate(affiliate);
+        partner.setCustomer(customer);
+        partner.setEntertainmentCompany(entertainmentCompany);
+        partner.setMuseum(museum);
+        partner.setTourCompany(tourCompany);
+        partner.setTransportProvider(transportProvider);
         return partner;
     }
 }

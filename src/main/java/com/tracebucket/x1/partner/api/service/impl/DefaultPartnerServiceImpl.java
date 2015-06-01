@@ -69,10 +69,15 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
 
     @Override
     @PersistChanges(repository = "partnerRepository")
-    public DefaultPartner addPartnerRole(DefaultPartnerRole newPartnerRole, AggregateId partnerAggregateId){
-        DefaultPartner partner = partnerRepository.findOne(partnerAggregateId);
+    public DefaultPartner addPartnerRole(DefaultPartner addPartnerRole){
+        DefaultPartner partner = partnerRepository.findOne(addPartnerRole.getAggregateId());
         if(partner != null) {
-            partner.addPartnerRole(newPartnerRole);
+            Set<DefaultPartnerRole> partnerRoles = addPartnerRole.getAllAssignedRoles();
+            if(partnerRoles != null && partnerRoles.size() > 0) {
+                partnerRoles.parallelStream().forEach(role -> {
+                    partner.addPartnerRole(role);
+                });
+            }
             return partner;
         }
         return null;

@@ -114,4 +114,20 @@ public class DefaultCustomer extends DefaultPartnerRole implements Customer, Ser
     public String simpleName() {
         return simpleName;
     }
+
+    public String getInitial() {
+        return initial;
+    }
+
+    public void setInitial(String initial) {
+        this.initial = initial;
+    }
+
+    public Salutation getSalutation() {
+        return salutation;
+    }
+
+    public void setSalutation(Salutation salutation) {
+        this.salutation = salutation;
+    }
 }

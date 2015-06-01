@@ -22,7 +22,7 @@ public abstract class DefaultPartnerRole extends BaseEntity implements PartnerRo
     @Basic(fetch = FetchType.EAGER)
     private String name;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @JoinTable(name = "PARTNER_ADDRESS", joinColumns = @JoinColumn(name = "PARTNER__ID"))
     private Set<DefaultAddress> addresses = new HashSet<DefaultAddress>(0);
 

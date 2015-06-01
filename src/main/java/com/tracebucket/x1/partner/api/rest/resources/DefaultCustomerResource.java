@@ -1,6 +1,5 @@
 package com.tracebucket.x1.partner.api.rest.resources;
 
-import com.tracebucket.tron.assembler.BaseResource;
 import com.tracebucket.x1.dictionary.api.domain.Gender;
 import com.tracebucket.x1.partner.api.dictionary.Salutation;
 
@@ -9,7 +8,7 @@ import java.util.Date;
 /**
  * Created by sadath on 26-May-2015.
  */
-public class DefaultCustomerResource extends BaseResource {
+public class DefaultCustomerResource extends DefaultPartnerRoleResource {
     private static final String simpleName = "Customer";
     private String initial;
     private Salutation salutation;

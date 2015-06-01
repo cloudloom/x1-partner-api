@@ -3,9 +3,6 @@ package com.tracebucket.x1.partner.api.rest.resources;
 import com.tracebucket.tron.assembler.BaseResource;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * Created by sadath on 26-May-2015.
  */
@@ -15,7 +12,12 @@ public class DefaultPartnerResource extends BaseResource{
     private String website;
     private PartnerCategory partnerCategory;
     private DefaultOwnerResource owner;
-    private Set<DefaultPartnerRoleResource> partnerRoles = new HashSet<DefaultPartnerRoleResource>(0);
+    private DefaultAffiliateResource affiliate;
+    private DefaultCustomerResource customer;
+    private DefaultEntertainmentCompanyResource entertainmentCompany;
+    private DefaultMuseumResource museum;
+    private DefaultTourCompanyResource tourCompany;
+    private DefaultTransportProviderResource transportProvider;
 
     public String getTitle() {
         return title;
@@ -57,11 +59,51 @@ public class DefaultPartnerResource extends BaseResource{
         this.owner = owner;
     }
 
-    public Set<DefaultPartnerRoleResource> getPartnerRoles() {
-        return partnerRoles;
+    public DefaultAffiliateResource getAffiliate() {
+        return affiliate;
     }
 
-    public void setPartnerRoles(Set<DefaultPartnerRoleResource> partnerRoles) {
-        this.partnerRoles = partnerRoles;
+    public void setAffiliate(DefaultAffiliateResource affiliate) {
+        this.affiliate = affiliate;
+    }
+
+    public DefaultCustomerResource getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(DefaultCustomerResource customer) {
+        this.customer = customer;
+    }
+
+    public DefaultEntertainmentCompanyResource getEntertainmentCompany() {
+        return entertainmentCompany;
+    }
+
+    public void setEntertainmentCompany(DefaultEntertainmentCompanyResource entertainmentCompany) {
+        this.entertainmentCompany = entertainmentCompany;
+    }
+
+    public DefaultMuseumResource getMuseum() {
+        return museum;
+    }
+
+    public void setMuseum(DefaultMuseumResource museum) {
+        this.museum = museum;
+    }
+
+    public DefaultTourCompanyResource getTourCompany() {
+        return tourCompany;
+    }
+
+    public void setTourCompany(DefaultTourCompanyResource tourCompany) {
+        this.tourCompany = tourCompany;
+    }
+
+    public DefaultTransportProviderResource getTransportProvider() {
+        return transportProvider;
+    }
+
+    public void setTransportProvider(DefaultTransportProviderResource transportProvider) {
+        this.transportProvider = transportProvider;
     }
 }

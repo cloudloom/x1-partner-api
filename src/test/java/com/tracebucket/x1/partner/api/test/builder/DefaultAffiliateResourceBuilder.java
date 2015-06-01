@@ -1,6 +1,7 @@
 package com.tracebucket.x1.partner.api.test.builder;
 
 import com.tracebucket.x1.dictionary.api.domain.Person;
+import com.tracebucket.x1.partner.api.rest.resources.DefaultAddressResource;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultAffiliateResource;
 
 import java.util.Date;
@@ -18,10 +19,12 @@ public class DefaultAffiliateResourceBuilder {
     private String logo;
     private String website;
     private Set<Person> persons = new HashSet<Person>(0);
+    private String name;
+    private Set<DefaultAddressResource> addresses = new HashSet<DefaultAddressResource>(0);
 
     private DefaultAffiliateResourceBuilder(){ }
 
-    public static DefaultAffiliateResourceBuilder aPartnerBuilder(){
+    public static DefaultAffiliateResourceBuilder anAffiliateBuilder(){
         return new DefaultAffiliateResourceBuilder();
     }
 
@@ -55,6 +58,16 @@ public class DefaultAffiliateResourceBuilder {
         return this;
     }
 
+    public DefaultAffiliateResourceBuilder withName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public DefaultAffiliateResourceBuilder withAddresses(Set<DefaultAddressResource> addresses) {
+        this.addresses = addresses;
+        return this;
+    }
+
     public DefaultAffiliateResource build() {
 
         DefaultAffiliateResource affiliateResource = new DefaultAffiliateResource();
@@ -64,7 +77,8 @@ public class DefaultAffiliateResourceBuilder {
         affiliateResource.setDateOfIncorporation(dateOfIncorporation );
         affiliateResource.setLogo(logo);
         affiliateResource.setPersons(persons);
-
+        affiliateResource.setName(name);
+        affiliateResource.setAddresses(addresses);
         return affiliateResource;
     }
 }

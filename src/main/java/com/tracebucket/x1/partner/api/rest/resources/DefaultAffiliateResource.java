@@ -17,6 +17,8 @@ public class DefaultAffiliateResource extends DefaultPartnerRoleResource {
     private String logo;
     private String website;
     private Set<Person> persons = new HashSet<Person>(0);
+    private String name;
+    private Set<DefaultAddressResource> addresses = new HashSet<DefaultAddressResource>(0);
 
     public static String getSimpleName() {
         return simpleName;
@@ -69,4 +71,6 @@ public class DefaultAffiliateResource extends DefaultPartnerRoleResource {
     public void setPersons(Set<Person> persons) {
         this.persons = persons;
     }
+
+
 }

@@ -24,7 +24,7 @@ public class DefaultAddressBuilder {
 
     }
 
-    public static DefaultAddressBuilder anAddress(){
+    public static DefaultAddressBuilder anAddressBuilder(){
         return new DefaultAddressBuilder();
     }
 

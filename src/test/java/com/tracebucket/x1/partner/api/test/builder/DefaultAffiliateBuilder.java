@@ -19,14 +19,13 @@ public class DefaultAffiliateBuilder {
     private String logo;
     private String website;
     private Set<DefaultPerson> persons = new HashSet<DefaultPerson>(0);
-  //  private Set<SaleChannel> saleChannels = new HashSet<>(0);
     private Set<DefaultAddress> addresses = new HashSet<DefaultAddress>(0);
 
     public DefaultAffiliateBuilder(){
 
     }
 
-    public static DefaultAffiliateBuilder aAffiliate(){
+    public static DefaultAffiliateBuilder anAffiliateBuilder(){
         return new DefaultAffiliateBuilder();
     }
 
@@ -65,11 +64,6 @@ public class DefaultAffiliateBuilder {
         return this;
     }
 
-   /* public AffiliateBuilder withSaleChannels(Set<SaleChannel> saleChannels){
-        this.saleChannels = saleChannels;
-        return this;
-    }*/
-
     public DefaultAffiliateBuilder withAddresses(Set<DefaultAddress> addresses){
         this.addresses = addresses;
         return this;
@@ -82,9 +76,8 @@ public class DefaultAffiliateBuilder {
         affiliate.setBusinessName(businessName);
         affiliate.setDateOfIncorporation(dateOfIncorporation);
         affiliate.setLogo(logo);
-        //affiliate.setAddresses(addresses);
+        affiliate.setAddresses(addresses);
         affiliate.setPersons(persons);
-       // affiliate.setSaleChannels(saleChannels);
         affiliate.setWebsite(website);
         return affiliate;
     }

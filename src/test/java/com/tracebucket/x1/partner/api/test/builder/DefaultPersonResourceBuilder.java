@@ -5,13 +5,14 @@ import com.tracebucket.x1.dictionary.api.domain.Gender;
 import com.tracebucket.x1.dictionary.api.domain.PersonType;
 import com.tracebucket.x1.dictionary.api.domain.PhoneType;
 import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultPerson;
+import com.tracebucket.x1.partner.api.rest.resources.DefaultPersonResource;
 
 import java.util.*;
 
 /**
  * Created by sadath on 25-Nov-14.
  */
-public class DefaultPersonBuilder {
+public class DefaultPersonResourceBuilder {
     private String firstName;
     private String lastName;
     private Date birthDay;
@@ -21,57 +22,57 @@ public class DefaultPersonBuilder {
     private Map<String, PhoneType> phones = new HashMap<String, PhoneType>();
     private Set<PersonType> personTypes = new HashSet<PersonType>();
 
-    private DefaultPersonBuilder(){
+    private DefaultPersonResourceBuilder(){
 
     }
 
-    public static DefaultPersonBuilder aPersonBuilder(){
-        return new DefaultPersonBuilder();
+    public static DefaultPersonResourceBuilder aPersonBuilder(){
+        return new DefaultPersonResourceBuilder();
     }
 
-    public DefaultPersonBuilder withFirstName(String firstName){
+    public DefaultPersonResourceBuilder withFirstName(String firstName){
         this.firstName = firstName;
         return this;
     }
 
-    public DefaultPersonBuilder withLastName(String lastName){
+    public DefaultPersonResourceBuilder withLastName(String lastName){
         this.lastName = lastName;
         return this;
     }
 
-    public DefaultPersonBuilder withBirthDay(Date birthDay)
+    public DefaultPersonResourceBuilder withBirthDay(Date birthDay)
     {
         this.birthDay = birthDay;
         return this;
     }
 
-    public DefaultPersonBuilder withGender(Gender gender){
+    public DefaultPersonResourceBuilder withGender(Gender gender){
         this.gender = gender;
         return this;
     }
 
-    public DefaultPersonBuilder withImage(String image){
+    public DefaultPersonResourceBuilder withImage(String image){
         this.image = image;
         return this;
     }
 
-    public DefaultPersonBuilder withEmails(Map<String, EmailType> emails){
+    public DefaultPersonResourceBuilder withEmails(Map<String, EmailType> emails){
         this.emails = emails;
         return this;
     }
 
-    public DefaultPersonBuilder withPhones(Map<String, PhoneType> phones){
+    public DefaultPersonResourceBuilder withPhones(Map<String, PhoneType> phones){
         this.phones = phones;
         return this;
     }
 
-    public DefaultPersonBuilder withPersonTypes(Set<PersonType> personTypes){
+    public DefaultPersonResourceBuilder withPersonTypes(Set<PersonType> personTypes){
         this.personTypes = personTypes;
         return this;
     }
 
-    public DefaultPerson build(){
-        DefaultPerson person = new DefaultPerson();
+    public DefaultPersonResource build(){
+        DefaultPersonResource person = new DefaultPersonResource();
         person.setFirstName(firstName);
         person.setLastName(lastName);
         person.setBirthDay(birthDay);

@@ -24,7 +24,7 @@ public class DefaultAddressResourceBuilder {
 
     }
 
-    public static DefaultAddressResourceBuilder anAddress(){
+    public static DefaultAddressResourceBuilder anAddressBuilder(){
         return new DefaultAddressResourceBuilder();
     }
 

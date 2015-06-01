@@ -100,16 +100,14 @@ public class PartnerController implements Partner{
         return new ResponseEntity<DefaultPartnerResource>(new DefaultPartnerResource(), HttpStatus.NOT_ACCEPTABLE);
     }
 
-    @RequestMapping(value = "/partner/{partnerUid}/partnerrole", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DefaultPartnerResource> addPartnerRole(@RequestBody DefaultPartnerRoleResource newPartnerRole, @PathVariable("partnerUid")String partnerAggregateId) {
-        DefaultPartnerRole defaultPartnerRole = assemblerResolver.resolveEntityAssembler(DefaultPartnerRole.class, DefaultPartnerRoleResource.class).toEntity(newPartnerRole, DefaultPartnerRole.class);
-        DefaultPartner partner = partnerService.addPartnerRole(defaultPartnerRole, new AggregateId(partnerAggregateId));
-        DefaultPartnerResource partnerResource = null;
-
-        if(partner != null) {
-            partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(partner, DefaultPartnerResource.class);
+    @RequestMapping(value = "/partner/partnerrole", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DefaultPartnerResource> addPartnerRole(@RequestBody DefaultPartnerResource partner) {
+        DefaultPartner defaultPartner = assemblerResolver.resolveEntityAssembler(DefaultPartner.class, DefaultPartnerResource.class).toEntity(partner, DefaultPartner.class);
+        defaultPartner = partnerService.addPartnerRole(defaultPartner);
+        DefaultPartnerResource partnerResource;
+        if(defaultPartner != null && defaultPartner.getAggregateId() != null) {
+            partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(defaultPartner, DefaultPartnerResource.class);
             return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
-
         }
         return new ResponseEntity<DefaultPartnerResource>(new DefaultPartnerResource(), HttpStatus.NOT_ACCEPTABLE);
     }

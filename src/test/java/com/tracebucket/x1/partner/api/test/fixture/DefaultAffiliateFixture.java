@@ -22,7 +22,7 @@ public class DefaultAffiliateFixture {
         persons.add(DefaultPersonFixture.standardPerson());
         persons.add(DefaultPersonFixture.standardPerson2());
 
-        DefaultAffiliate affiliate = DefaultAffiliateBuilder.aAffiliate()
+        DefaultAffiliate affiliate = DefaultAffiliateBuilder.anAffiliateBuilder()
                 .withName("Affiliate " + new Date().getTime())
                 .withCode("Code " + new Date().getTime())
                 .withBusinessName("Business Name "+ new Date().getTime())

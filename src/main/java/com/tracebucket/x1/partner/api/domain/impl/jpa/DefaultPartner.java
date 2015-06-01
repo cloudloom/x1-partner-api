@@ -162,4 +162,19 @@ public class DefaultPartner extends BaseAggregateRoot implements Partner{
     public Set<DefaultPartnerRole> getPartnerRoles() {
         return partnerRoles;
     }
+
+    @Override
+    public String getTitle() {
+        return title;
+    }
+
+    @Override
+    public String getImage() {
+        return image;
+    }
+
+    @Override
+    public String getWebsite() {
+        return website;
+    }
 }

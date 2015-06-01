@@ -15,7 +15,7 @@ public class DefaultAddressFixture {
     public static DefaultAddress standardAddress() {
         Set<AddressType> addressTypes = new HashSet<AddressType>();
         addressTypes.add(AddressType.HEAD_OFFICE);
-        DefaultAddress address = DefaultAddressBuilder.anAddress()
+        DefaultAddress address = DefaultAddressBuilder.anAddressBuilder()
                 .withName("MMP")
                 .withBuilding("XYZ Complex")
                 .withStreet("KR Road")
@@ -33,7 +33,7 @@ public class DefaultAddressFixture {
     public static DefaultAddress headOffice() {
         Set<AddressType> addressTypes = new HashSet<AddressType>();
         addressTypes.add(AddressType.HEAD_OFFICE);
-        DefaultAddress address = DefaultAddressBuilder.anAddress()
+        DefaultAddress address = DefaultAddressBuilder.anAddressBuilder()
                 .withName("MMPBV")
                 .withBuilding("Vlasveen")
                 .withStreet("9301 PS")
