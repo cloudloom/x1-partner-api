@@ -140,9 +140,8 @@ public class PartnerController implements Partner{
         return null;
     }*/
 
-    @RequestMapping(value = "/partner/{partnerUid}/hasrole", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Boolean> hasPartnerRole(@RequestBody DefaultPartnerRoleResource partnerRole, @PathVariable("partnerUid") String partnerAggregateId) {
-        DefaultPartnerRole defaultPartnerRole = assemblerResolver.resolveEntityAssembler(DefaultPartnerRole.class, DefaultPartnerRoleResource.class).toEntity(partnerRole, DefaultPartnerRole.class);
-        return new ResponseEntity<Boolean>(partnerService.hasPartnerRole(defaultPartnerRole, new AggregateId(partnerAggregateId)), HttpStatus.OK);
+    @RequestMapping(value = "/partner/{partnerUid}/role/{roleUid}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> hasPartnerRole(@PathVariable("partnerUid") String partnerAggregateId, @PathVariable("roleUid") String roleEntityId) {
+        return new ResponseEntity<Boolean>(partnerService.hasPartnerRole(new AggregateId(partnerAggregateId), new EntityId(roleEntityId)), HttpStatus.OK);
     }
 }

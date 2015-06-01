@@ -21,5 +21,5 @@ public interface Partner {
 /*
     public ResponseEntity<DefaultPartnerResource> changeOwner(DefaultOwnerResource newOwner, String partnerAggregateId);
 */
-    public ResponseEntity<Boolean> hasPartnerRole(DefaultPartnerRoleResource partnerRole, String partnerAggregateId);
+    public ResponseEntity<Boolean> hasPartnerRole(String partnerAggregateId, String roleEntityId);
 }

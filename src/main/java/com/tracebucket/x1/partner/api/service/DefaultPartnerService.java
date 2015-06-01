@@ -22,5 +22,5 @@ public interface DefaultPartnerService {
 /*
     public DefaultPartner changeOwner(DefaultOwner newOwner, AggregateId partnerAggregateId);
 */
-    public Boolean hasPartnerRole(DefaultPartnerRole partnerRole, AggregateId partnerAggregateId);
+    public Boolean hasPartnerRole(AggregateId partnerAggregateId, EntityId roleEntityId);
 }

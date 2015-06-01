@@ -131,13 +131,15 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
     }*/
 
     @Override
-    public Boolean hasPartnerRole(DefaultPartnerRole partnerRole, AggregateId partnerAggregateId){
+    public Boolean hasPartnerRole(AggregateId partnerAggregateId, EntityId roleEntityId){
         Long found = null;
         DefaultPartner partner = partnerRepository.findOne(partnerAggregateId);
         if(partner != null) {
-            found = partner.getAllAssignedRoles().parallelStream()
-                    .filter(t -> t.getEntityId().equals(partnerRole.getEntityId()))
-                    .count();
+            if(partner.getAllAssignedRoles() != null && partner.getAllAssignedRoles().size() > 0) {
+                found = partner.getAllAssignedRoles().parallelStream()
+                        .filter(t -> t.getEntityId().equals(roleEntityId.getId()))
+                        .count();
+            }
         }
         return (found != null && found > 0) ? true : false;
     }

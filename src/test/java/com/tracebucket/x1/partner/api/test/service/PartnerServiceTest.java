@@ -141,13 +141,11 @@ public class PartnerServiceTest {
 
     @Test
     public void hasPartnerRole() throws Exception{
-
         createPartner();
         Set<DefaultPartnerRole> partnerRoles = partner.getAllAssignedRoles();
         Assert.assertNotNull(partnerRoles);
-
         for(DefaultPartnerRole partnerRole : partnerRoles){
-            Assert.assertTrue(partnerService.hasPartnerRole(partnerRole,partner.getAggregateId()));
+            Assert.assertTrue(partnerService.hasPartnerRole(partner.getAggregateId(), partnerRole.getEntityId()));
             break;
         }
 
