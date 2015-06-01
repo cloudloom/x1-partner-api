@@ -75,7 +75,7 @@ public class PartnerServiceTest {
     @Test
      public void addPartnerRole() throws Exception{
         createPartner();
-        partner.getAllAssignedRoles().add(DefaultAffiliateFixture.standardAffiliate());
+        partner.getAllAssignedRoles().add(DefaultAffiliateFixture.standardAffiliate2());
         partner = partnerService.addPartnerRole(partner);
         Assert.assertNotNull(partner);
         Assert.assertEquals(2, partner.getAllAssignedRoles().size());
