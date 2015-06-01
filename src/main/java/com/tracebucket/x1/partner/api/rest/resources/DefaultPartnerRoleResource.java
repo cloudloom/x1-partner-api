@@ -1,7 +1,6 @@
 package com.tracebucket.x1.partner.api.rest.resources;
 
 import com.tracebucket.tron.assembler.BaseResource;
-import com.tracebucket.x1.dictionary.api.domain.Address;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,7 +10,7 @@ import java.util.Set;
  */
 public class DefaultPartnerRoleResource extends BaseResource {
     private String name;
-    private Set<Address> addresses = new HashSet<Address>(0);
+    private Set<DefaultAddressResource> addresses = new HashSet<DefaultAddressResource>(0);
 
     public String getName() {
         return name;
@@ -21,11 +20,11 @@ public class DefaultPartnerRoleResource extends BaseResource {
         this.name = name;
     }
 
-    public Set<Address> getAddresses() {
+    public Set<DefaultAddressResource> getAddresses() {
         return addresses;
     }
 
-    public void setAddresses(Set<Address> addresses) {
+    public void setAddresses(Set<DefaultAddressResource> addresses) {
         this.addresses = addresses;
     }
 }

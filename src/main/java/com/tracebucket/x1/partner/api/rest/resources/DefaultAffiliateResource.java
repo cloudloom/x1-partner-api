@@ -1,6 +1,5 @@
 package com.tracebucket.x1.partner.api.rest.resources;
 
-import com.tracebucket.tron.assembler.BaseResource;
 import com.tracebucket.x1.dictionary.api.domain.Person;
 
 import java.util.Date;
@@ -10,7 +9,7 @@ import java.util.Set;
 /**
  * Created by sadath on 26-May-2015.
  */
-public class DefaultAffiliateResource extends BaseResource {
+public class DefaultAffiliateResource extends DefaultPartnerRoleResource {
     private static final String simpleName = "Affiliate";
     private String businessName;
     private String code;
@@ -18,6 +17,8 @@ public class DefaultAffiliateResource extends BaseResource {
     private String logo;
     private String website;
     private Set<Person> persons = new HashSet<Person>(0);
+    private String name;
+    private Set<DefaultAddressResource> addresses = new HashSet<DefaultAddressResource>(0);
 
     public static String getSimpleName() {
         return simpleName;
@@ -70,4 +71,6 @@ public class DefaultAffiliateResource extends BaseResource {
     public void setPersons(Set<Person> persons) {
         this.persons = persons;
     }
+
+
 }

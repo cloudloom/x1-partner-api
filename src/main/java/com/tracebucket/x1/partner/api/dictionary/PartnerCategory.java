@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 /**
  * Created by ffl on 26-05-2014.
  */
-@JsonFormat(shape = JsonFormat.Shape.OBJECT)
+@JsonFormat(shape = JsonFormat.Shape.SCALAR)
 public enum PartnerCategory {
     INDIVIDUAL("Individual", "INDIVIDUAL"),
     GROUP("Group", "GROUP"),

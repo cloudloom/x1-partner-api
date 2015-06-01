@@ -1,6 +1,6 @@
 package com.tracebucket.x1.partner.api.domain.impl.jpa;
 
-import com.tracebucket.x1.dictionary.api.domain.Person;
+import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultPerson;
 import com.tracebucket.x1.partner.api.domain.Affiliate;
 
 import javax.persistence.*;
@@ -45,7 +45,7 @@ public class DefaultAffiliate extends DefaultPartnerRole implements Affiliate, S
             joinColumns={ @JoinColumn(name="AFFILIATE__ID", referencedColumnName="ID") },
             inverseJoinColumns={ @JoinColumn(name="PERSON__ID", referencedColumnName="ID", unique=false) }
     )
-    private Set<Person> persons = new HashSet<Person>(0);
+    private Set<DefaultPerson> persons = new HashSet<DefaultPerson>(0);
 
     @Override
     public String getBusinessName() {
@@ -98,12 +98,12 @@ public class DefaultAffiliate extends DefaultPartnerRole implements Affiliate, S
     }
 
     @Override
-    public Set<Person> getPersons() {
+    public Set<DefaultPerson> getPersons() {
         return persons;
     }
 
     @Override
-    public void setPersons(Set<Person> persons) {
+    public void setPersons(Set<DefaultPerson> persons) {
         this.persons = persons;
     }
 

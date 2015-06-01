@@ -1,6 +1,6 @@
 package com.tracebucket.x1.partner.api.domain;
 
-import com.tracebucket.x1.dictionary.api.domain.Person;
+import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultPerson;
 
 import java.util.Set;
 
@@ -14,6 +14,6 @@ public interface EntertainmentCompany {
     public void setWebsite(String website);
     public String getLogo();
     public void setLogo(String logo);
-    public Set<Person> getContactPersons();
-    public void setContactPersons(Set<Person> contactPersons);
+    public Set<DefaultPerson> getContactPersons();
+    public void setContactPersons(Set<DefaultPerson> contactPersons);
 }
