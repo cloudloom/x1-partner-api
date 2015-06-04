@@ -10,16 +10,9 @@ import java.util.Date;
  */
 public class DefaultOwnerFixture {
 
-    public static DefaultOwner standardOwner() {
+    public static DefaultOwner standardOwner(String organizationUID) {
         DefaultOwner owner = DefaultOwnerBuilder.anOwnerBuilder()
-                .withName("Name " + new Date().getTime())
-                .build();
-        return owner;
-    }
-
-    public static DefaultOwner standardOwner2() {
-        DefaultOwner owner = DefaultOwnerBuilder.anOwnerBuilder()
-                .withName("Name_UPDT "+ new Date().getTime())
+                .withOrganizationUID(organizationUID)
                 .build();
         return owner;
     }

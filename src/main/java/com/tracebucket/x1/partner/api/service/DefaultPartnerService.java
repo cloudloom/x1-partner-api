@@ -5,7 +5,6 @@ import com.tracebucket.tron.ddd.domain.EntityId;
 import com.tracebucket.x1.dictionary.api.domain.Address;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartner;
-import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartnerRole;
 
 /**
  * Created by sadath on 26-May-2015.

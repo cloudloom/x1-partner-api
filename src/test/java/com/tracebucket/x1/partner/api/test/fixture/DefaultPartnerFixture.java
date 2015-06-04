@@ -21,15 +21,11 @@ public class DefaultPartnerFixture {
         Set<DefaultPartnerRole> partnerRoles = new HashSet<DefaultPartnerRole>();
         DefaultAffiliate affiliate = DefaultAffiliateFixture.standardAffiliate();
         partnerRoles.add(affiliate);
-
-        DefaultOwner owner = DefaultOwnerFixture.standardOwner();
-
         DefaultPartner partner = DefaultPartnerBuilder.aPartnerBuilder()
                 .withPartnerCategory(PartnerCategory.GROUP)
                 .withImage("logo_1")
                 .withTitle("title_1")
                 //.withPartnerRoles(partnerRoles)
-                .withOwner(owner)
                 .withWebsite("www.yyy.nl").build();
         return partner;
     }

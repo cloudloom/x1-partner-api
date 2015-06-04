@@ -6,13 +6,13 @@ import com.tracebucket.tron.assembler.BaseResource;
  * Created by sadath on 26-May-2015.
  */
 public class DefaultOwnerResource extends BaseResource {
-    private String name;
+    private String organizationUID;
 
-    public String getName() {
-        return name;
+    public String getOrganizationUID() {
+        return organizationUID;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setOrganizationUID(String organizationUID) {
+        this.organizationUID = organizationUID;
     }
 }

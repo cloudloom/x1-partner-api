@@ -4,9 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tracebucket.x1.partner.api.DefaultPartnerStarter;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultAddressResource;
-import com.tracebucket.x1.partner.api.rest.resources.DefaultAffiliateResource;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerResource;
-import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerRoleResource;
 import com.tracebucket.x1.partner.api.test.fixture.DefaultAddressResourceFixture;
 import com.tracebucket.x1.partner.api.test.fixture.DefaultAffiliateResourceFixture;
 import com.tracebucket.x1.partner.api.test.fixture.DefaultPartnerResourceFixture;
@@ -27,7 +25,6 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
-import java.util.Set;
 
 /**
  * Created by Vishwajit on 27-05-2015.

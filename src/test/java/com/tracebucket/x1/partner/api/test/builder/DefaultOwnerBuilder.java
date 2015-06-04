@@ -7,7 +7,7 @@ import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultOwner;
  */
 public class DefaultOwnerBuilder {
 
-    private String name;
+    private String organizationUID;
 
     private DefaultOwnerBuilder(){ }
 
@@ -15,15 +15,14 @@ public class DefaultOwnerBuilder {
         return new DefaultOwnerBuilder();
     }
 
-    public DefaultOwnerBuilder withName(String name){
-        this.name = name;
+    public DefaultOwnerBuilder withOrganizationUID(String organizationUID){
+        this.organizationUID = organizationUID;
         return this;
     }
 
     public DefaultOwner build(){
         DefaultOwner owner = new DefaultOwner();
-        owner.setName(name);
-
+        owner.setOrganizationUID(organizationUID);
         return owner;
     }
 }

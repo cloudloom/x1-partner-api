@@ -13,30 +13,15 @@ import javax.persistence.FetchType;
  */
 @Embeddable
 public class DefaultOwner implements Owner {
-
-    /*@Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "aggregateId", column = @Column(name = "clientId", nullable = false))})
-    private AggregateId aggregateId;*/
-
-    @Column(name = "NAME", /*nullable = false, */unique = true)
+    @Column(name = "ORGANIZATION__ID", unique = true)
     @Basic(fetch = FetchType.EAGER)
-    private String name;
+    private String organizationUID;
 
-    public DefaultOwner() {
+    public String getOrganizationUID() {
+        return organizationUID;
     }
 
-    public DefaultOwner(String name){
-        this.name = name;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public void setName(String name) {
-        this.name = name;
+    public void setOrganizationUID(String organizationUID) {
+        this.organizationUID = organizationUID;
     }
 }
