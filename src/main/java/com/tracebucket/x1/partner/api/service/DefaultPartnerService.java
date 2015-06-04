@@ -5,6 +5,9 @@ import com.tracebucket.tron.ddd.domain.EntityId;
 import com.tracebucket.x1.dictionary.api.domain.Address;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartner;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 /**
  * Created by sadath on 26-May-2015.
@@ -22,4 +25,6 @@ public interface DefaultPartnerService {
     public DefaultPartner changeOwner(DefaultOwner newOwner, AggregateId partnerAggregateId);
 */
     public Boolean hasPartnerRole(AggregateId partnerAggregateId, EntityId roleEntityId);
+    public List<DefaultPartner> findPartnersByOrganization(String organizationUid);
+
 }

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -142,5 +143,10 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
             }
         }
         return (found != null && found > 0) ? true : false;
+    }
+
+    @Override
+    public List<DefaultPartner> findPartnersByOrganization(String organizationUid) {
+        return partnerRepository.findPartnersByOrganization(organizationUid);
     }
 }
