@@ -17,6 +17,14 @@ public class DefaultOwner implements Owner {
     @Basic(fetch = FetchType.EAGER)
     private String organizationUID;
 
+    public DefaultOwner() {
+
+    }
+
+    public DefaultOwner(String organizationUID) {
+        this.organizationUID = organizationUID;
+    }
+
     public String getOrganizationUID() {
         return organizationUID;
     }
