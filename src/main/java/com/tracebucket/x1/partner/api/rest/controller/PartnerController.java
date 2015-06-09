@@ -19,6 +19,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
 /**
  * Created by sadath on 26-May-2015.
  */
@@ -63,6 +67,17 @@ public class PartnerController implements Partner{
         }
 
         return new ResponseEntity<DefaultPartnerResource>(new DefaultPartnerResource(), HttpStatus.NOT_FOUND);
+    }
+
+    @RequestMapping(value = "/partners", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Set<DefaultPartnerResource>> findAll() {
+        List<DefaultPartner> partners = partnerService.findAll();
+        if(partners != null && partners.size() > 0) {
+            Set<DefaultPartnerResource> partnerResources = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResources(partners, DefaultPartnerResource.class);
+            return new ResponseEntity<Set<DefaultPartnerResource>>(partnerResources, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<Set<DefaultPartnerResource>>(Collections.emptySet(), HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(value = "/partner/{partnerUid}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)

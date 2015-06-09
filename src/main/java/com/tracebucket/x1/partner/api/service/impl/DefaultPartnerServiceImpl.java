@@ -37,6 +37,11 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
     }
 
     @Override
+    public List<DefaultPartner> findAll() {
+        return partnerRepository.findAll();
+    }
+
+    @Override
     public boolean delete(AggregateId partnerAggregateId) {
         DefaultPartner partner = partnerRepository.findOne(partnerAggregateId);
         if(partner != null) {

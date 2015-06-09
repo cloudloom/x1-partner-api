@@ -15,6 +15,7 @@ import java.util.List;
 public interface DefaultPartnerService {
     public DefaultPartner save(DefaultPartner partner);
     public DefaultPartner findOne(AggregateId aggregateId);
+    public List<DefaultPartner> findAll();
     public boolean delete(AggregateId partnerAggregateId);
     public DefaultPartner setPartnerCategory(PartnerCategory partnerCategory, AggregateId partnerAggregateId);
     public DefaultPartner movePartnerToCategory(PartnerCategory newPartnerCategory,AggregateId partnerAggregateId);
