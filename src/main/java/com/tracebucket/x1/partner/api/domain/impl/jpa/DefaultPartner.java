@@ -76,7 +76,10 @@ public class DefaultPartner extends BaseAggregateRoot implements Partner{
     @Override
     @DomainMethod(event = "PartnerRoleAdded")
     public void addPartnerRole(DefaultPartnerRole newPartnerRole){
-        this.partnerRoles.add(newPartnerRole);
+        boolean status = this.partnerRoles.stream().noneMatch(role -> role.getEntityId().getId().equals(newPartnerRole.getEntityId().getId()));
+        if(status) {
+            this.partnerRoles.add(newPartnerRole);
+        }
     }
 
     @Override
