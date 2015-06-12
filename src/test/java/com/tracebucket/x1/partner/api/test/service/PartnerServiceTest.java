@@ -72,13 +72,14 @@ public class PartnerServiceTest {
          Assert.assertNotNull(partner);
          Assert.assertEquals(partner.getPartnerCategory(), PartnerCategory.INDIVIDUAL);
      }
+
     @Test
      public void addPartnerRole() throws Exception{
         createPartner();
         partner.getAllAssignedRoles().add(DefaultAffiliateFixture.standardAffiliate());
         partner = partnerService.addPartnerRole(partner);
         Assert.assertNotNull(partner);
-        Assert.assertEquals(1, partner.getAllAssignedRoles().size());
+        Assert.assertEquals(2, partner.getAllAssignedRoles().size());
     }
 
     @Test

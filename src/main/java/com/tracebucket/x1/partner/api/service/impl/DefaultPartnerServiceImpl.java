@@ -76,7 +76,7 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
     @Override
     @PersistChanges(repository = "partnerRepository")
     public DefaultPartner addPartnerRole(DefaultPartner addPartnerRole){
-        DefaultPartner partner = partnerRepository.findOne(addPartnerRole.getAggregateId());
+/*        DefaultPartner partner = partnerRepository.findOne(addPartnerRole.getAggregateId());
         if(partner != null) {
             Set<DefaultPartnerRole> partnerRoles = addPartnerRole.getAllAssignedRoles();
             if(partnerRoles != null && partnerRoles.size() > 0) {
@@ -86,7 +86,8 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
             }
             return partner;
         }
-        return null;
+        return null;*/
+        return addPartnerRole;
     }
 
     @Override
@@ -143,7 +144,7 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
         if(partner != null) {
             if(partner.getAllAssignedRoles() != null && partner.getAllAssignedRoles().size() > 0) {
                 found = partner.getAllAssignedRoles().parallelStream()
-                        .filter(t -> t.getEntityId().equals(roleEntityId.getId()))
+                        .filter(t -> t.getEntityId().getId().equals(roleEntityId.getId()))
                         .count();
             }
         }

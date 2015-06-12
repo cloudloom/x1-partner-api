@@ -1,6 +1,7 @@
 package com.tracebucket.x1.partner.api.test.builder;
 
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
+import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultEmployee;
 import com.tracebucket.x1.partner.api.rest.resources.*;
 
 /**
@@ -14,6 +15,7 @@ public class DefaultPartnerResourceBuilder {
     private PartnerCategory partnerCategory;
     private DefaultOwnerResource ownerResource;
     private DefaultAffiliateResource affiliate;
+    private DefaultEmployeeResource employee;
     private DefaultCustomerResource customer;
     private DefaultEntertainmentCompanyResource entertainmentCompany;
     private DefaultMuseumResource museum;
