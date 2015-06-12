@@ -143,7 +143,7 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
         if(partner != null) {
             if(partner.getAllAssignedRoles() != null && partner.getAllAssignedRoles().size() > 0) {
                 found = partner.getAllAssignedRoles().parallelStream()
-                        .filter(t -> t.getEntityId().equals(roleEntityId.getId()))
+                        .filter(t -> t.getEntityId().getId().equals(roleEntityId.getId()))
                         .count();
             }
         }
