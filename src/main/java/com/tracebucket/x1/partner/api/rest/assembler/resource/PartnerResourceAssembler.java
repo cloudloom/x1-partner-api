@@ -50,6 +50,8 @@ public class PartnerResourceAssembler extends ResourceAssembler<DefaultPartnerRe
                             partner.setTourCompany(assemblerResolver.resolveResourceAssembler(DefaultTourCompanyResource.class, DefaultTourCompany.class).toResource((DefaultTourCompany) role, DefaultTourCompanyResource.class));
                         } else if(role instanceof DefaultTransportProvider) {
                             partner.setTransportProvider(assemblerResolver.resolveResourceAssembler(DefaultTransportProviderResource.class, DefaultTransportProvider.class).toResource((DefaultTransportProvider) role, DefaultTransportProviderResource.class));
+                        } else if(role instanceof DefaultEmployee) {
+                            partner.setEmployee(assemblerResolver.resolveResourceAssembler(DefaultEmployeeResource.class, DefaultEmployee.class).toResource((DefaultEmployee) role, DefaultEmployeeResource.class));
                         }
                     });
                 }

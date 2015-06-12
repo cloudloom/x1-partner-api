@@ -18,6 +18,7 @@ public class DefaultPartnerResource extends BaseResource{
     private DefaultMuseumResource museum;
     private DefaultTourCompanyResource tourCompany;
     private DefaultTransportProviderResource transportProvider;
+    private DefaultEmployeeResource employee;
 
     public String getTitle() {
         return title;
@@ -105,5 +106,13 @@ public class DefaultPartnerResource extends BaseResource{
 
     public void setTransportProvider(DefaultTransportProviderResource transportProvider) {
         this.transportProvider = transportProvider;
+    }
+
+    public DefaultEmployeeResource getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(DefaultEmployeeResource employee) {
+        this.employee = employee;
     }
 }

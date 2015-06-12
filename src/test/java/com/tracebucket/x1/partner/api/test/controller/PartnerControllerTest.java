@@ -7,6 +7,7 @@ import com.tracebucket.x1.partner.api.rest.resources.DefaultAddressResource;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerResource;
 import com.tracebucket.x1.partner.api.test.fixture.DefaultAddressResourceFixture;
 import com.tracebucket.x1.partner.api.test.fixture.DefaultAffiliateResourceFixture;
+import com.tracebucket.x1.partner.api.test.fixture.DefaultEmployeeResourceFixture;
 import com.tracebucket.x1.partner.api.test.fixture.DefaultPartnerResourceFixture;
 import org.junit.After;
 import org.junit.Assert;
@@ -98,12 +99,15 @@ public class PartnerControllerTest {
     public void testAddPartnerRole() throws Exception {
         createPartner();
         partner.setAffiliate(DefaultAffiliateResourceFixture.standardAffiliate());
+        partner.setEmployee(DefaultEmployeeResourceFixture.standardEmployee());
         log.info("Add Partner Role : " + objectMapper.writeValueAsString(partner));
         restTemplate.put(basePath+"/partner/partnerrole", partner);
         partner = restTemplate.getForObject(basePath + "/partner/" + partner.getUid(), DefaultPartnerResource.class);
         Assert.assertNotNull(partner.getUid());
         Assert.assertNotNull(partner.getAffiliate());
         Assert.assertNotNull(partner.getAffiliate().getUid());
+        Assert.assertNotNull(partner.getEmployee());
+        Assert.assertNotNull(partner.getEmployee().getUid());
 
     }
 

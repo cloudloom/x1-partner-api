@@ -57,6 +57,9 @@ public class PartnerEntityAssembler extends EntityAssembler<DefaultPartner, Defa
             if(resource.getTransportProvider() != null) {
                 partnerRoles.add(assemblerResolver.resolveEntityAssembler(DefaultTransportProvider.class, DefaultTransportProviderResource.class).toEntity(resource.getTransportProvider(), DefaultTransportProvider.class));
             }
+            if(resource.getEmployee() != null) {
+                partnerRoles.add(assemblerResolver.resolveEntityAssembler(DefaultEmployee.class, DefaultEmployeeResource.class).toEntity(resource.getEmployee(), DefaultEmployee.class));
+            }
             if(partnerRoles.size() > 0) {
                 partner.setPartnerRoles(partnerRoles);
             }
