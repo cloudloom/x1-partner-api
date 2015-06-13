@@ -13,7 +13,7 @@ import javax.persistence.FetchType;
  */
 @Embeddable
 public class DefaultOwner implements Owner {
-    @Column(name = "ORGANIZATION__ID", unique = true)
+    @Column(name = "ORGANIZATION__ID")
     @Basic(fetch = FetchType.EAGER)
     private String organizationUID;
 

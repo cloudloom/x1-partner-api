@@ -1,10 +1,12 @@
 package com.tracebucket.x1.partner.api.rest.resources;
 
 import com.tracebucket.tron.assembler.BaseResource;
+import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultAddress;
 import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultEmail;
 import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultPhone;
 import com.tracebucket.x1.partner.api.dictionary.Salutation;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -19,6 +21,7 @@ public class DefaultEmployeeResource extends BaseResource {
     protected String middleName;
     private Set<DefaultPhone> phone;
     private Set<DefaultEmail> email;
+    private Set<DefaultAddressResource> addresses;
 
     public String getEmployeeID() {
         return employeeID;
@@ -74,5 +77,13 @@ public class DefaultEmployeeResource extends BaseResource {
 
     public void setEmail(Set<DefaultEmail> email) {
         this.email = email;
+    }
+
+    public Set<DefaultAddressResource> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(Set<DefaultAddressResource> addresses) {
+        this.addresses = addresses;
     }
 }

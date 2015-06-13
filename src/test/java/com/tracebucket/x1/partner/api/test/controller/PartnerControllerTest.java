@@ -18,7 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -74,6 +76,14 @@ public class PartnerControllerTest {
         Assert.assertNotNull(partner.getUid());
         Assert.assertEquals(uid, partner.getUid());
         log.info("Found : " + objectMapper.writeValueAsString(partner));
+    }
+
+    @Test
+    public void testFindAll() throws Exception {
+        createPartner();
+        ResponseEntity<DefaultPartnerResource[]> responseEntity = restTemplate.exchange(basePath + "/partners", HttpMethod.GET, null, DefaultPartnerResource[].class);
+        Assert.assertNotNull(responseEntity.getBody());
+        Assert.assertTrue(responseEntity.getBody().length > 0);
     }
 
     @Test

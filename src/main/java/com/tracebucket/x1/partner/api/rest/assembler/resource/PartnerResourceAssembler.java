@@ -70,7 +70,7 @@ public class PartnerResourceAssembler extends ResourceAssembler<DefaultPartnerRe
         Set<DefaultPartnerResource> partners = new HashSet<DefaultPartnerResource>();
         if(entities != null && entities.size() > 0) {
             Iterator<DefaultPartner> iterator = entities.iterator();
-            if(iterator.hasNext()) {
+            while(iterator.hasNext()) {
                 DefaultPartner partner = iterator.next();
                 partners.add(toResource(partner, DefaultPartnerResource.class));
             }
