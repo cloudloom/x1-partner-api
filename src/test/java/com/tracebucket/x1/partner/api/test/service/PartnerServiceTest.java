@@ -3,11 +3,13 @@ package com.tracebucket.x1.partner.api.test.service;
 import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultAddress;
 import com.tracebucket.x1.partner.api.DefaultPartnerStarter;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
+import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultOwner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartnerRole;
 import com.tracebucket.x1.partner.api.service.DefaultPartnerService;
 import com.tracebucket.x1.partner.api.test.fixture.DefaultAddressFixture;
 import com.tracebucket.x1.partner.api.test.fixture.DefaultAffiliateFixture;
+import com.tracebucket.x1.partner.api.test.fixture.DefaultOwnerFixture;
 import com.tracebucket.x1.partner.api.test.fixture.DefaultPartnerFixture;
 import org.junit.After;
 import org.junit.Assert;
@@ -20,6 +22,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * Created by Vishwajit on 26-05-2015.
@@ -131,14 +134,15 @@ public class PartnerServiceTest {
        Assert.assertNotNull(partner.getAllAssignedRoles());
     }
 
-/*    @Test
+    @Test
     public void changeOwner() throws Exception{
         createPartner();
-        DefaultOwner owner = DefaultOwnerFixture.standardOwner2();
+        String organizationUid = UUID.randomUUID().toString();
+        DefaultOwner owner = DefaultOwnerFixture.standardOwner(organizationUid);
         partner = partnerService.changeOwner(owner,partner.getAggregateId());
         Assert.assertNotNull(partner);
-        Assert.assertEquals(owner, partner.getOwner());
-    }*/
+        Assert.assertEquals(organizationUid, partner.getOwner().getOrganizationUID());
+    }
 
     @Test
     public void hasPartnerRole() throws Exception{

@@ -151,9 +151,10 @@ public class PartnerController implements Partner{
         return new ResponseEntity<DefaultPartnerResource>(new DefaultPartnerResource(), HttpStatus.NOT_ACCEPTABLE);
     }
 
-    @RequestMapping(value = "/partner/{partnerUid}/owner/{organizationUid}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DefaultPartnerResource> changeOwner(@PathVariable("partnerUid") String partnerAggregateId, @PathVariable("organizationUid") String organizationAggregateId) {
-        DefaultPartner partner = partnerService.changeOwner(new DefaultOwner(organizationAggregateId), new AggregateId(partnerAggregateId));
+    @RequestMapping(value = "/partner/{partnerUid}/owner", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DefaultPartnerResource> changeOwner(@PathVariable("partnerUid") String partnerAggregateId, @RequestBody DefaultOwnerResource ownerResource) {
+        DefaultOwner owner = assemblerResolver.resolveEntityAssembler(DefaultOwner.class, DefaultOwnerResource.class).toEntity(ownerResource, DefaultOwner.class);
+        DefaultPartner partner = partnerService.changeOwner(owner, new AggregateId(partnerAggregateId));
         if(partner != null) {
             DefaultPartnerResource partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(partner, DefaultPartnerResource.class);
             return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);

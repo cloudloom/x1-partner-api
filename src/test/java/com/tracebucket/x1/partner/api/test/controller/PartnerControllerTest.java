@@ -4,11 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tracebucket.x1.partner.api.DefaultPartnerStarter;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultAddressResource;
+import com.tracebucket.x1.partner.api.rest.resources.DefaultOwnerResource;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerResource;
-import com.tracebucket.x1.partner.api.test.fixture.DefaultAddressResourceFixture;
-import com.tracebucket.x1.partner.api.test.fixture.DefaultAffiliateResourceFixture;
-import com.tracebucket.x1.partner.api.test.fixture.DefaultEmployeeResourceFixture;
-import com.tracebucket.x1.partner.api.test.fixture.DefaultPartnerResourceFixture;
+import com.tracebucket.x1.partner.api.test.fixture.*;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -26,6 +24,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
+import java.util.UUID;
 
 /**
  * Created by Vishwajit on 27-05-2015.
@@ -131,10 +130,16 @@ public class PartnerControllerTest {
         Assert.assertEquals(1, partner.getAffiliate().getAddresses().size());
     }
 
-/*    @Test
+    @Test
     public void testChangeOwner() throws Exception {
-
-    }*/
+        createPartner();
+        String organizationUid = UUID.randomUUID().toString();
+        DefaultOwnerResource ownerResource = DefaultOwnerResourceFixture.standardOwner(organizationUid);
+        restTemplate.put(basePath + "/partner/" + partner.getUid() + "/owner", ownerResource);
+        partner = restTemplate.getForObject(basePath + "/partner/" + partner.getUid(), DefaultPartnerResource.class);
+        Assert.assertNotNull(partner);
+        Assert.assertEquals(organizationUid, partner.getOwner().getOrganizationUID());
+    }
 
     @Test
     public void testMoveRoleAddressTo() throws Exception {
