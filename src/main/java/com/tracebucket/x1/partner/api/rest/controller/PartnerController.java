@@ -5,9 +5,11 @@ import com.tracebucket.tron.ddd.domain.AggregateId;
 import com.tracebucket.tron.ddd.domain.EntityId;
 import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultAddress;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
+import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultOwner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartner;
 import com.tracebucket.x1.partner.api.rest.exception.PartnerException;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultAddressResource;
+import com.tracebucket.x1.partner.api.rest.resources.DefaultOwnerResource;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerResource;
 import com.tracebucket.x1.partner.api.service.DefaultPartnerService;
 import org.slf4j.Logger;
@@ -149,9 +151,15 @@ public class PartnerController implements Partner{
         return new ResponseEntity<DefaultPartnerResource>(new DefaultPartnerResource(), HttpStatus.NOT_ACCEPTABLE);
     }
 
-/*     public ResponseEntity<DefaultPartnerResource> changeOwner(DefaultOwnerResource newOwner, String partnerAggregateId) {
-        return null;
-    }*/
+    @RequestMapping(value = "/partner/{partnerUid}/owner/{organizationUid}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DefaultPartnerResource> changeOwner(@PathVariable("partnerUid") String partnerAggregateId, @PathVariable("organizationUid") String organizationAggregateId) {
+        DefaultPartner partner = partnerService.changeOwner(new DefaultOwner(organizationAggregateId), new AggregateId(partnerAggregateId));
+        if(partner != null) {
+            DefaultPartnerResource partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(partner, DefaultPartnerResource.class);
+            return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
+        }
+        return new ResponseEntity<DefaultPartnerResource>(new DefaultPartnerResource(), HttpStatus.NOT_ACCEPTABLE);
+    }
 
     @RequestMapping(value = "/partner/{partnerUid}/role/{roleUid}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Boolean> hasPartnerRole(@PathVariable("partnerUid") String partnerAggregateId, @PathVariable("roleUid") String roleEntityId) {
