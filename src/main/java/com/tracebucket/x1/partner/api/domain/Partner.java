@@ -4,6 +4,7 @@ import com.tracebucket.x1.dictionary.api.domain.Address;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultOwner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartnerRole;
+import org.dozer.Mapper;
 
 import java.util.Set;
 
@@ -14,6 +15,7 @@ public interface Partner {
     public void setPartnerCategory(PartnerCategory partnerCategory);
     public void movePartnerToCategory(PartnerCategory newPartnerCategory);
     public void addPartnerRole(DefaultPartnerRole newPartnerRole);
+    public void updatePartnerRole(DefaultPartnerRole newPartnerRole, Mapper mapper);
     public Boolean hasPartnerRole(DefaultPartnerRole partnerRole);
     public void addAddressToRole(DefaultPartnerRole partnerRole, Address address);
     public void moveRoleAddressTo(DefaultPartnerRole partnerRole, Address newAddress);

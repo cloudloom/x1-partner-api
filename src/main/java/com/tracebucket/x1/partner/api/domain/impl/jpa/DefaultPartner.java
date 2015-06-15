@@ -6,6 +6,7 @@ import com.tracebucket.x1.dictionary.api.domain.Address;
 import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultAddress;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
 import com.tracebucket.x1.partner.api.domain.Partner;
+import org.dozer.Mapper;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -83,6 +84,17 @@ public class DefaultPartner extends BaseAggregateRoot implements Partner{
         boolean status = this.partnerRoles.stream().noneMatch(role -> role.getEntityId().getId().equals(newPartnerRole.getEntityId().getId()));
         if(status) {
             this.partnerRoles.add(newPartnerRole);
+        }
+    }
+
+    @Override
+    @DomainMethod(event = "PartnerRoleUpdated")
+    public void updatePartnerRole(DefaultPartnerRole partnerRole, Mapper mapper){
+        DefaultPartnerRole roleFound = partnerRoles.parallelStream()
+                .filter(t -> t.getEntityId().equals(partnerRole.getEntityId()))
+                .findFirst().get();
+        if(roleFound != null){
+            mapper.map(partnerRole, roleFound);
         }
     }
 

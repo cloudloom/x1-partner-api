@@ -10,6 +10,7 @@ import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartnerRole;
 import com.tracebucket.x1.partner.api.repository.jpa.DefaultPartnerRepository;
 import com.tracebucket.x1.partner.api.service.DefaultPartnerService;
+import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,9 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
     
     @Autowired
     private DefaultPartnerRepository partnerRepository;
+
+    @Autowired
+    private Mapper mapper;
 
     @Override
     public DefaultPartner save(DefaultPartner partner) {
@@ -84,6 +88,25 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
                 partnerRoles.parallelStream().forEach(role -> {
                     partner.addPartnerRole(role);
                 });
+            }
+            return partner;
+        }
+        return null;
+    }
+
+    @Override
+    @PersistChanges(repository = "partnerRepository")
+    public DefaultPartner updatePartnerRole(DefaultPartner updatePartnerRole, EntityId partnerRoleEntityId) {
+        DefaultPartner partner = partnerRepository.findOne(updatePartnerRole.getAggregateId());
+        if(partner != null) {
+            Set<DefaultPartnerRole> partnerRoles = updatePartnerRole.getAllAssignedRoles();
+            if(partnerRoles != null && partnerRoles.size() > 0) {
+                DefaultPartnerRole updateRole = partnerRoles.parallelStream()
+                        .filter(t -> t.getEntityId().equals(partnerRoleEntityId))
+                        .findFirst().get();
+                if(updateRole != null) {
+                    partner.updatePartnerRole(updateRole, mapper);
+                }
             }
             return partner;
         }

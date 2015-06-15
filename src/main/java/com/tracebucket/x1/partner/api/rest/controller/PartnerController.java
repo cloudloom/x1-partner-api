@@ -127,6 +127,18 @@ public class PartnerController implements Partner{
         return new ResponseEntity<DefaultPartnerResource>(new DefaultPartnerResource(), HttpStatus.NOT_ACCEPTABLE);
     }
 
+    @RequestMapping(value = "/partner/partnerrole/{partnerRoleUid}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DefaultPartnerResource> updatePartnerRole(@RequestBody DefaultPartnerResource partner, @PathVariable("partnerRoleUid") String partnerRoleUid) {
+        DefaultPartner defaultPartner = assemblerResolver.resolveEntityAssembler(DefaultPartner.class, DefaultPartnerResource.class).toEntity(partner, DefaultPartner.class);
+        defaultPartner = partnerService.updatePartnerRole(defaultPartner, new EntityId(partnerRoleUid));
+        DefaultPartnerResource partnerResource;
+        if(defaultPartner != null && defaultPartner.getAggregateId() != null) {
+            partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(defaultPartner, DefaultPartnerResource.class);
+            return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
+        }
+        return new ResponseEntity<DefaultPartnerResource>(new DefaultPartnerResource(), HttpStatus.NOT_ACCEPTABLE);
+    }
+
     @RequestMapping(value = "/partner/{partnerUid}/partnerRole/{uid}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DefaultPartnerResource> addAddressToRole(@PathVariable("partnerUid") String partnerAggregateId, @PathVariable("uid") String partnerRoleUid, @RequestBody DefaultAddressResource address) {
         DefaultAddress defaultAddress = assemblerResolver.resolveEntityAssembler(DefaultAddress.class, DefaultAddressResource.class).toEntity(address, DefaultAddress.class);

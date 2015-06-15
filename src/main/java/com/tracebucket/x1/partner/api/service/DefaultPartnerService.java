@@ -21,6 +21,7 @@ public interface DefaultPartnerService {
     public DefaultPartner setPartnerCategory(PartnerCategory partnerCategory, AggregateId partnerAggregateId);
     public DefaultPartner movePartnerToCategory(PartnerCategory newPartnerCategory,AggregateId partnerAggregateId);
     public DefaultPartner addPartnerRole(DefaultPartner partner);
+    public DefaultPartner updatePartnerRole(DefaultPartner partner, EntityId partnerRoleEntityId);
     public DefaultPartner addAddressToRole(EntityId partnerRoleEntityId, Address address, AggregateId partnerAggregateId);
     public DefaultPartner moveRoleAddressTo(EntityId partnerRoleEntityId, Address newAddress,AggregateId partnerAggregateId);
     public DefaultPartner changeOwner(DefaultOwner newOwner, AggregateId partnerAggregateId);
