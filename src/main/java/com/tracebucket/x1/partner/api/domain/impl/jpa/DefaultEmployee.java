@@ -10,6 +10,7 @@ import com.tracebucket.x1.partner.api.domain.Partner;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -45,11 +46,11 @@ public class DefaultEmployee extends DefaultPartnerRole implements Employee, Ser
 
     @ElementCollection(fetch = FetchType.EAGER)
     @JoinTable(name = "EMPLOYEE_PHONE", joinColumns = @JoinColumn(name = "PARTNER__ID"))
-    private Set<DefaultPhone> phone;
+    private Set<DefaultPhone> phone = new HashSet<DefaultPhone>(0);
 
     @ElementCollection(fetch = FetchType.EAGER)
     @JoinTable(name = "EMPLOYEE_EMAIL", joinColumns = @JoinColumn(name = "PARTNER__ID"))
-    private Set<DefaultEmail> email;
+    private Set<DefaultEmail> email = new HashSet<DefaultEmail>(0);
 
     public String getEmployeeID() {
         return employeeID;
@@ -95,7 +96,10 @@ public class DefaultEmployee extends DefaultPartnerRole implements Employee, Ser
     }
 
     public void setPhone(Set<DefaultPhone> phone) {
-        this.phone = phone;
+        if(phone != null) {
+            this.phone.clear();
+            this.phone.addAll(phone);
+        }
     }
 
     public Set<DefaultEmail> getEmail() {
@@ -103,7 +107,10 @@ public class DefaultEmployee extends DefaultPartnerRole implements Employee, Ser
     }
 
     public void setEmail(Set<DefaultEmail> email) {
-        this.email = email;
+        if(email != null) {
+            this.email.clear();
+            this.email.addAll(email);
+        }
     }
 
     @Override

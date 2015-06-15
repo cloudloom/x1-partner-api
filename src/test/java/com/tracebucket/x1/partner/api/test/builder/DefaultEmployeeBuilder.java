@@ -5,6 +5,7 @@ import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultEmail;
 import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultPhone;
 import com.tracebucket.x1.partner.api.dictionary.Salutation;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultEmployee;
+import com.tracebucket.x1.partner.api.rest.resources.DefaultAddressResource;
 
 import java.util.Set;
 
@@ -20,6 +21,7 @@ public class DefaultEmployeeBuilder {
     protected String middleName;
     private Set<DefaultPhone> phone;
     private Set<DefaultEmail> email;
+    private Set<DefaultAddress> addresses;
 
     private DefaultEmployeeBuilder(){
 
@@ -67,13 +69,18 @@ public class DefaultEmployeeBuilder {
         return this;
     }
 
+    public DefaultEmployeeBuilder withAddresses(Set<DefaultAddress> addresses) {
+        this.addresses = addresses;
+        return this;
+    }
+
     public DefaultEmployee build() {
         DefaultEmployee employee = new DefaultEmployee();
         employee.setFirstName(firstName);
         employee.setMiddleName(middleName);
         employee.setLastName(lastName);
         employee.setEmployeeID(employeeID);
-
+        employee.setAddresses(addresses);
         employee.setEmail(email);
         employee.setPhone(phone);
         employee.setSalutation(salutation);

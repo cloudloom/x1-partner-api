@@ -1,10 +1,14 @@
 package com.tracebucket.x1.partner.api.test.builder;
 
+import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultAddress;
 import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultEmail;
 import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultPhone;
 import com.tracebucket.x1.partner.api.dictionary.Salutation;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultEmployee;
+import com.tracebucket.x1.partner.api.rest.resources.DefaultAddressResource;
+import com.tracebucket.x1.partner.api.rest.resources.DefaultEmailResource;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultEmployeeResource;
+import com.tracebucket.x1.partner.api.rest.resources.DefaultPhoneResource;
 
 import java.util.Set;
 
@@ -18,8 +22,9 @@ public class DefaultEmployeeResourceBuilder {
     protected String firstName;
     protected String lastName;
     protected String middleName;
-    private Set<DefaultPhone> phone;
-    private Set<DefaultEmail> email;
+    private Set<DefaultPhoneResource> phone;
+    private Set<DefaultEmailResource> email;
+    private Set<DefaultAddressResource> addresses;
 
     private DefaultEmployeeResourceBuilder(){ }
 
@@ -52,13 +57,18 @@ public class DefaultEmployeeResourceBuilder {
         return this;
     }
 
-    public DefaultEmployeeResourceBuilder withPhone(Set<DefaultPhone> phone) {
+    public DefaultEmployeeResourceBuilder withPhone(Set<DefaultPhoneResource> phone) {
         this.phone = phone;
         return this;
     }
 
-    public DefaultEmployeeResourceBuilder withEmail(Set<DefaultEmail> email) {
+    public DefaultEmployeeResourceBuilder withEmail(Set<DefaultEmailResource> email) {
         this.email = email;
+        return this;
+    }
+
+    public DefaultEmployeeResourceBuilder withAddresses(Set<DefaultAddressResource> addresses) {
+        this.addresses = addresses;
         return this;
     }
 
@@ -68,11 +78,10 @@ public class DefaultEmployeeResourceBuilder {
         employee.setMiddleName(middleName);
         employee.setLastName(lastName);
         employee.setEmployeeID(employeeID);
-
         employee.setEmail(email);
         employee.setPhone(phone);
         employee.setSalutation(salutation);
-
+        employee.setAddresses(addresses);
         return employee;
     }
 }

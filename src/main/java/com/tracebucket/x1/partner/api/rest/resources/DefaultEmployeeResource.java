@@ -19,8 +19,8 @@ public class DefaultEmployeeResource extends BaseResource {
     protected String firstName;
     protected String lastName;
     protected String middleName;
-    private Set<DefaultPhone> phone;
-    private Set<DefaultEmail> email;
+    private Set<DefaultPhoneResource> phone;
+    private Set<DefaultEmailResource> email;
     private Set<DefaultAddressResource> addresses;
 
     public String getEmployeeID() {
@@ -63,19 +63,19 @@ public class DefaultEmployeeResource extends BaseResource {
         this.middleName = middleName;
     }
 
-    public Set<DefaultPhone> getPhone() {
+    public Set<DefaultPhoneResource> getPhone() {
         return phone;
     }
 
-    public void setPhone(Set<DefaultPhone> phone) {
+    public void setPhone(Set<DefaultPhoneResource> phone) {
         this.phone = phone;
     }
 
-    public Set<DefaultEmail> getEmail() {
+    public Set<DefaultEmailResource> getEmail() {
         return email;
     }
 
-    public void setEmail(Set<DefaultEmail> email) {
+    public void setEmail(Set<DefaultEmailResource> email) {
         this.email = email;
     }
 

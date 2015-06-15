@@ -92,8 +92,9 @@ public class DefaultPartner extends BaseAggregateRoot implements Partner{
     public void updatePartnerRole(DefaultPartnerRole partnerRole, Mapper mapper){
         DefaultPartnerRole roleFound = partnerRoles.parallelStream()
                 .filter(t -> t.getEntityId().equals(partnerRole.getEntityId()))
-                .findFirst().get();
+                .findFirst().orElse(null);
         if(roleFound != null){
+            roleFound.getAddresses().clear();
             mapper.map(partnerRole, roleFound);
         }
     }

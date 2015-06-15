@@ -45,7 +45,10 @@ public abstract class DefaultPartnerRole extends BaseEntity implements PartnerRo
 
     @Override
     public void setAddresses(Set<DefaultAddress> addresses) {
-        this.addresses = addresses;
+        if(addresses != null) {
+            this.addresses.clear();
+            this.addresses.addAll(addresses);
+        }
     }
 }
 
