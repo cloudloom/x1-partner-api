@@ -16,11 +16,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -38,144 +40,172 @@ public class PartnerController implements Partner{
     @Autowired
     private AssemblerResolver assemblerResolver;
 
-
     @RequestMapping(value = "/partner", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DefaultPartnerResource> createPartner(@RequestBody DefaultPartnerResource partnerResource) {
+    public ResponseEntity<DefaultPartnerResource> createPartner(HttpServletRequest request, @RequestBody DefaultPartnerResource partnerResource) {
+        String tenantId = request.getHeader("tenant_id");
+        if(tenantId != null) {
+            DefaultPartner partner = assemblerResolver.resolveEntityAssembler(DefaultPartner.class, DefaultPartnerResource.class).toEntity(partnerResource, DefaultPartner.class);
+            try {
+                partner = partnerService.save(tenantId, partner);
+            } catch (DataIntegrityViolationException dive) {
+                throw new PartnerException("Partner With title : " + partnerResource.getTitle() + "Exists", HttpStatus.CONFLICT);
+            }
 
-        DefaultPartner partner = assemblerResolver.resolveEntityAssembler(DefaultPartner.class, DefaultPartnerResource.class).toEntity(partnerResource, DefaultPartner.class);
-        try {
-            partner = partnerService.save(partner);
-        }
-        catch (DataIntegrityViolationException dive) {
-            throw new PartnerException("Partner With title : " + partnerResource.getTitle() + "Exists", HttpStatus.CONFLICT);
-        }
-
-        if(partner != null) {
-            partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(partner, DefaultPartnerResource.class);
-            return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.CREATED);
+            if (partner != null) {
+                partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(partner, DefaultPartnerResource.class);
+                return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.CREATED);
+            }
         }
         return new ResponseEntity<DefaultPartnerResource>(new DefaultPartnerResource(), HttpStatus.NOT_ACCEPTABLE);
     }
 
     @RequestMapping(value = "/partner/{partnerUid}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DefaultPartnerResource> findOne(@PathVariable("partnerUid") String aggregateId) {
+    public ResponseEntity<DefaultPartnerResource> findOne(HttpServletRequest request, @PathVariable("partnerUid") String aggregateId) {
+        String tenantId = request.getHeader("tenant_id");
+        if(tenantId != null) {
+            DefaultPartner partner = partnerService.findOne(tenantId, new AggregateId(aggregateId));
+            DefaultPartnerResource partnerResource = null;
 
-        DefaultPartner partner = partnerService.findOne(new AggregateId(aggregateId));
-        DefaultPartnerResource partnerResource = null;
-
-        if(partner != null) {
-            partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(partner, DefaultPartnerResource.class);
-            return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
+            if (partner != null) {
+                partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(partner, DefaultPartnerResource.class);
+                return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
+            }
         }
-
         return new ResponseEntity<DefaultPartnerResource>(new DefaultPartnerResource(), HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(value = "/partners", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Set<DefaultPartnerResource>> findAll() {
-        List<DefaultPartner> partners = partnerService.findAll();
-        if(partners != null && partners.size() > 0) {
-            Set<DefaultPartnerResource> partnerResources = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResources(partners, DefaultPartnerResource.class);
-            return new ResponseEntity<Set<DefaultPartnerResource>>(partnerResources, HttpStatus.OK);
+    public ResponseEntity<Set<DefaultPartnerResource>> findAll(HttpServletRequest request) {
+        String tenantId = request.getHeader("tenant_id");
+        if(tenantId != null) {
+            List<DefaultPartner> partners = partnerService.findAll(tenantId);
+            if (partners != null && partners.size() > 0) {
+                Set<DefaultPartnerResource> partnerResources = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResources(partners, DefaultPartnerResource.class);
+                return new ResponseEntity<Set<DefaultPartnerResource>>(partnerResources, HttpStatus.OK);
+            }
         }
-
         return new ResponseEntity<Set<DefaultPartnerResource>>(Collections.emptySet(), HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(value = "/partner/{partnerUid}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Boolean> deletePartner(@PathVariable("partnerUid") String partnerAggregateId) {
-       return new ResponseEntity<Boolean>(partnerService.delete(new AggregateId(partnerAggregateId)), HttpStatus.OK);
+    public ResponseEntity<Boolean> deletePartner(HttpServletRequest request, @PathVariable("partnerUid") String partnerAggregateId) {
+        String tenantId = request.getHeader("tenant_id");
+        if(tenantId != null) {
+            return new ResponseEntity<Boolean>(partnerService.delete(tenantId, new AggregateId(partnerAggregateId)), HttpStatus.OK);
+        }
+        return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
     }
 
     @RequestMapping(value = "/partner/{partnerUid}/partnercategory", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DefaultPartnerResource> setPartnerCategory(@RequestBody PartnerCategory partnerCategory, @PathVariable("partnerUid") String partnerAggregateId) {
+    public ResponseEntity<DefaultPartnerResource> setPartnerCategory(HttpServletRequest request, @RequestBody PartnerCategory partnerCategory, @PathVariable("partnerUid") String partnerAggregateId) {
+        String tenantId = request.getHeader("tenant_id");
+        if(tenantId != null) {
+            DefaultPartner partner = partnerService.setPartnerCategory(tenantId, partnerCategory, new AggregateId(partnerAggregateId));
+            DefaultPartnerResource partnerResource = null;
 
-        DefaultPartner partner = partnerService.setPartnerCategory(partnerCategory, new AggregateId(partnerAggregateId));
-        DefaultPartnerResource partnerResource = null;
-
-        if(partner != null) {
-            partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(partner, DefaultPartnerResource.class);
-            return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
+            if (partner != null) {
+                partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(partner, DefaultPartnerResource.class);
+                return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
+            }
         }
-
         return new ResponseEntity<DefaultPartnerResource>(new DefaultPartnerResource(), HttpStatus.NOT_ACCEPTABLE);
     }
 
     @RequestMapping(value = "/partner/{partnerUid}/partner/tocategory", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DefaultPartnerResource> movePartnerToCategory(@RequestBody PartnerCategory newPartnerCategory, @PathVariable("partnerUid") String partnerAggregateId) {
+    public ResponseEntity<DefaultPartnerResource> movePartnerToCategory(HttpServletRequest request, @RequestBody PartnerCategory newPartnerCategory, @PathVariable("partnerUid") String partnerAggregateId) {
+        String tenantId = request.getHeader("tenant_id");
+        if(tenantId != null) {
+            DefaultPartner partner = partnerService.movePartnerToCategory(tenantId, newPartnerCategory, new AggregateId(partnerAggregateId));
+            DefaultPartnerResource partnerResource = null;
 
-        DefaultPartner partner = partnerService.movePartnerToCategory(newPartnerCategory, new AggregateId(partnerAggregateId));
-        DefaultPartnerResource partnerResource = null;
-
-        if(partner != null) {
-            partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(partner, DefaultPartnerResource.class);
-            return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
+            if (partner != null) {
+                partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(partner, DefaultPartnerResource.class);
+                return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
+            }
         }
-
         return new ResponseEntity<DefaultPartnerResource>(new DefaultPartnerResource(), HttpStatus.NOT_ACCEPTABLE);
     }
 
     @RequestMapping(value = "/partner/partnerrole", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DefaultPartnerResource> addPartnerRole(@RequestBody DefaultPartnerResource partner) {
-        DefaultPartner defaultPartner = assemblerResolver.resolveEntityAssembler(DefaultPartner.class, DefaultPartnerResource.class).toEntity(partner, DefaultPartner.class);
-        defaultPartner = partnerService.addPartnerRole(defaultPartner);
-        DefaultPartnerResource partnerResource;
-        if(defaultPartner != null && defaultPartner.getAggregateId() != null) {
-            partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(defaultPartner, DefaultPartnerResource.class);
-            return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
+    public ResponseEntity<DefaultPartnerResource> addPartnerRole(HttpServletRequest request, @RequestBody DefaultPartnerResource partner) {
+        String tenantId = request.getHeader("tenant_id");
+        if(tenantId != null) {
+            DefaultPartner defaultPartner = assemblerResolver.resolveEntityAssembler(DefaultPartner.class, DefaultPartnerResource.class).toEntity(partner, DefaultPartner.class);
+            defaultPartner = partnerService.addPartnerRole(tenantId, defaultPartner);
+            DefaultPartnerResource partnerResource;
+            if (defaultPartner != null && defaultPartner.getAggregateId() != null) {
+                partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(defaultPartner, DefaultPartnerResource.class);
+                return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
+            }
         }
         return new ResponseEntity<DefaultPartnerResource>(new DefaultPartnerResource(), HttpStatus.NOT_ACCEPTABLE);
     }
 
     @RequestMapping(value = "/partner/partnerrole/{partnerRoleUid}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DefaultPartnerResource> updatePartnerRole(@RequestBody DefaultPartnerResource partner, @PathVariable("partnerRoleUid") String partnerRoleUid) {
-        DefaultPartner defaultPartner = assemblerResolver.resolveEntityAssembler(DefaultPartner.class, DefaultPartnerResource.class).toEntity(partner, DefaultPartner.class);
-        defaultPartner = partnerService.updatePartnerRole(defaultPartner, new EntityId(partnerRoleUid));
-        DefaultPartnerResource partnerResource;
-        if(defaultPartner != null && defaultPartner.getAggregateId() != null) {
-            partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(defaultPartner, DefaultPartnerResource.class);
-            return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
+    public ResponseEntity<DefaultPartnerResource> updatePartnerRole(HttpServletRequest request, @RequestBody DefaultPartnerResource partner, @PathVariable("partnerRoleUid") String partnerRoleUid) {
+        String tenantId = request.getHeader("tenant_id");
+        if(tenantId != null) {
+            DefaultPartner defaultPartner = assemblerResolver.resolveEntityAssembler(DefaultPartner.class, DefaultPartnerResource.class).toEntity(partner, DefaultPartner.class);
+            defaultPartner = partnerService.updatePartnerRole(tenantId, defaultPartner, new EntityId(partnerRoleUid));
+            DefaultPartnerResource partnerResource;
+            if (defaultPartner != null && defaultPartner.getAggregateId() != null) {
+                partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(defaultPartner, DefaultPartnerResource.class);
+                return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
+            }
         }
         return new ResponseEntity<DefaultPartnerResource>(new DefaultPartnerResource(), HttpStatus.NOT_ACCEPTABLE);
     }
 
     @RequestMapping(value = "/partner/{partnerUid}/partnerRole/{uid}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DefaultPartnerResource> addAddressToRole(@PathVariable("partnerUid") String partnerAggregateId, @PathVariable("uid") String partnerRoleUid, @RequestBody DefaultAddressResource address) {
-        DefaultAddress defaultAddress = assemblerResolver.resolveEntityAssembler(DefaultAddress.class, DefaultAddressResource.class).toEntity(address, DefaultAddress.class);
-        DefaultPartner partner = partnerService.addAddressToRole(new EntityId(partnerRoleUid), defaultAddress, new AggregateId(partnerAggregateId));
-        DefaultPartnerResource partnerResource = null;
-        if(partner != null) {
-            partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(partner, DefaultPartnerResource.class);
-            return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
+    public ResponseEntity<DefaultPartnerResource> addAddressToRole(HttpServletRequest request, @PathVariable("partnerUid") String partnerAggregateId, @PathVariable("uid") String partnerRoleUid, @RequestBody DefaultAddressResource address) {
+        String tenantId = request.getHeader("tenant_id");
+        if(tenantId != null) {
+            DefaultAddress defaultAddress = assemblerResolver.resolveEntityAssembler(DefaultAddress.class, DefaultAddressResource.class).toEntity(address, DefaultAddress.class);
+            DefaultPartner partner = partnerService.addAddressToRole(tenantId, new EntityId(partnerRoleUid), defaultAddress, new AggregateId(partnerAggregateId));
+            DefaultPartnerResource partnerResource = null;
+            if (partner != null) {
+                partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(partner, DefaultPartnerResource.class);
+                return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
+            }
         }
         return new ResponseEntity<DefaultPartnerResource>(new DefaultPartnerResource(), HttpStatus.NOT_ACCEPTABLE);
     }
 
     @RequestMapping(value = "/partner/{partnerUid}/partnerRole/{uid}/moveAddress", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DefaultPartnerResource> moveRoleAddressTo(@PathVariable("partnerUid") String partnerAggregateId, @PathVariable("uid") String partnerRoleUid, @RequestBody DefaultAddressResource address) {
-        DefaultAddress defaultAddress = assemblerResolver.resolveEntityAssembler(DefaultAddress.class, DefaultAddressResource.class).toEntity(address, DefaultAddress.class);
-        DefaultPartner partner = partnerService.moveRoleAddressTo(new EntityId(partnerRoleUid), defaultAddress, new AggregateId(partnerAggregateId));
-        DefaultPartnerResource partnerResource = null;
-        if(partner != null) {
-            partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(partner, DefaultPartnerResource.class);
-            return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
+    public ResponseEntity<DefaultPartnerResource> moveRoleAddressTo(HttpServletRequest request, @PathVariable("partnerUid") String partnerAggregateId, @PathVariable("uid") String partnerRoleUid, @RequestBody DefaultAddressResource address) {
+        String tenantId = request.getHeader("tenant_id");
+        if(tenantId != null) {
+            DefaultAddress defaultAddress = assemblerResolver.resolveEntityAssembler(DefaultAddress.class, DefaultAddressResource.class).toEntity(address, DefaultAddress.class);
+            DefaultPartner partner = partnerService.moveRoleAddressTo(tenantId, new EntityId(partnerRoleUid), defaultAddress, new AggregateId(partnerAggregateId));
+            DefaultPartnerResource partnerResource = null;
+            if (partner != null) {
+                partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(partner, DefaultPartnerResource.class);
+                return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
+            }
         }
         return new ResponseEntity<DefaultPartnerResource>(new DefaultPartnerResource(), HttpStatus.NOT_ACCEPTABLE);
     }
 
     @RequestMapping(value = "/partner/{partnerUid}/owner", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DefaultPartnerResource> changeOwner(@PathVariable("partnerUid") String partnerAggregateId, @RequestBody DefaultOwnerResource ownerResource) {
-        DefaultOwner owner = assemblerResolver.resolveEntityAssembler(DefaultOwner.class, DefaultOwnerResource.class).toEntity(ownerResource, DefaultOwner.class);
-        DefaultPartner partner = partnerService.changeOwner(owner, new AggregateId(partnerAggregateId));
-        if(partner != null) {
-            DefaultPartnerResource partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(partner, DefaultPartnerResource.class);
-            return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
+    public ResponseEntity<DefaultPartnerResource> changeOwner(HttpServletRequest request, @PathVariable("partnerUid") String partnerAggregateId, @RequestBody DefaultOwnerResource ownerResource) {
+        String tenantId = request.getHeader("tenant_id");
+        if(tenantId != null) {
+            DefaultOwner owner = assemblerResolver.resolveEntityAssembler(DefaultOwner.class, DefaultOwnerResource.class).toEntity(ownerResource, DefaultOwner.class);
+            DefaultPartner partner = partnerService.changeOwner(tenantId, owner, new AggregateId(partnerAggregateId));
+            if (partner != null) {
+                DefaultPartnerResource partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(partner, DefaultPartnerResource.class);
+                return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
+            }
         }
         return new ResponseEntity<DefaultPartnerResource>(new DefaultPartnerResource(), HttpStatus.NOT_ACCEPTABLE);
     }
 
     @RequestMapping(value = "/partner/{partnerUid}/role/{roleUid}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Boolean> hasPartnerRole(@PathVariable("partnerUid") String partnerAggregateId, @PathVariable("roleUid") String roleEntityId) {
-        return new ResponseEntity<Boolean>(partnerService.hasPartnerRole(new AggregateId(partnerAggregateId), new EntityId(roleEntityId)), HttpStatus.OK);
+    public ResponseEntity<Boolean> hasPartnerRole(HttpServletRequest request, @PathVariable("partnerUid") String partnerAggregateId, @PathVariable("roleUid") String roleEntityId) {
+        String tenantId = request.getHeader("tenant_id");
+        if(tenantId != null) {
+            return new ResponseEntity<Boolean>(partnerService.hasPartnerRole(tenantId, new AggregateId(partnerAggregateId), new EntityId(roleEntityId)), HttpStatus.OK);
+        }
+        return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
     }
 }

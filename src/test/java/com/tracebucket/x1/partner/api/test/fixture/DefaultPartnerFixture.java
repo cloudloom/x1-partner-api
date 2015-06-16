@@ -48,4 +48,37 @@ public class DefaultPartnerFixture {
                 .withWebsite("www.yyy.nl").build();
         return partner;
     }
+
+    public static DefaultPartner standardPartnerWithOwner(DefaultOwner owner) {
+
+        Set<DefaultPartnerRole> partnerRoles = new HashSet<DefaultPartnerRole>();
+
+        Set<DefaultPhone> empPhone = new HashSet<>();
+        DefaultPhone phone = new DefaultPhone();
+        phone.setNumber(9441009922L);
+        phone.setDefaultPhone(true);
+        phone.setPhoneType(PhoneType.MOBILE);
+        empPhone.add(phone);
+
+        Set<DefaultEmail> empEmail = new HashSet<DefaultEmail>();
+        DefaultEmail email = new DefaultEmail();
+        email.setDefaultEmail(true);
+        email.setEmail("xyz@mmpsd.nl");
+        email.setEmailType(EmailType.BUSINESS);
+        empEmail.add(email);
+
+        DefaultEmployee employee = DefaultEmployeeFixture.standardEmployee();
+        employee.setPhone(empPhone);
+        employee.setEmail(empEmail);
+        partnerRoles.add(employee);
+
+        DefaultPartner partner = DefaultPartnerBuilder.aPartnerBuilder()
+                .withPartnerCategory(PartnerCategory.GROUP)
+                .withImage("logo_1")
+                .withTitle("title_1")
+                .withPartnerRoles(partnerRoles)
+                .withOwner(owner)
+                .withWebsite("www.yyy.nl").build();
+        return partner;
+    }
 }

@@ -16,7 +16,7 @@ public class DefaultAffiliateResource extends DefaultPartnerRoleResource {
     private Date dateOfIncorporation;
     private String logo;
     private String website;
-    private Set<Person> persons = new HashSet<Person>(0);
+    private Set<DefaultPersonResource> persons = new HashSet<DefaultPersonResource>(0);
     private String name;
     private Set<DefaultAddressResource> addresses = new HashSet<DefaultAddressResource>(0);
 
@@ -64,13 +64,31 @@ public class DefaultAffiliateResource extends DefaultPartnerRoleResource {
         this.website = website;
     }
 
-    public Set<Person> getPersons() {
+    public Set<DefaultPersonResource> getPersons() {
         return persons;
     }
 
-    public void setPersons(Set<Person> persons) {
+    public void setPersons(Set<DefaultPersonResource> persons) {
         this.persons = persons;
     }
 
+    @Override
+    public String getName() {
+        return name;
+    }
 
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public Set<DefaultAddressResource> getAddresses() {
+        return addresses;
+    }
+
+    @Override
+    public void setAddresses(Set<DefaultAddressResource> addresses) {
+        this.addresses = addresses;
+    }
 }

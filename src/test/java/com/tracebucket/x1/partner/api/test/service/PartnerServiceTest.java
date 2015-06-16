@@ -44,7 +44,8 @@ public class PartnerServiceTest {
 
     private void createPartner() throws Exception{
         partner = DefaultPartnerFixture.standardPartner();
-        partner = partnerService.save(partner);
+        partner.setOwner(new DefaultOwner(UUID.randomUUID().toString()));
+        partner = partnerService.save(partner.getOwner().getOrganizationUID(), partner);
     }
 
     @Test
@@ -56,14 +57,14 @@ public class PartnerServiceTest {
     @Test
     public void testFindOne() throws Exception{
         createPartner();
-        partner = partnerService.findOne(partner.getAggregateId());
+        partner = partnerService.findOne(partner.getOwner().getOrganizationUID(), partner.getAggregateId());
         Assert.assertNotNull(partner);
     }
 
     @Test
     public void setPartnerCategory() throws Exception{
         createPartner();
-        partner = partnerService.setPartnerCategory(PartnerCategory.ORGANIZATION, partner.getAggregateId());
+        partner = partnerService.setPartnerCategory(partner.getOwner().getOrganizationUID(), PartnerCategory.ORGANIZATION, partner.getAggregateId());
         Assert.assertNotNull(partner);
         Assert.assertEquals(partner.getPartnerCategory(), PartnerCategory.ORGANIZATION);
     }
@@ -71,7 +72,7 @@ public class PartnerServiceTest {
      @Test
      public void movePartnerToCategory() throws Exception{
          createPartner();
-         partner = partnerService.movePartnerToCategory(PartnerCategory.INDIVIDUAL, partner.getAggregateId());
+         partner = partnerService.movePartnerToCategory(partner.getOwner().getOrganizationUID(), PartnerCategory.INDIVIDUAL, partner.getAggregateId());
          Assert.assertNotNull(partner);
          Assert.assertEquals(partner.getPartnerCategory(), PartnerCategory.INDIVIDUAL);
      }
@@ -80,7 +81,7 @@ public class PartnerServiceTest {
      public void addPartnerRole() throws Exception{
         createPartner();
         partner.getAllAssignedRoles().add(DefaultAffiliateFixture.standardAffiliate());
-        partner = partnerService.addPartnerRole(partner);
+        partner = partnerService.addPartnerRole(partner.getOwner().getOrganizationUID(), partner);
         Assert.assertNotNull(partner);
         Assert.assertEquals(2, partner.getAllAssignedRoles().size());
     }
@@ -96,7 +97,7 @@ public class PartnerServiceTest {
         Assert.assertNotNull(partnerRoles);
 
         for(DefaultPartnerRole partnerRole: partnerRoles){
-            partner = partnerService.addAddressToRole(partnerRole.getEntityId(),address, partner.getAggregateId());
+            partner = partnerService.addAddressToRole(partner.getOwner().getOrganizationUID(), partnerRole.getEntityId(),address, partner.getAggregateId());
             break;
         }
 
@@ -118,7 +119,7 @@ public class PartnerServiceTest {
         DefaultAddress address = DefaultAddressFixture.standardAddress();
 
         for(DefaultPartnerRole partnerRole: partnerRoles){
-            partner = partnerService.moveRoleAddressTo(partnerRole.getEntityId(),address,partner.getAggregateId());
+            partner = partnerService.moveRoleAddressTo(partner.getOwner().getOrganizationUID(), partnerRole.getEntityId(),address,partner.getAggregateId());
             break;
         }
 
@@ -139,7 +140,7 @@ public class PartnerServiceTest {
         createPartner();
         String organizationUid = UUID.randomUUID().toString();
         DefaultOwner owner = DefaultOwnerFixture.standardOwner(organizationUid);
-        partner = partnerService.changeOwner(owner,partner.getAggregateId());
+        partner = partnerService.changeOwner(partner.getOwner().getOrganizationUID(), owner, partner.getAggregateId());
         Assert.assertNotNull(partner);
         Assert.assertEquals(organizationUid, partner.getOwner().getOrganizationUID());
     }
@@ -150,7 +151,7 @@ public class PartnerServiceTest {
         Set<DefaultPartnerRole> partnerRoles = partner.getAllAssignedRoles();
         Assert.assertNotNull(partnerRoles);
         for(DefaultPartnerRole partnerRole : partnerRoles){
-            Assert.assertTrue(partnerService.hasPartnerRole(partner.getAggregateId(), partnerRole.getEntityId()));
+            Assert.assertTrue(partnerService.hasPartnerRole(partner.getOwner().getOrganizationUID(), partner.getAggregateId(), partnerRole.getEntityId()));
             break;
         }
     }
@@ -158,8 +159,8 @@ public class PartnerServiceTest {
     @After
     public void tearDown(){
         if(partner != null && partner.getAggregateId() != null) {
-            partnerService.delete(partner.getAggregateId());
-            partner = partnerService.findOne(partner.getAggregateId());
+            partnerService.delete(partner.getOwner().getOrganizationUID(), partner.getAggregateId());
+            partner = partnerService.findOne(partner.getOwner().getOrganizationUID(), partner.getAggregateId());
             Assert.assertNull(partner);
         }
     }

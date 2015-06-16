@@ -32,34 +32,35 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
     private Mapper mapper;
 
     @Override
-    public DefaultPartner save(DefaultPartner partner) {
+    public DefaultPartner save(String tenantId, DefaultPartner partner) {
+        partner.setOwner(new DefaultOwner(tenantId));
         return partnerRepository.save(partner);
     }
 
     @Override
-    public DefaultPartner findOne(AggregateId aggregateId) {
-        return partnerRepository.findOne(aggregateId);
+    public DefaultPartner findOne(String tenantId, AggregateId aggregateId) {
+        return partnerRepository.findOne(aggregateId, tenantId);
     }
 
     @Override
-    public List<DefaultPartner> findAll() {
-        return partnerRepository.findAll();
+    public List<DefaultPartner> findAll(String tenantId) {
+        return partnerRepository.findAll(tenantId);
     }
 
     @Override
-    public boolean delete(AggregateId partnerAggregateId) {
-        DefaultPartner partner = partnerRepository.findOne(partnerAggregateId);
+    public boolean delete(String tenantId, AggregateId partnerAggregateId) {
+        DefaultPartner partner = partnerRepository.findOne(partnerAggregateId, tenantId);
         if(partner != null) {
-            partnerRepository.delete(partner);
-            return partnerRepository.findOne(partnerAggregateId) == null ? true : false;
+            partnerRepository.delete(partner.getAggregateId(), tenantId);
+            return partnerRepository.findOne(partnerAggregateId, tenantId) == null ? true : false;
         }
         return false;
     }
 
     @Override
     @PersistChanges(repository = "partnerRepository")
-    public DefaultPartner setPartnerCategory(PartnerCategory partnerCategory, AggregateId partnerAggregateId){
-        DefaultPartner partner = partnerRepository.findOne(partnerAggregateId);
+    public DefaultPartner setPartnerCategory(String tenantId, PartnerCategory partnerCategory, AggregateId partnerAggregateId){
+        DefaultPartner partner = partnerRepository.findOne(partnerAggregateId, tenantId);
         if(partner != null) {
             partner.setPartnerCategory(partnerCategory);
             return partner;
@@ -69,8 +70,8 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
 
     @Override
     @PersistChanges(repository = "partnerRepository")
-    public DefaultPartner movePartnerToCategory(PartnerCategory newPartnerCategory,AggregateId partnerAggregateId){
-        DefaultPartner partner = partnerRepository.findOne(partnerAggregateId);
+    public DefaultPartner movePartnerToCategory(String tenantId, PartnerCategory newPartnerCategory,AggregateId partnerAggregateId){
+        DefaultPartner partner = partnerRepository.findOne(partnerAggregateId, tenantId);
         if(partner != null) {
             partner.setPartnerCategory(newPartnerCategory);
             return partner;
@@ -80,8 +81,8 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
 
     @Override
     @PersistChanges(repository = "partnerRepository")
-    public DefaultPartner addPartnerRole(DefaultPartner addPartnerRole){
-        DefaultPartner partner = partnerRepository.findOne(addPartnerRole.getAggregateId());
+    public DefaultPartner addPartnerRole(String tenantId, DefaultPartner addPartnerRole){
+        DefaultPartner partner = partnerRepository.findOne(addPartnerRole.getAggregateId(), tenantId);
         if(partner != null) {
             Set<DefaultPartnerRole> partnerRoles = addPartnerRole.getAllAssignedRoles();
             if(partnerRoles != null && partnerRoles.size() > 0) {
@@ -96,8 +97,8 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
 
     @Override
     @PersistChanges(repository = "partnerRepository")
-    public DefaultPartner updatePartnerRole(DefaultPartner updatePartnerRole, EntityId partnerRoleEntityId) {
-        DefaultPartner partner = partnerRepository.findOne(updatePartnerRole.getAggregateId());
+    public DefaultPartner updatePartnerRole(String tenantId, DefaultPartner updatePartnerRole, EntityId partnerRoleEntityId) {
+        DefaultPartner partner = partnerRepository.findOne(updatePartnerRole.getAggregateId(), tenantId);
         if(partner != null) {
             Set<DefaultPartnerRole> partnerRoles = updatePartnerRole.getAllAssignedRoles();
             if(partnerRoles != null && partnerRoles.size() > 0) {
@@ -115,8 +116,8 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
 
     @Override
     @PersistChanges(repository = "partnerRepository")
-    public DefaultPartner addAddressToRole(EntityId partnerRoleEntityId, Address address, AggregateId partnerAggregateId){
-        DefaultPartner partner = partnerRepository.findOne(partnerAggregateId);
+    public DefaultPartner addAddressToRole(String tenantId, EntityId partnerRoleEntityId, Address address, AggregateId partnerAggregateId){
+        DefaultPartner partner = partnerRepository.findOne(partnerAggregateId, tenantId);
         if(partner != null) {
             Set<DefaultPartnerRole> partnerRoles = partner.getAllAssignedRoles();
             if(partnerRoles != null) {
@@ -133,8 +134,8 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
 
     @Override
     @PersistChanges(repository = "partnerRepository")
-    public DefaultPartner moveRoleAddressTo(EntityId partnerRoleEntityId, Address newAddress, AggregateId partnerAggregateId){
-        DefaultPartner partner = partnerRepository.findOne(partnerAggregateId);
+    public DefaultPartner moveRoleAddressTo(String tenantId, EntityId partnerRoleEntityId, Address newAddress, AggregateId partnerAggregateId){
+        DefaultPartner partner = partnerRepository.findOne(partnerAggregateId, tenantId);
         if(partner != null) {
             Set<DefaultPartnerRole> partnerRoles = partner.getAllAssignedRoles();
             if(partnerRoles != null) {
@@ -151,8 +152,8 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
 
     @Override
     @PersistChanges(repository = "partnerRepository")
-    public DefaultPartner changeOwner(DefaultOwner newOwner, AggregateId partnerAggregateId){
-        DefaultPartner partner = partnerRepository.findOne(partnerAggregateId);
+    public DefaultPartner changeOwner(String tenantId, DefaultOwner newOwner, AggregateId partnerAggregateId){
+        DefaultPartner partner = partnerRepository.findOne(partnerAggregateId, tenantId);
         if(partner != null) {
             partner.changeOwner(newOwner);
             return partner;
@@ -161,9 +162,9 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
     }
 
     @Override
-    public Boolean hasPartnerRole(AggregateId partnerAggregateId, EntityId roleEntityId){
+    public Boolean hasPartnerRole(String tenantId, AggregateId partnerAggregateId, EntityId roleEntityId){
         Long found = null;
-        DefaultPartner partner = partnerRepository.findOne(partnerAggregateId);
+        DefaultPartner partner = partnerRepository.findOne(partnerAggregateId, tenantId);
         if(partner != null) {
             if(partner.getAllAssignedRoles() != null && partner.getAllAssignedRoles().size() > 0) {
                 found = partner.getAllAssignedRoles().parallelStream()

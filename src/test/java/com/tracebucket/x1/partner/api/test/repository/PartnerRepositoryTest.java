@@ -1,6 +1,8 @@
 package com.tracebucket.x1.partner.api.test.repository;
 
 import com.tracebucket.x1.partner.api.DefaultPartnerStarter;
+import com.tracebucket.x1.partner.api.domain.Partner;
+import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultOwner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartner;
 import com.tracebucket.x1.partner.api.repository.jpa.DefaultPartnerRepository;
 import com.tracebucket.x1.partner.api.test.fixture.DefaultPartnerFixture;
@@ -13,6 +15,9 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by Vishwajit on 26-05-2015.
@@ -45,6 +50,35 @@ public class PartnerRepositoryTest {
         createPartner();
         partner = partnerRepository.findOne(partner.getAggregateId());
         Assert.assertNotNull(partner);
+    }
+
+    @Test
+    @Rollback(value = false)
+    public void testFindByTenantId() throws Exception {
+        String tenantId = UUID.randomUUID().toString();
+        partner = DefaultPartnerFixture.standardPartnerWithOwner(new DefaultOwner(tenantId));
+        partner = partnerRepository.save(partner);
+        Assert.assertNotNull(partner);
+        Assert.assertNotNull(partner.getOwner());
+        partner = partnerRepository.findOne(partner.getAggregateId(), partner.getOwner().getOrganizationUID());
+        Assert.assertNotNull(partner);
+        Assert.assertNotNull(partner.getOwner());
+        Assert.assertEquals(tenantId, partner.getOwner().getOrganizationUID());
+        partner = partnerRepository.findOne(partner.getAggregateId(), UUID.randomUUID().toString());
+        Assert.assertNull(partner);
+    }
+
+    @Test
+    @Rollback(value = false)
+    public void testFindAllByTenantId() throws Exception {
+        String tenantId = UUID.randomUUID().toString();
+        partner = DefaultPartnerFixture.standardPartnerWithOwner(new DefaultOwner(tenantId));
+        partner = partnerRepository.save(partner);
+        Assert.assertNotNull(partner);
+        Assert.assertNotNull(partner.getOwner());
+        List<DefaultPartner> partners = partnerRepository.findAll(tenantId);
+        Assert.assertNotNull(partners);
+        Assert.assertEquals(1, partners.size());
     }
 
     @After

@@ -14,18 +14,17 @@ import java.util.List;
  * Created by sadath on 26-May-2015.
  */
 public interface DefaultPartnerService {
-    public DefaultPartner save(DefaultPartner partner);
-    public DefaultPartner findOne(AggregateId aggregateId);
-    public List<DefaultPartner> findAll();
-    public boolean delete(AggregateId partnerAggregateId);
-    public DefaultPartner setPartnerCategory(PartnerCategory partnerCategory, AggregateId partnerAggregateId);
-    public DefaultPartner movePartnerToCategory(PartnerCategory newPartnerCategory,AggregateId partnerAggregateId);
-    public DefaultPartner addPartnerRole(DefaultPartner partner);
-    public DefaultPartner updatePartnerRole(DefaultPartner partner, EntityId partnerRoleEntityId);
-    public DefaultPartner addAddressToRole(EntityId partnerRoleEntityId, Address address, AggregateId partnerAggregateId);
-    public DefaultPartner moveRoleAddressTo(EntityId partnerRoleEntityId, Address newAddress,AggregateId partnerAggregateId);
-    public DefaultPartner changeOwner(DefaultOwner newOwner, AggregateId partnerAggregateId);
-    public Boolean hasPartnerRole(AggregateId partnerAggregateId, EntityId roleEntityId);
+    public DefaultPartner save(String tenantId, DefaultPartner partner);
+    public DefaultPartner findOne(String tenantId, AggregateId aggregateId);
+    public List<DefaultPartner> findAll(String tenantId);
+    public boolean delete(String tenantId, AggregateId partnerAggregateId);
+    public DefaultPartner setPartnerCategory(String tenantId, PartnerCategory partnerCategory, AggregateId partnerAggregateId);
+    public DefaultPartner movePartnerToCategory(String tenantId, PartnerCategory newPartnerCategory,AggregateId partnerAggregateId);
+    public DefaultPartner addPartnerRole(String tenantId, DefaultPartner partner);
+    public DefaultPartner updatePartnerRole(String tenantId, DefaultPartner partner, EntityId partnerRoleEntityId);
+    public DefaultPartner addAddressToRole(String tenantId, EntityId partnerRoleEntityId, Address address, AggregateId partnerAggregateId);
+    public DefaultPartner moveRoleAddressTo(String tenantId, EntityId partnerRoleEntityId, Address newAddress,AggregateId partnerAggregateId);
+    public DefaultPartner changeOwner(String tenantId, DefaultOwner newOwner, AggregateId partnerAggregateId);
+    public Boolean hasPartnerRole(String tenantId, AggregateId partnerAggregateId, EntityId roleEntityId);
     public List<DefaultPartner> findPartnersByOrganization(String organizationUid);
-
 }
