@@ -33,7 +33,8 @@ public class PartnerRepositoryTest {
     private DefaultPartner partner = null;
 
     private void createPartner() throws Exception{
-        partner = DefaultPartnerFixture.standardPartner();
+        String tenantId = UUID.randomUUID().toString();
+        partner = DefaultPartnerFixture.standardPartnerWithOwner(new DefaultOwner(tenantId));
         partner = partnerRepository.save(partner);
     }
 
@@ -42,6 +43,7 @@ public class PartnerRepositoryTest {
     public void testCreate() throws Exception{
         createPartner();
         Assert.assertNotNull(partner);
+        Assert.assertNotNull(partner.getOwner());
     }
 
     @Test
@@ -55,37 +57,28 @@ public class PartnerRepositoryTest {
     @Test
     @Rollback(value = false)
     public void testFindByTenantId() throws Exception {
-        String tenantId = UUID.randomUUID().toString();
-        partner = DefaultPartnerFixture.standardPartnerWithOwner(new DefaultOwner(tenantId));
-        partner = partnerRepository.save(partner);
-        Assert.assertNotNull(partner);
-        Assert.assertNotNull(partner.getOwner());
+        createPartner();
         partner = partnerRepository.findOne(partner.getAggregateId(), partner.getOwner().getOrganizationUID());
         Assert.assertNotNull(partner);
         Assert.assertNotNull(partner.getOwner());
-        Assert.assertEquals(tenantId, partner.getOwner().getOrganizationUID());
-        partner = partnerRepository.findOne(partner.getAggregateId(), UUID.randomUUID().toString());
-        Assert.assertNull(partner);
+        Assert.assertNotNull(partner.getOwner().getOrganizationUID());
+        Assert.assertNull(partnerRepository.findOne(partner.getAggregateId(), UUID.randomUUID().toString()));
     }
 
     @Test
     @Rollback(value = false)
     public void testFindAllByTenantId() throws Exception {
-        String tenantId = UUID.randomUUID().toString();
-        partner = DefaultPartnerFixture.standardPartnerWithOwner(new DefaultOwner(tenantId));
-        partner = partnerRepository.save(partner);
-        Assert.assertNotNull(partner);
-        Assert.assertNotNull(partner.getOwner());
-        List<DefaultPartner> partners = partnerRepository.findAll(tenantId);
+        createPartner();
+        List<DefaultPartner> partners = partnerRepository.findAll(partner.getOwner().getOrganizationUID());
         Assert.assertNotNull(partners);
         Assert.assertEquals(1, partners.size());
     }
 
-    @After
+    //@After
     public void tearDown(){
         if(partner != null && partner.getAggregateId() != null) {
-            partnerRepository.delete(partner.getAggregateId());
-            partner = partnerRepository.findOne(partner.getAggregateId());
+            partnerRepository.delete(partner.getAggregateId(), partner.getOwner().getOrganizationUID());
+            partner = partnerRepository.findOne(partner.getAggregateId(), partner.getOwner().getOrganizationUID());
             Assert.assertNull(partner);
         }
     }
