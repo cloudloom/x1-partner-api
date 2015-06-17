@@ -55,8 +55,10 @@ public class PartnerController implements Partner{
                 partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(partner, DefaultPartnerResource.class);
                 return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.CREATED);
             }
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
-        return new ResponseEntity<DefaultPartnerResource>(new DefaultPartnerResource(), HttpStatus.NOT_ACCEPTABLE);
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "/partner/{partnerUid}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -69,9 +71,12 @@ public class PartnerController implements Partner{
             if (partner != null) {
                 partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(partner, DefaultPartnerResource.class);
                 return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
+            } else {
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
             }
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
-        return new ResponseEntity<DefaultPartnerResource>(new DefaultPartnerResource(), HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(value = "/partners", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -82,9 +87,12 @@ public class PartnerController implements Partner{
             if (partners != null && partners.size() > 0) {
                 Set<DefaultPartnerResource> partnerResources = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResources(partners, DefaultPartnerResource.class);
                 return new ResponseEntity<Set<DefaultPartnerResource>>(partnerResources, HttpStatus.OK);
+            } else {
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
             }
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
-        return new ResponseEntity<Set<DefaultPartnerResource>>(Collections.emptySet(), HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(value = "/partner/{partnerUid}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -92,8 +100,9 @@ public class PartnerController implements Partner{
         String tenantId = request.getHeader("tenant_id");
         if(tenantId != null) {
             return new ResponseEntity<Boolean>(partnerService.delete(tenantId, new AggregateId(partnerAggregateId)), HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
-        return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
     }
 
     @RequestMapping(value = "/partner/{partnerUid}/partnercategory", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -107,8 +116,10 @@ public class PartnerController implements Partner{
                 partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(partner, DefaultPartnerResource.class);
                 return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
             }
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
-        return new ResponseEntity<DefaultPartnerResource>(new DefaultPartnerResource(), HttpStatus.NOT_ACCEPTABLE);
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "/partner/{partnerUid}/partner/tocategory", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -122,8 +133,10 @@ public class PartnerController implements Partner{
                 partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(partner, DefaultPartnerResource.class);
                 return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
             }
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
-        return new ResponseEntity<DefaultPartnerResource>(new DefaultPartnerResource(), HttpStatus.NOT_ACCEPTABLE);
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "/partner/partnerrole", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -137,8 +150,10 @@ public class PartnerController implements Partner{
                 partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(defaultPartner, DefaultPartnerResource.class);
                 return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
             }
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
-        return new ResponseEntity<DefaultPartnerResource>(new DefaultPartnerResource(), HttpStatus.NOT_ACCEPTABLE);
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "/partner/partnerrole/{partnerRoleUid}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -152,8 +167,10 @@ public class PartnerController implements Partner{
                 partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(defaultPartner, DefaultPartnerResource.class);
                 return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
             }
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
-        return new ResponseEntity<DefaultPartnerResource>(new DefaultPartnerResource(), HttpStatus.NOT_ACCEPTABLE);
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "/partner/{partnerUid}/partnerRole/{uid}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -167,8 +184,10 @@ public class PartnerController implements Partner{
                 partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(partner, DefaultPartnerResource.class);
                 return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
             }
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
-        return new ResponseEntity<DefaultPartnerResource>(new DefaultPartnerResource(), HttpStatus.NOT_ACCEPTABLE);
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "/partner/{partnerUid}/partnerRole/{uid}/moveAddress", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -182,8 +201,10 @@ public class PartnerController implements Partner{
                 partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(partner, DefaultPartnerResource.class);
                 return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
             }
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
-        return new ResponseEntity<DefaultPartnerResource>(new DefaultPartnerResource(), HttpStatus.NOT_ACCEPTABLE);
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "/partner/{partnerUid}/owner", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -196,8 +217,10 @@ public class PartnerController implements Partner{
                 DefaultPartnerResource partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(partner, DefaultPartnerResource.class);
                 return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
             }
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
-        return new ResponseEntity<DefaultPartnerResource>(new DefaultPartnerResource(), HttpStatus.NOT_ACCEPTABLE);
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "/partner/{partnerUid}/role/{roleUid}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -205,7 +228,8 @@ public class PartnerController implements Partner{
         String tenantId = request.getHeader("tenant_id");
         if(tenantId != null) {
             return new ResponseEntity<Boolean>(partnerService.hasPartnerRole(tenantId, new AggregateId(partnerAggregateId), new EntityId(roleEntityId)), HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
-        return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
     }
 }
