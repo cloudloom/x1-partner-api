@@ -1,7 +1,5 @@
 package com.tracebucket.x1.partner.api.rest.resources;
 
-import com.tracebucket.x1.dictionary.api.domain.Person;
-
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;

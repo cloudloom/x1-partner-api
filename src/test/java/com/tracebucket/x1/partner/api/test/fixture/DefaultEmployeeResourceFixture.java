@@ -1,12 +1,9 @@
 package com.tracebucket.x1.partner.api.test.fixture;
 
-import com.tracebucket.x1.dictionary.api.domain.Phone;
-import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultEmployee;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultAddressResource;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultEmailResource;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultEmployeeResource;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultPhoneResource;
-import com.tracebucket.x1.partner.api.test.builder.DefaultEmployeeBuilder;
 import com.tracebucket.x1.partner.api.test.builder.DefaultEmployeeResourceBuilder;
 
 import java.util.HashSet;

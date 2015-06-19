@@ -1,6 +1,5 @@
 package com.tracebucket.x1.partner.api.test.builder;
 
-import com.tracebucket.x1.dictionary.api.domain.Person;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultAddressResource;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultAffiliateResource;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultPersonResource;

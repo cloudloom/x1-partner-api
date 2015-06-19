@@ -1,12 +1,10 @@
 package com.tracebucket.x1.partner.api.test.repository;
 
 import com.tracebucket.x1.partner.api.DefaultPartnerStarter;
-import com.tracebucket.x1.partner.api.domain.Partner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultOwner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartner;
 import com.tracebucket.x1.partner.api.repository.jpa.DefaultPartnerRepository;
 import com.tracebucket.x1.partner.api.test.fixture.DefaultPartnerFixture;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

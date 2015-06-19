@@ -5,7 +5,6 @@ import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultEmail;
 import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultPhone;
 import com.tracebucket.x1.partner.api.dictionary.Salutation;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultEmployee;
-import com.tracebucket.x1.partner.api.rest.resources.DefaultAddressResource;
 
 import java.util.Set;
 

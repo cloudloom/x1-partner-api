@@ -1,12 +1,8 @@
 package com.tracebucket.x1.partner.api.rest.resources;
 
 import com.tracebucket.tron.assembler.BaseResource;
-import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultAddress;
-import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultEmail;
-import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultPhone;
 import com.tracebucket.x1.partner.api.dictionary.Salutation;
 
-import java.util.HashSet;
 import java.util.Set;
 
 /**

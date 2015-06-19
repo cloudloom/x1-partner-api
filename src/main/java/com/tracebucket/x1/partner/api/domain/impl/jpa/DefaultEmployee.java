@@ -1,12 +1,9 @@
 package com.tracebucket.x1.partner.api.domain.impl.jpa;
 
-import com.tracebucket.tron.ddd.domain.BaseAggregateRoot;
-import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultAddress;
 import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultEmail;
 import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultPhone;
 import com.tracebucket.x1.partner.api.dictionary.Salutation;
 import com.tracebucket.x1.partner.api.domain.Employee;
-import com.tracebucket.x1.partner.api.domain.Partner;
 
 import javax.persistence.*;
 import java.io.Serializable;

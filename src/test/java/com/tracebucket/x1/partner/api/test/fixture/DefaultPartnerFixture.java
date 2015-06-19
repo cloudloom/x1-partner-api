@@ -6,7 +6,10 @@ import com.tracebucket.x1.dictionary.api.domain.PhoneType;
 import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultEmail;
 import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultPhone;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
-import com.tracebucket.x1.partner.api.domain.impl.jpa.*;
+import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultEmployee;
+import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultOwner;
+import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartner;
+import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartnerRole;
 import com.tracebucket.x1.partner.api.test.builder.DefaultPartnerBuilder;
 
 import java.util.HashSet;
