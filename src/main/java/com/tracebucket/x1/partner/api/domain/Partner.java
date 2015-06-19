@@ -1,5 +1,6 @@
 package com.tracebucket.x1.partner.api.domain;
 
+import com.tracebucket.tron.ddd.domain.EntityId;
 import com.tracebucket.x1.dictionary.api.domain.Address;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultOwner;
@@ -20,6 +21,7 @@ public interface Partner {
     public void addAddressToRole(DefaultPartnerRole partnerRole, Address address);
     public void moveRoleAddressTo(DefaultPartnerRole partnerRole, Address newAddress);
     public void changeOwner(DefaultOwner newOwner);
+    public void addPosition(EntityId partnerRoleUid, EntityId positionUid);
     public Set<DefaultPartnerRole> getAllAssignedRoles();
     public DefaultOwner getOwner();
     public void setOwner(DefaultOwner owner);

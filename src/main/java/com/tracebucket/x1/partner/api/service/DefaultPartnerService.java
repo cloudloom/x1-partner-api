@@ -27,4 +27,5 @@ public interface DefaultPartnerService {
     public DefaultPartner changeOwner(String tenantId, DefaultOwner newOwner, AggregateId partnerAggregateId);
     public Boolean hasPartnerRole(String tenantId, AggregateId partnerAggregateId, EntityId roleEntityId);
     public List<DefaultPartner> findPartnersByOrganization(String organizationUid);
+    public DefaultPartner addPosition(String tenantId, AggregateId partnerAggregateId, EntityId partnerRoleUid, EntityId positionUid);
 }

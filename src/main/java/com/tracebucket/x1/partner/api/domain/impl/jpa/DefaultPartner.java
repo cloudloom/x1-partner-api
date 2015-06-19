@@ -2,6 +2,7 @@ package com.tracebucket.x1.partner.api.domain.impl.jpa;
 
 import com.tracebucket.tron.ddd.annotation.DomainMethod;
 import com.tracebucket.tron.ddd.domain.BaseAggregateRoot;
+import com.tracebucket.tron.ddd.domain.EntityId;
 import com.tracebucket.x1.dictionary.api.domain.Address;
 import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultAddress;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
@@ -146,6 +147,18 @@ public class DefaultPartner extends BaseAggregateRoot implements Partner{
     @DomainMethod(event = "OwnerChanged")
     public void changeOwner(DefaultOwner newOwner){
         this.owner = newOwner;
+    }
+
+    @Override
+    @DomainMethod(event = "AddPosition")
+    public void addPosition(EntityId partnerRoleUid, EntityId positionUid) {
+        DefaultPartnerRole roleFound = partnerRoles.parallelStream()
+                .filter(t -> t.getEntityId().getId().equals(partnerRoleUid.getId()))
+                .findFirst()
+                .orElse(null);
+        if(roleFound != null && roleFound instanceof DefaultEmployee) {
+            ((DefaultEmployee)roleFound).setPosition(positionUid.getId());
+        }
     }
 
     @Override

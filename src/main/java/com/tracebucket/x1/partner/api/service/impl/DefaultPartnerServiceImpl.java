@@ -179,4 +179,15 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
     public List<DefaultPartner> findPartnersByOrganization(String organizationUid) {
         return partnerRepository.findPartnersByOrganization(organizationUid);
     }
+
+    @Override
+    @PersistChanges(repository = "partnerRepository")
+    public DefaultPartner addPosition(String tenantId, AggregateId partnerAggregateId, EntityId partnerRoleUid, EntityId positionUid) {
+        DefaultPartner partner = partnerRepository.findOne(partnerAggregateId, tenantId);
+        if(partner != null) {
+            partner.addPosition(partnerRoleUid, positionUid);
+            return partner;
+        }
+        return null;
+    }
 }

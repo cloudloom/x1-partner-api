@@ -232,4 +232,20 @@ public class PartnerController implements Partner{
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
     }
+
+    @Override
+    @RequestMapping(value = "/partner/{partnerUid}/role/{roleUid}/position/{positionUid}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DefaultPartnerResource> addPosition(HttpServletRequest request, @PathVariable("partnerUid") String partnerAggregateId, @PathVariable("roleUid") String partnerRoleUid, @PathVariable("positionUid") String positionUid) {
+        String tenantId = request.getHeader("tenant_id");
+        if(tenantId != null) {
+            DefaultPartner partner = partnerService.addPosition(tenantId, new AggregateId(partnerAggregateId), new EntityId(partnerRoleUid), new EntityId(positionUid));
+            if (partner != null) {
+                DefaultPartnerResource partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(partner, DefaultPartnerResource.class);
+                return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
+            }
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
 }

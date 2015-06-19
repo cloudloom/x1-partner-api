@@ -52,6 +52,10 @@ public class DefaultEmployee extends DefaultPartnerRole implements Employee, Ser
     @JoinTable(name = "EMPLOYEE_EMAIL", joinColumns = @JoinColumn(name = "PARTNER__ID"))
     private Set<DefaultEmail> email = new HashSet<DefaultEmail>(0);
 
+    @Column(name = "POSITION__ID", unique = true)
+    @Basic(fetch = FetchType.EAGER)
+    private String position;
+
     public String getEmployeeID() {
         return employeeID;
     }
@@ -116,5 +120,13 @@ public class DefaultEmployee extends DefaultPartnerRole implements Employee, Ser
     @Override
     public String simpleName() {
         return simpleName;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 }

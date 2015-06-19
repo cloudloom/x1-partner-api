@@ -22,6 +22,7 @@ public class DefaultEmployeeResource extends BaseResource {
     private Set<DefaultPhoneResource> phone;
     private Set<DefaultEmailResource> email;
     private Set<DefaultAddressResource> addresses;
+    private String position;
 
     public String getEmployeeID() {
         return employeeID;
@@ -85,5 +86,13 @@ public class DefaultEmployeeResource extends BaseResource {
 
     public void setAddresses(Set<DefaultAddressResource> addresses) {
         this.addresses = addresses;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 }

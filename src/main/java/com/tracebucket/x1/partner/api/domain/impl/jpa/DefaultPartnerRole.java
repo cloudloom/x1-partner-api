@@ -51,4 +51,3 @@ public abstract class DefaultPartnerRole extends BaseEntity implements PartnerRo
         }
     }
 }
-
