@@ -1,5 +1,6 @@
 package com.tracebucket.x1.partner.api.rest.resources;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tracebucket.tron.assembler.BaseResource;
 import com.tracebucket.x1.partner.api.dictionary.Salutation;
 
@@ -21,6 +22,7 @@ public class DefaultEmployeeResource extends BaseResource {
     private Set<DefaultAddressResource> addresses;
     private String position;
     private DefaultValidityResource validity;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date dateOfBirth;
     private boolean user;
     private String searchTerm;
