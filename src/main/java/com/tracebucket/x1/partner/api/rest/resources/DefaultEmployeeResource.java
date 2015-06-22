@@ -3,6 +3,7 @@ package com.tracebucket.x1.partner.api.rest.resources;
 import com.tracebucket.tron.assembler.BaseResource;
 import com.tracebucket.x1.partner.api.dictionary.Salutation;
 
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -19,6 +20,10 @@ public class DefaultEmployeeResource extends BaseResource {
     private Set<DefaultEmailResource> email;
     private Set<DefaultAddressResource> addresses;
     private String position;
+    private DefaultValidityResource validity;
+    private Date dateOfBirth;
+    private boolean user;
+    private String searchTerm;
 
     public String getEmployeeID() {
         return employeeID;
@@ -90,5 +95,37 @@ public class DefaultEmployeeResource extends BaseResource {
 
     public void setPosition(String position) {
         this.position = position;
+    }
+
+    public DefaultValidityResource getValidity() {
+        return validity;
+    }
+
+    public void setValidity(DefaultValidityResource validity) {
+        this.validity = validity;
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public boolean isUser() {
+        return user;
+    }
+
+    public void setUser(boolean user) {
+        this.user = user;
+    }
+
+    public String getSearchTerm() {
+        return searchTerm;
+    }
+
+    public void setSearchTerm(String searchTerm) {
+        this.searchTerm = searchTerm;
     }
 }

@@ -2,11 +2,13 @@ package com.tracebucket.x1.partner.api.domain.impl.jpa;
 
 import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultEmail;
 import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultPhone;
+import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultValidity;
 import com.tracebucket.x1.partner.api.dictionary.Salutation;
 import com.tracebucket.x1.partner.api.domain.Employee;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -52,6 +54,22 @@ public class DefaultEmployee extends DefaultPartnerRole implements Employee, Ser
     @Column(name = "POSITION__ID", unique = true)
     @Basic(fetch = FetchType.EAGER)
     private String position;
+
+    @Embedded
+    private DefaultValidity validity;
+
+    @Column(name = "DATE_OF_BIRTH")
+    @Basic(fetch = FetchType.EAGER)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateOfBirth;
+
+    @Column(name = "IS_USER", columnDefinition = "boolean default false")
+    @Basic(fetch = FetchType.EAGER)
+    private boolean user;//Is Employee a user
+
+    @Column(name = "SEARCH_TERM")
+    @Basic(fetch = FetchType.EAGER)
+    private String searchTerm;
 
     public String getEmployeeID() {
         return employeeID;
@@ -125,5 +143,37 @@ public class DefaultEmployee extends DefaultPartnerRole implements Employee, Ser
 
     public void setPosition(String position) {
         this.position = position;
+    }
+
+    public DefaultValidity getValidity() {
+        return validity;
+    }
+
+    public void setValidity(DefaultValidity validity) {
+        this.validity = validity;
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public boolean isUser() {
+        return user;
+    }
+
+    public void setUser(boolean user) {
+        this.user = user;
+    }
+
+    public String getSearchTerm() {
+        return searchTerm;
+    }
+
+    public void setSearchTerm(String searchTerm) {
+        this.searchTerm = searchTerm;
     }
 }

@@ -1,11 +1,9 @@
 package com.tracebucket.x1.partner.api.test.builder;
 
 import com.tracebucket.x1.partner.api.dictionary.Salutation;
-import com.tracebucket.x1.partner.api.rest.resources.DefaultAddressResource;
-import com.tracebucket.x1.partner.api.rest.resources.DefaultEmailResource;
-import com.tracebucket.x1.partner.api.rest.resources.DefaultEmployeeResource;
-import com.tracebucket.x1.partner.api.rest.resources.DefaultPhoneResource;
+import com.tracebucket.x1.partner.api.rest.resources.*;
 
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -21,6 +19,10 @@ public class DefaultEmployeeResourceBuilder {
     private Set<DefaultPhoneResource> phone;
     private Set<DefaultEmailResource> email;
     private Set<DefaultAddressResource> addresses;
+    private DefaultValidityResource validity;
+    private Date dateOfBirth;
+    private boolean user;
+    private String searchTerm;
 
     private DefaultEmployeeResourceBuilder(){ }
 
@@ -68,6 +70,26 @@ public class DefaultEmployeeResourceBuilder {
         return this;
     }
 
+    public DefaultEmployeeResourceBuilder withValidity(DefaultValidityResource validity) {
+        this.validity = validity;
+        return this;
+    }
+
+    public DefaultEmployeeResourceBuilder withDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+        return this;
+    }
+
+    public DefaultEmployeeResourceBuilder withUser(boolean user) {
+        this.user = user;
+        return this;
+    }
+
+    public DefaultEmployeeResourceBuilder withSearchTerm(String searchTerm) {
+        this.searchTerm = searchTerm;
+        return this;
+    }
+
     public DefaultEmployeeResource build() {
         DefaultEmployeeResource employee = new DefaultEmployeeResource();
         employee.setFirstName(firstName);
@@ -78,6 +100,10 @@ public class DefaultEmployeeResourceBuilder {
         employee.setPhone(phone);
         employee.setSalutation(salutation);
         employee.setAddresses(addresses);
+        employee.setValidity(validity);
+        employee.setDateOfBirth(dateOfBirth);
+        employee.setUser(user);
+        employee.setSearchTerm(searchTerm);
         return employee;
     }
 }
