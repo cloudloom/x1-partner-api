@@ -89,7 +89,7 @@ public class DefaultAddressResourceBuilder {
         address.setBuilding(building);
         address.setStreet(street);
         address.setRegion(region);
-        address.setCity(city);
+        //address.setCity(city);
         address.setDistrict(district);
         address.setState(state);
         address.setCountry(country);

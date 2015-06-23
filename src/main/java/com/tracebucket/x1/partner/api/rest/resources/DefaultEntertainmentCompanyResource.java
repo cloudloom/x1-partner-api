@@ -1,5 +1,11 @@
 package com.tracebucket.x1.partner.api.rest.resources;
 
+import org.hibernate.validator.constraints.URL;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -8,9 +14,22 @@ import java.util.Set;
  */
 public class DefaultEntertainmentCompanyResource extends DefaultPartnerRoleResource{
     private static final String simpleName = "Entertainment Company";
+
+    @NotNull
+    @Size(min = 1, max = 250)
     private String name;
+
+    @NotNull
+    @Size(min = 1, max = 250)
+    @URL
     private String website;
+
+    @NotNull
+    @Size(min = 1, max = 250)
+    @Pattern(regexp = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)")
     private String logo;
+
+    @Valid
     private Set<DefaultPersonResource> contactPersons = new HashSet<DefaultPersonResource>(0);
 
     public static String getSimpleName() {

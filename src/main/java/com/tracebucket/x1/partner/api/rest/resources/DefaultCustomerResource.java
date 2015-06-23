@@ -2,7 +2,10 @@ package com.tracebucket.x1.partner.api.rest.resources;
 
 import com.tracebucket.x1.dictionary.api.domain.Gender;
 import com.tracebucket.x1.partner.api.dictionary.Salutation;
+import org.hibernate.validator.constraints.Email;
 
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
@@ -10,13 +13,29 @@ import java.util.Date;
  */
 public class DefaultCustomerResource extends DefaultPartnerRoleResource {
     private static final String simpleName = "Customer";
+
+    @Size(min = 1, max = 10)
     private String initial;
+
     private Salutation salutation;
+
+    @Size(min = 1, max = 250)
+    @Pattern(regexp = "^[A-Za-z]*$")
     private String firstName;
+
+    @Size(min = 1, max = 250)
+    @Pattern(regexp = "^[A-Za-z]*$")
     private String middleName;
+
+    @Size(min = 1, max = 250)
+    @Pattern(regexp = "^[A-Za-z]*$")
     private String lastName;
+
     private Date birthDay;
     private Gender gender;
+
+    @Size(min = 1, max = 250)
+    @Email
     private String email;
 
     public static String getSimpleName() {

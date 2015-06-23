@@ -2,22 +2,54 @@ package com.tracebucket.x1.partner.api.rest.resources;
 
 import com.tracebucket.tron.assembler.BaseResource;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
+import org.hibernate.validator.constraints.URL;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 /**
  * Created by sadath on 26-May-2015.
  */
 public class DefaultPartnerResource extends BaseResource{
+
+    @NotNull
+    @Size(min = 1, max = 150)
+    @Pattern(regexp = "^[A-Za-z]*$")
     private String title;
+
+    @Size(min = 1, max = 250)
+    @Pattern(regexp = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)")
     private String image;
+
+    @Size(min = 1, max = 255)
+    @URL
     private String website;
+
     private PartnerCategory partnerCategory;
+
     private DefaultOwnerResource owner;
+
+    @Valid
     private DefaultAffiliateResource affiliate;
+
+    @Valid
     private DefaultCustomerResource customer;
+
+    @Valid
     private DefaultEntertainmentCompanyResource entertainmentCompany;
+
+
     private DefaultMuseumResource museum;
+
+
     private DefaultTourCompanyResource tourCompany;
+
+
     private DefaultTransportProviderResource transportProvider;
+
+    @Valid
     private DefaultEmployeeResource employee;
 
     public String getTitle() {

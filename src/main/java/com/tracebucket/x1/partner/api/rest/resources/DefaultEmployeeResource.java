@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tracebucket.tron.assembler.BaseResource;
 import com.tracebucket.x1.partner.api.dictionary.Salutation;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.Set;
 
@@ -13,18 +16,40 @@ import java.util.Set;
 public class DefaultEmployeeResource extends BaseResource {
 
     private String employeeID;
+
     private Salutation salutation;
+
+    @Size(min = 1, max = 250)
+    @Pattern(regexp = "^[A-Za-z]*$")
     protected String firstName;
+
+    @Size(min = 1, max = 250)
+    @Pattern(regexp = "^[A-Za-z]*$")
     protected String lastName;
+
+    @Size(min = 1, max = 250)
+    @Pattern(regexp = "^[A-Za-z]*$")
     protected String middleName;
-    private Set<DefaultPhoneResource> phone;
+
+    @Valid
+    private Set<DefaultPhoneResource> phones;
+
+    @Valid
     private Set<DefaultEmailResource> email;
+
+    @Valid
     private Set<DefaultAddressResource> addresses;
-    private String position;
+
+
+    private String position;//no validation required
+
+
     private DefaultValidityResource validity;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date dateOfBirth;
     private boolean user;
+
+    @Size(min = 1, max = 250)
     private String searchTerm;
 
     public String getEmployeeID() {
@@ -68,11 +93,11 @@ public class DefaultEmployeeResource extends BaseResource {
     }
 
     public Set<DefaultPhoneResource> getPhone() {
-        return phone;
+        return phones;
     }
 
     public void setPhone(Set<DefaultPhoneResource> phone) {
-        this.phone = phone;
+        this.phones = phone;
     }
 
     public Set<DefaultEmailResource> getEmail() {
