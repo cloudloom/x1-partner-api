@@ -249,4 +249,46 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
         return null;
     }
 
+    @Override
+    public Boolean isPositionAssigned(String tenantId, String organizationUid, String positionUid, String organizationUnitUid) {
+        Boolean innerBreak = false;
+        Boolean outerBreak = false;
+        if(tenantId.equals(organizationUid)) {
+            List<DefaultPartner> partners = findPartnersByOrganization(tenantId);
+            if(partners != null) {
+                for(DefaultPartner partner : partners) {
+                    Set<DefaultPartnerRole> partnerRoles = partner.getAllAssignedRoles();
+                    if(partnerRoles != null) {
+                        for(DefaultPartnerRole partnerRole : partnerRoles) {
+                            if (partnerRole instanceof DefaultEmployee) {
+                                DefaultEmployee employee = (DefaultEmployee) partnerRole;
+                                if (employee.getOrganizationUnit() != null && employee.getOrganizationUnit().equals(organizationUnitUid)
+                                        && employee.getPosition() != null && employee.getPosition().equals(positionUid)) {
+                                    innerBreak = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if(innerBreak) {
+                        outerBreak = true;
+                        break;
+                    }
+                }
+                return outerBreak;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public DefaultPartner addPositionAndOrganization(String tenantId, AggregateId partnerAggregateId, EntityId partnerRoleUid, EntityId positionUid, EntityId organizationUnitUid) {
+        DefaultPartner partner = partnerRepository.findOne(partnerAggregateId, tenantId);
+        if (partner != null) {
+            partner.addPositionAndOrganization(partnerRoleUid, positionUid, organizationUnitUid);
+            return partner;
+        }
+        return null;
+    }
+
 }

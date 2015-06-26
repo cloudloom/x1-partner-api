@@ -29,4 +29,7 @@ public interface DefaultPartnerService {
     public List<DefaultPartner> findPartnersByOrganization(String organizationUid);
     public DefaultPartner addPosition(String tenantId, AggregateId partnerAggregateId, EntityId partnerRoleUid, EntityId positionUid);
     public Set<DefaultPartner> searchPartners(String tenantId, AggregateId organizationAggregateId, String searchTerm);
+    public Boolean isPositionAssigned(String tenantId, String organizationUid, String positionUid, String organizationUnitUid);
+    public DefaultPartner addPositionAndOrganization(String tenantId, AggregateId partnerAggregateId, EntityId partnerRoleUid, EntityId positionUid, EntityId organizationUnitUid);
+
 }

@@ -265,4 +265,31 @@ public class PartnerController implements Partner{
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
     }
+
+    @Override
+    @RequestMapping(value = "/partner/organization/{organizationUID}/position/{positionUid}/organizationUnit/{organizationUnitUid}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> isPositionAssigned(HttpServletRequest request, @PathVariable("organizationUID") String organizationUID, @PathVariable("positionUid") String positionUid, @PathVariable("organizationUnitUid") String organizationUnitUid) {
+        String tenantId = request.getHeader("tenant_id");
+        if (tenantId != null) {
+            return new ResponseEntity<Boolean>(partnerService.isPositionAssigned(tenantId, organizationUID, positionUid, organizationUnitUid), HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @Override
+    @RequestMapping(value = "/partner/{partnerUid}/role/{roleUid}/position/{positionUid}/organizationUnit/{organizationUnitUid}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DefaultPartnerResource> addPositionAndOrganization(HttpServletRequest request, @PathVariable("partnerUid") String partnerAggregateId, @PathVariable("roleUid") String partnerRoleUid, @PathVariable("positionUid") String positionUid, @PathVariable("organizationUnitUid") String organizationUnitUid) {
+        String tenantId = request.getHeader("tenant_id");
+        if (tenantId != null) {
+            DefaultPartner partner = partnerService.addPositionAndOrganization(tenantId, new AggregateId(partnerAggregateId), new EntityId(partnerRoleUid), new EntityId(positionUid), new EntityId(organizationUnitUid));
+            if (partner != null) {
+                DefaultPartnerResource partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(partner, DefaultPartnerResource.class);
+                return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
+            }
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
 }
