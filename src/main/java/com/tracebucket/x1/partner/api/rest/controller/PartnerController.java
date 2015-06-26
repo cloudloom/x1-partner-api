@@ -246,4 +246,23 @@ public class PartnerController implements Partner{
         }
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
+
+
+    @Override
+    @RequestMapping(value = "/partner/organization/{organizationUID}/search/{searchTerm}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Set<DefaultPartnerResource>> searchPartners(HttpServletRequest request, @PathVariable("organizationUID") String organizationAggregateId, @PathVariable("searchTerm") String searchTerm) {
+        String tenantId = request.getHeader("tenant_id");
+        if(tenantId != null) {
+            searchTerm = "(.*)" + searchTerm.toLowerCase() + "(.*)";
+            List<DefaultPartner> partners = partnerService.findPartnersByOrganization(organizationAggregateId);
+            if (partners != null && partners.size() > 0) {
+                Set<DefaultPartnerResource> partnerResources = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResources(partners, DefaultPartnerResource.class);
+                return new ResponseEntity<Set<DefaultPartnerResource>>(partnerResources, HttpStatus.OK);
+            } else {
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
 }
