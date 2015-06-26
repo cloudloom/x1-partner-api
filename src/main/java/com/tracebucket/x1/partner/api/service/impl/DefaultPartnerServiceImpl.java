@@ -1,10 +1,13 @@
 package com.tracebucket.x1.partner.api.service.impl;
 
+import com.sun.xml.internal.ws.api.streaming.XMLStreamReaderFactory;
 import com.tracebucket.tron.ddd.annotation.PersistChanges;
 import com.tracebucket.tron.ddd.domain.AggregateId;
 import com.tracebucket.tron.ddd.domain.EntityId;
 import com.tracebucket.x1.dictionary.api.domain.Address;
+import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultEmail;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
+import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultEmployee;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultOwner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartnerRole;
@@ -15,8 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created by sadath on 26-May-2015.
@@ -190,4 +195,60 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
         }
         return null;
     }
+
+    @Override
+    public Set<DefaultPartner> searchPartners(String tenantId, AggregateId organizationAggregateId, String searchTerm) {
+        if(tenantId.equals(organizationAggregateId.getAggregateId())) {
+
+            List<DefaultPartner> partners = findPartnersByOrganization(tenantId);
+            Set<DefaultPartner> foundPartners = new HashSet<>();
+                if(partners != null) {
+                   partners.stream().forEach(p -> {
+                        if((p.getTitle() != null && p.getTitle().toLowerCase().matches(searchTerm))) {
+                            foundPartners.add(p);
+                        } else if((p.getWebsite() != null && p.getWebsite().toLowerCase().matches(searchTerm))) {
+                            foundPartners.add(p);
+                        } else if(p.getPartnerRoles().stream().filter(pRoles -> pRoles.getName().toLowerCase().matches(searchTerm) ||
+                                                pRoles.getAddresses().stream().filter(addresses -> (addresses.getCity().toLowerCase().matches(searchTerm) ||
+                                                        addresses.getCountry().toLowerCase().matches(searchTerm) ||
+                                                        addresses.getRegion().toLowerCase().matches(searchTerm) ||
+                                                        addresses.getState().toLowerCase().matches(searchTerm) ||
+                                                        addresses.getDistrict().toLowerCase().matches(searchTerm) ||
+                                                        addresses.getStreet().toLowerCase().matches(searchTerm) ||
+                                                        addresses.getZip().toLowerCase().matches(searchTerm))).count() > 0
+
+                        ).count() > 0) {
+                            foundPartners.add(p);
+                        }
+                    });
+                    partners.stream().forEach(p -> {
+                        Set<DefaultPartnerRole> partnerRoles = p.getPartnerRoles();
+                        for(DefaultPartnerRole partnerRole : partnerRoles) {
+                            if(partnerRole instanceof DefaultEmployee) {
+                                DefaultEmployee employee = (DefaultEmployee)partnerRole;
+                                if(employee.getName() != null && employee.getName().toLowerCase().matches(searchTerm)) {
+                                    foundPartners.add(p);
+                                } else if(employee.getMiddleName() != null && employee.getMiddleName().toLowerCase().matches(searchTerm)){
+                                    foundPartners.add(p);
+                                }  else if(employee.getLastName() != null && employee.getLastName().toLowerCase().matches(searchTerm)){
+                                    foundPartners.add(p);
+                                }
+
+                                Set<DefaultEmail> emails = employee.getEmail();
+                                for(DefaultEmail email: emails){
+                                    if(email.getEmail() != null && email.getEmail().toLowerCase().matches(searchTerm))
+                                        foundPartners.add(p);
+                                }
+                            }
+                        }
+                    });
+                    if(foundPartners.size() > 0) {
+                        return foundPartners;
+                    }
+                }
+
+        }
+        return null;
+    }
+
 }
