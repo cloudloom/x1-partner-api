@@ -5,6 +5,7 @@ import com.tracebucket.tron.ddd.domain.AggregateId;
 import com.tracebucket.tron.ddd.domain.EntityId;
 import com.tracebucket.x1.dictionary.api.domain.Address;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
+import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultEmployee;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultOwner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartnerRole;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -24,7 +26,7 @@ import java.util.Set;
 @Service
 @Transactional
 public class DefaultPartnerServiceImpl implements DefaultPartnerService {
-    
+
     @Autowired
     private DefaultPartnerRepository partnerRepository;
 
@@ -50,7 +52,7 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
     @Override
     public boolean delete(String tenantId, AggregateId partnerAggregateId) {
         DefaultPartner partner = partnerRepository.findOne(partnerAggregateId, tenantId);
-        if(partner != null) {
+        if (partner != null) {
             partnerRepository.delete(partner.getAggregateId(), tenantId);
             return partnerRepository.findOne(partnerAggregateId, tenantId) == null ? true : false;
         }
@@ -59,9 +61,9 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
 
     @Override
     @PersistChanges(repository = "partnerRepository")
-    public DefaultPartner setPartnerCategory(String tenantId, PartnerCategory partnerCategory, AggregateId partnerAggregateId){
+    public DefaultPartner setPartnerCategory(String tenantId, PartnerCategory partnerCategory, AggregateId partnerAggregateId) {
         DefaultPartner partner = partnerRepository.findOne(partnerAggregateId, tenantId);
-        if(partner != null) {
+        if (partner != null) {
             partner.setPartnerCategory(partnerCategory);
             return partner;
         }
@@ -70,9 +72,9 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
 
     @Override
     @PersistChanges(repository = "partnerRepository")
-    public DefaultPartner movePartnerToCategory(String tenantId, PartnerCategory newPartnerCategory,AggregateId partnerAggregateId){
+    public DefaultPartner movePartnerToCategory(String tenantId, PartnerCategory newPartnerCategory, AggregateId partnerAggregateId) {
         DefaultPartner partner = partnerRepository.findOne(partnerAggregateId, tenantId);
-        if(partner != null) {
+        if (partner != null) {
             partner.setPartnerCategory(newPartnerCategory);
             return partner;
         }
@@ -81,11 +83,11 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
 
     @Override
     @PersistChanges(repository = "partnerRepository")
-    public DefaultPartner addPartnerRole(String tenantId, DefaultPartner addPartnerRole){
+    public DefaultPartner addPartnerRole(String tenantId, DefaultPartner addPartnerRole) {
         DefaultPartner partner = partnerRepository.findOne(addPartnerRole.getAggregateId(), tenantId);
-        if(partner != null) {
+        if (partner != null) {
             Set<DefaultPartnerRole> partnerRoles = addPartnerRole.getAllAssignedRoles();
-            if(partnerRoles != null && partnerRoles.size() > 0) {
+            if (partnerRoles != null && partnerRoles.size() > 0) {
                 partnerRoles.parallelStream().forEach(role -> {
                     partner.addPartnerRole(role);
                 });
@@ -99,13 +101,13 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
     @PersistChanges(repository = "partnerRepository")
     public DefaultPartner updatePartnerRole(String tenantId, DefaultPartner updatePartnerRole, EntityId partnerRoleEntityId) {
         DefaultPartner partner = partnerRepository.findOne(updatePartnerRole.getAggregateId(), tenantId);
-        if(partner != null) {
+        if (partner != null) {
             Set<DefaultPartnerRole> partnerRoles = updatePartnerRole.getAllAssignedRoles();
-            if(partnerRoles != null && partnerRoles.size() > 0) {
+            if (partnerRoles != null && partnerRoles.size() > 0) {
                 DefaultPartnerRole updateRole = partnerRoles.parallelStream()
                         .filter(t -> t.getEntityId().equals(partnerRoleEntityId))
                         .findFirst().get();
-                if(updateRole != null) {
+                if (updateRole != null) {
                     partner.updatePartnerRole(updateRole, mapper);
                 }
             }
@@ -116,11 +118,11 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
 
     @Override
     @PersistChanges(repository = "partnerRepository")
-    public DefaultPartner addAddressToRole(String tenantId, EntityId partnerRoleEntityId, Address address, AggregateId partnerAggregateId){
+    public DefaultPartner addAddressToRole(String tenantId, EntityId partnerRoleEntityId, Address address, AggregateId partnerAggregateId) {
         DefaultPartner partner = partnerRepository.findOne(partnerAggregateId, tenantId);
-        if(partner != null) {
+        if (partner != null) {
             Set<DefaultPartnerRole> partnerRoles = partner.getAllAssignedRoles();
-            if(partnerRoles != null) {
+            if (partnerRoles != null) {
                 partnerRoles.stream().forEach(r -> {
                     if (r.getEntityId().getId().equals(partnerRoleEntityId.getId())) {
                         partner.addAddressToRole(r, address);
@@ -134,13 +136,13 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
 
     @Override
     @PersistChanges(repository = "partnerRepository")
-    public DefaultPartner moveRoleAddressTo(String tenantId, EntityId partnerRoleEntityId, Address newAddress, AggregateId partnerAggregateId){
+    public DefaultPartner moveRoleAddressTo(String tenantId, EntityId partnerRoleEntityId, Address newAddress, AggregateId partnerAggregateId) {
         DefaultPartner partner = partnerRepository.findOne(partnerAggregateId, tenantId);
-        if(partner != null) {
+        if (partner != null) {
             Set<DefaultPartnerRole> partnerRoles = partner.getAllAssignedRoles();
-            if(partnerRoles != null) {
+            if (partnerRoles != null) {
                 partnerRoles.stream().forEach(r -> {
-                    if(r.getEntityId().getId().equals(partnerRoleEntityId.getId())) {
+                    if (r.getEntityId().getId().equals(partnerRoleEntityId.getId())) {
                         partner.moveRoleAddressTo(r, newAddress);
                     }
                 });
@@ -152,9 +154,9 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
 
     @Override
     @PersistChanges(repository = "partnerRepository")
-    public DefaultPartner changeOwner(String tenantId, DefaultOwner newOwner, AggregateId partnerAggregateId){
+    public DefaultPartner changeOwner(String tenantId, DefaultOwner newOwner, AggregateId partnerAggregateId) {
         DefaultPartner partner = partnerRepository.findOne(partnerAggregateId, tenantId);
-        if(partner != null) {
+        if (partner != null) {
             partner.changeOwner(newOwner);
             return partner;
         }
@@ -162,11 +164,11 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
     }
 
     @Override
-    public Boolean hasPartnerRole(String tenantId, AggregateId partnerAggregateId, EntityId roleEntityId){
+    public Boolean hasPartnerRole(String tenantId, AggregateId partnerAggregateId, EntityId roleEntityId) {
         Long found = null;
         DefaultPartner partner = partnerRepository.findOne(partnerAggregateId, tenantId);
-        if(partner != null) {
-            if(partner.getAllAssignedRoles() != null && partner.getAllAssignedRoles().size() > 0) {
+        if (partner != null) {
+            if (partner.getAllAssignedRoles() != null && partner.getAllAssignedRoles().size() > 0) {
                 found = partner.getAllAssignedRoles().parallelStream()
                         .filter(t -> t.getEntityId().getId().equals(roleEntityId.getId()))
                         .count();
@@ -184,9 +186,51 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
     @PersistChanges(repository = "partnerRepository")
     public DefaultPartner addPosition(String tenantId, AggregateId partnerAggregateId, EntityId partnerRoleUid, EntityId positionUid) {
         DefaultPartner partner = partnerRepository.findOne(partnerAggregateId, tenantId);
-        if(partner != null) {
+        if (partner != null) {
             partner.addPosition(partnerRoleUid, positionUid);
             return partner;
+        }
+        return null;
+    }
+
+    @Override
+    public DefaultPartner addPositionAndOrganization(String tenantId, AggregateId partnerAggregateId, EntityId partnerRoleUid, EntityId positionUid, EntityId organizationUnitUid) {
+        DefaultPartner partner = partnerRepository.findOne(partnerAggregateId, tenantId);
+        if (partner != null) {
+            partner.addPositionAndOrganization(partnerRoleUid, positionUid, organizationUnitUid);
+            return partner;
+        }
+        return null;
+    }
+
+    @Override
+    public Boolean isPositionAssigned(String tenantId, String organizationUid, String positionUid, String organizationUnitUid) {
+        Boolean innerBreak = false;
+        Boolean outerBreak = false;
+        if(tenantId.equals(organizationUid)) {
+            List<DefaultPartner> partners = findPartnersByOrganization(tenantId);
+            if(partners != null) {
+                for(DefaultPartner partner : partners) {
+                    Set<DefaultPartnerRole> partnerRoles = partner.getAllAssignedRoles();
+                    if(partnerRoles != null) {
+                        for(DefaultPartnerRole partnerRole : partnerRoles) {
+                            if (partnerRole instanceof DefaultEmployee) {
+                                DefaultEmployee employee = (DefaultEmployee) partnerRole;
+                                if (employee.getOrganizationUnit() != null && employee.getOrganizationUnit().equals(organizationUnitUid)
+                                        && employee.getPosition() != null && employee.getPosition().equals(positionUid)) {
+                                    innerBreak = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if(innerBreak) {
+                        outerBreak = true;
+                        break;
+                    }
+                }
+                return outerBreak;
+            }
         }
         return null;
     }

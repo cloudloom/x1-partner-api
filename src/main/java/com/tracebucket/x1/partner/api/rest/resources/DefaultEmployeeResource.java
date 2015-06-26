@@ -21,6 +21,7 @@ public class DefaultEmployeeResource extends BaseResource {
     private Set<DefaultEmailResource> email;
     private Set<DefaultAddressResource> addresses;
     private String position;
+    private String organizationUnit;
     private DefaultValidityResource validity;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date dateOfBirth;
@@ -129,5 +130,13 @@ public class DefaultEmployeeResource extends BaseResource {
 
     public void setSearchTerm(String searchTerm) {
         this.searchTerm = searchTerm;
+    }
+
+    public String getOrganizationUnit() {
+        return organizationUnit;
+    }
+
+    public void setOrganizationUnit(String organizationUnit) {
+        this.organizationUnit = organizationUnit;
     }
 }

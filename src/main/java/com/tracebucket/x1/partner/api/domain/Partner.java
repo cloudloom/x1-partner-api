@@ -22,6 +22,7 @@ public interface Partner {
     public void moveRoleAddressTo(DefaultPartnerRole partnerRole, Address newAddress);
     public void changeOwner(DefaultOwner newOwner);
     public void addPosition(EntityId partnerRoleUid, EntityId positionUid);
+    public void addPositionAndOrganization(EntityId partnerRoleUid, EntityId positionUid, EntityId organizationUnitUid);
     public Set<DefaultPartnerRole> getAllAssignedRoles();
     public DefaultOwner getOwner();
     public void setOwner(DefaultOwner owner);

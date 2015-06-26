@@ -8,6 +8,7 @@ import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultOwner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartner;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by sadath on 26-May-2015.
@@ -27,4 +28,6 @@ public interface DefaultPartnerService {
     public Boolean hasPartnerRole(String tenantId, AggregateId partnerAggregateId, EntityId roleEntityId);
     public List<DefaultPartner> findPartnersByOrganization(String organizationUid);
     public DefaultPartner addPosition(String tenantId, AggregateId partnerAggregateId, EntityId partnerRoleUid, EntityId positionUid);
-}
+    public DefaultPartner addPositionAndOrganization(String tenantId, AggregateId partnerAggregateId, EntityId partnerRoleUid, EntityId positionUid, EntityId organizationUnitUid);
+    public Boolean isPositionAssigned(String tenantId, String organizationUid, String positionUid, String organizationUnitUid);
+    }
