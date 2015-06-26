@@ -254,7 +254,7 @@ public class PartnerController implements Partner{
         String tenantId = request.getHeader("tenant_id");
         if(tenantId != null) {
             searchTerm = "(.*)" + searchTerm.toLowerCase() + "(.*)";
-            List<DefaultPartner> partners = partnerService.findPartnersByOrganization(organizationAggregateId);
+            Set<DefaultPartner> partners = partnerService.searchPartners(tenantId, new AggregateId(organizationAggregateId), searchTerm);
             if (partners != null && partners.size() > 0) {
                 Set<DefaultPartnerResource> partnerResources = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResources(partners, DefaultPartnerResource.class);
                 return new ResponseEntity<Set<DefaultPartnerResource>>(partnerResources, HttpStatus.OK);
