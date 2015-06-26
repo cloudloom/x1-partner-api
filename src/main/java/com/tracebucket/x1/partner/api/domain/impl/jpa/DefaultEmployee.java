@@ -55,10 +55,6 @@ public class DefaultEmployee extends DefaultPartnerRole implements Employee, Ser
     @Basic(fetch = FetchType.EAGER)
     private String position;
 
-    @Column(name = "ORGANIZATION_UNIT__ID", unique = true)
-    @Basic(fetch = FetchType.EAGER)
-    private String organizationUnit;
-
     @Embedded
     private DefaultValidity validity;
 
@@ -179,13 +175,5 @@ public class DefaultEmployee extends DefaultPartnerRole implements Employee, Ser
 
     public void setSearchTerm(String searchTerm) {
         this.searchTerm = searchTerm;
-    }
-
-    public String getOrganizationUnit() {
-        return organizationUnit;
-    }
-
-    public void setOrganizationUnit(String organizationUnit) {
-        this.organizationUnit = organizationUnit;
     }
 }
