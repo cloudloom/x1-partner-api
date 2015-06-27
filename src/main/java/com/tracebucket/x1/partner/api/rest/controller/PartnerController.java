@@ -22,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Set;
 
@@ -39,7 +40,7 @@ public class PartnerController implements Partner{
     private AssemblerResolver assemblerResolver;
 
     @RequestMapping(value = "/partner", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DefaultPartnerResource> createPartner(HttpServletRequest request, @RequestBody DefaultPartnerResource partnerResource) {
+    public ResponseEntity<DefaultPartnerResource> createPartner(HttpServletRequest request, @Valid @RequestBody DefaultPartnerResource partnerResource) {
         String tenantId = request.getHeader("tenant_id");
         if(tenantId != null) {
             DefaultPartner partner = assemblerResolver.resolveEntityAssembler(DefaultPartner.class, DefaultPartnerResource.class).toEntity(partnerResource, DefaultPartner.class);
@@ -138,7 +139,7 @@ public class PartnerController implements Partner{
     }
 
     @RequestMapping(value = "/partner/partnerrole", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DefaultPartnerResource> addPartnerRole(HttpServletRequest request, @RequestBody DefaultPartnerResource partner) {
+    public ResponseEntity<DefaultPartnerResource> addPartnerRole(HttpServletRequest request, @Valid @RequestBody DefaultPartnerResource partner) {
         String tenantId = request.getHeader("tenant_id");
         if(tenantId != null) {
             DefaultPartner defaultPartner = assemblerResolver.resolveEntityAssembler(DefaultPartner.class, DefaultPartnerResource.class).toEntity(partner, DefaultPartner.class);
@@ -155,7 +156,7 @@ public class PartnerController implements Partner{
     }
 
     @RequestMapping(value = "/partner/partnerrole/{partnerRoleUid}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DefaultPartnerResource> updatePartnerRole(HttpServletRequest request, @RequestBody DefaultPartnerResource partner, @PathVariable("partnerRoleUid") String partnerRoleUid) {
+    public ResponseEntity<DefaultPartnerResource> updatePartnerRole(HttpServletRequest request, @Valid @RequestBody DefaultPartnerResource partner, @PathVariable("partnerRoleUid") String partnerRoleUid) {
         String tenantId = request.getHeader("tenant_id");
         if(tenantId != null) {
             DefaultPartner defaultPartner = assemblerResolver.resolveEntityAssembler(DefaultPartner.class, DefaultPartnerResource.class).toEntity(partner, DefaultPartner.class);
@@ -172,7 +173,7 @@ public class PartnerController implements Partner{
     }
 
     @RequestMapping(value = "/partner/{partnerUid}/partnerRole/{uid}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DefaultPartnerResource> addAddressToRole(HttpServletRequest request, @PathVariable("partnerUid") String partnerAggregateId, @PathVariable("uid") String partnerRoleUid, @RequestBody DefaultAddressResource address) {
+    public ResponseEntity<DefaultPartnerResource> addAddressToRole(HttpServletRequest request, @PathVariable("partnerUid") String partnerAggregateId, @PathVariable("uid") String partnerRoleUid, @Valid @RequestBody DefaultAddressResource address) {
         String tenantId = request.getHeader("tenant_id");
         if(tenantId != null) {
             DefaultAddress defaultAddress = assemblerResolver.resolveEntityAssembler(DefaultAddress.class, DefaultAddressResource.class).toEntity(address, DefaultAddress.class);
@@ -189,7 +190,7 @@ public class PartnerController implements Partner{
     }
 
     @RequestMapping(value = "/partner/{partnerUid}/partnerRole/{uid}/moveAddress", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DefaultPartnerResource> moveRoleAddressTo(HttpServletRequest request, @PathVariable("partnerUid") String partnerAggregateId, @PathVariable("uid") String partnerRoleUid, @RequestBody DefaultAddressResource address) {
+    public ResponseEntity<DefaultPartnerResource> moveRoleAddressTo(HttpServletRequest request, @PathVariable("partnerUid") String partnerAggregateId, @PathVariable("uid") String partnerRoleUid, @Valid @RequestBody DefaultAddressResource address) {
         String tenantId = request.getHeader("tenant_id");
         if(tenantId != null) {
             DefaultAddress defaultAddress = assemblerResolver.resolveEntityAssembler(DefaultAddress.class, DefaultAddressResource.class).toEntity(address, DefaultAddress.class);
