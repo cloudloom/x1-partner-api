@@ -332,7 +332,7 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
 
     @Override
     public Set<DefaultPartner> getEmployeesAssignedToOrganizationAndPosition(String tenantId, AggregateId organizationUid, EntityId organizationUnitUid, EntityId positionUid) {
-        List<DefaultPartner> partners = partnerRepository.getEmployeesAssignedToOrganizationAndPosition(tenantId, organizationUid.getAggregateId(), organizationUnitUid.getId());
+        List<DefaultPartner> partners = partnerRepository.getEmployeesAssignedToOrganizationAndPosition(organizationUid.getAggregateId(), organizationUnitUid.getId(), positionUid.getId());
         if(partners != null && partners.size() > 0) {
             return new HashSet<>(partners);
         }
