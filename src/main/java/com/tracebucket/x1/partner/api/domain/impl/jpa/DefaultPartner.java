@@ -171,7 +171,7 @@ public class DefaultPartner extends BaseAggregateRoot implements Partner{
     @Override
     @DomainMethod(event = "AddPosition")
     public void addPositionAndOrganization(EntityId partnerRoleUid, EntityId positionUid, EntityId organizationUnitUid) {
-        DefaultPartnerRole roleFound = partnerRoles.parallelStream()
+        DefaultPartnerRole roleFound = partnerRoles.stream()
                 .filter(t -> t.getEntityId().getId().equals(partnerRoleUid.getId()))
                 .findFirst()
                 .orElse(null);

@@ -8,10 +8,7 @@ import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultOwner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartner;
 import com.tracebucket.x1.partner.api.rest.exception.PartnerException;
-import com.tracebucket.x1.partner.api.rest.resources.DefaultAddressResource;
-import com.tracebucket.x1.partner.api.rest.resources.DefaultOwnerResource;
-import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerPositionAndOrganizationUnitResource;
-import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerResource;
+import com.tracebucket.x1.partner.api.rest.resources.*;
 import com.tracebucket.x1.partner.api.service.DefaultPartnerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -347,6 +344,23 @@ public class PartnerController implements Partner {
                 return new ResponseEntity<Map<Boolean, Set<DefaultPartnerResource>>>(result, HttpStatus.OK);
             } else {
                 return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @Override
+    @RequestMapping(value = "/employees/organization/{organizationUid}/restructure", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Set<DefaultPartnerResource>> restructureEmployees(HttpServletRequest request, @PathVariable("organizationUid") String organizationUid, @RequestBody DefaultEmployeeRestructureResource employeeStructure) {
+        String tenantId = request.getHeader("tenant_id");
+        if (tenantId != null) {
+            Set<DefaultPartner> partners = partnerService.restructureEmployees(tenantId, new AggregateId(organizationUid), employeeStructure.getEmployeeStructure());
+            if(partners != null) {
+                Set<DefaultPartnerResource> partnerResources = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResources(partners, DefaultPartnerResource.class);
+                return new ResponseEntity<Set<DefaultPartnerResource>>(partnerResources, HttpStatus.OK);
+            } else {
+                return new ResponseEntity(HttpStatus.NOT_MODIFIED);
             }
         } else {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
