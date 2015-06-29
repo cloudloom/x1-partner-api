@@ -1,5 +1,6 @@
 package com.tracebucket.x1.partner.api.service.impl;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.tracebucket.tron.ddd.annotation.PersistChanges;
 import com.tracebucket.tron.ddd.domain.AggregateId;
 import com.tracebucket.tron.ddd.domain.EntityId;
@@ -18,10 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by sadath on 26-May-2015.
@@ -316,9 +314,27 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
     }
 
     @Override
-    public List<DefaultPartner> getEmployeesAssignedAndNotToOrganizationAndPosition(String tenantId, AggregateId organizationUid, EntityId organizationUnitUid, EntityId positionUid) {
+    public Map<Boolean, Set<DefaultPartner>> getEmployeesAssignedAndNotToOrganizationAndPosition(String tenantId, AggregateId organizationUid, EntityId organizationUnitUid, EntityId positionUid) {
         if(tenantId.equals(organizationUid.getAggregateId())) {
-            return partnerRepository.getEmployeesAssignedAndNotToOrganizationAndPosition(organizationUnitUid.getId(), positionUid.getId());
+            Map<Boolean, Set<DefaultPartner>> partners = new HashMap<Boolean, Set<DefaultPartner>>();
+            List<DefaultPartner> partnersAssigned = partnerRepository.getEmployeesAssignedToOrganizationAndPosition(organizationUid.getAggregateId(), organizationUnitUid.getId(), positionUid.getId());
+            List<DefaultPartner> partnersNotAssigned = partnerRepository.getEmployeesNotAssignedToOrganizationAndPosition(organizationUid.getAggregateId());
+            if(partnersAssigned != null) {
+                partners.put(true, new HashSet<>(partnersAssigned));
+            }
+            if(partnersNotAssigned != null) {
+                partners.put(false, new HashSet<>(partnersNotAssigned));
+            }
+            return partners;
+        }
+        return null;
+    }
+
+    @Override
+    public Set<DefaultPartner> getEmployeesAssignedToOrganizationAndPosition(String tenantId, AggregateId organizationUid, EntityId organizationUnitUid, EntityId positionUid) {
+        List<DefaultPartner> partners = partnerRepository.getEmployeesAssignedToOrganizationAndPosition(tenantId, organizationUid.getAggregateId(), organizationUnitUid.getId());
+        if(partners != null && partners.size() > 0) {
+            return new HashSet<>(partners);
         }
         return null;
     }

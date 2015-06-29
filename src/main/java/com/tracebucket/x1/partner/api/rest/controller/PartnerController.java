@@ -24,7 +24,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -315,13 +317,34 @@ public class PartnerController implements Partner {
 
     @Override
     @RequestMapping(value = "/partners/organization/{organizationUid}/organizationUnit/{organizationUnitUid}/position/{positionUid}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Set<DefaultPartnerResource>> getEmployeesAssignedAndNotToOrganizationAndPosition(HttpServletRequest request, @PathVariable("organizationUid") String organizationUid, @PathVariable("organizationUnitUid") String organizationUnitUid, @PathVariable("positionUid") String positionUid) {
+    public ResponseEntity<Set<DefaultPartnerResource>> getEmployeesAssignedToOrganizationAndPosition(HttpServletRequest request, @PathVariable("organizationUid") String organizationUid, @PathVariable("organizationUnitUid") String organizationUnitUid, @PathVariable("positionUid") String positionUid) {
         String tenantId = request.getHeader("tenant_id");
         if (tenantId != null) {
-            List<DefaultPartner> partners = partnerService.getEmployeesAssignedAndNotToOrganizationAndPosition(tenantId, new AggregateId(organizationUid), new EntityId(organizationUnitUid), new EntityId(positionUid));
+            Set<DefaultPartner> partners = partnerService.getEmployeesAssignedToOrganizationAndPosition(tenantId, new AggregateId(organizationUid), new EntityId(organizationUnitUid), new EntityId(positionUid));
             if (partners != null) {
                 Set<DefaultPartnerResource> partnerResources = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResources(partners, DefaultPartnerResource.class);
                 return new ResponseEntity<Set<DefaultPartnerResource>>(partnerResources, HttpStatus.OK);
+            } else {
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @Override
+    @RequestMapping(value = "/partners/organization/{organizationUid}/organizationUnit/{organizationUnitUid}/position/{positionUid}/union", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<Boolean, Set<DefaultPartnerResource>>> getEmployeesAssignedAndNotToOrganizationAndPosition(HttpServletRequest request, @PathVariable("organizationUid") String organizationUid, @PathVariable("organizationUnitUid") String organizationUnitUid, @PathVariable("positionUid") String positionUid) {
+        String tenantId = request.getHeader("tenant_id");
+        if (tenantId != null) {
+            Map<Boolean, Set<DefaultPartner>> partners = partnerService.getEmployeesAssignedAndNotToOrganizationAndPosition(tenantId, new AggregateId(organizationUid), new EntityId(organizationUnitUid), new EntityId(positionUid));
+            if (partners != null) {
+                Map<Boolean, Set<DefaultPartnerResource>> result = new HashMap<Boolean, Set<DefaultPartnerResource>>();
+                partners.entrySet().stream().forEach(entry -> {
+                    Set<DefaultPartnerResource> partnerResources = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResources(entry.getValue(), DefaultPartnerResource.class);
+                    result.put(entry.getKey(), partnerResources);
+                });
+                return new ResponseEntity<Map<Boolean, Set<DefaultPartnerResource>>>(result, HttpStatus.OK);
             } else {
                 return new ResponseEntity(HttpStatus.NOT_FOUND);
             }
