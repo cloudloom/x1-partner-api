@@ -1,10 +1,7 @@
 package com.tracebucket.x1.partner.api.rest.controller;
 
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
-import com.tracebucket.x1.partner.api.rest.resources.DefaultAddressResource;
-import com.tracebucket.x1.partner.api.rest.resources.DefaultOwnerResource;
-import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerPositionAndOrganizationUnitResource;
-import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerResource;
+import com.tracebucket.x1.partner.api.rest.resources.*;
 import org.springframework.http.ResponseEntity;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,4 +30,5 @@ public interface Partner {
     public ResponseEntity<Set<DefaultPartnerResource>> addPositionAndOrganization(HttpServletRequest request, String organizationUid, List<DefaultPartnerPositionAndOrganizationUnitResource> resource);
     public ResponseEntity<Set<DefaultPartnerResource>> getEmployeesAssignedToOrganizationAndPosition(HttpServletRequest request, String organizationUid, String organizationUnitUid, String positionUid);
     public ResponseEntity<Map<Boolean, Set<DefaultPartnerResource>>> getEmployeesAssignedAndNotToOrganizationAndPosition(HttpServletRequest request, String organizationUid, String organizationUnitUid, String positionUid);
+    public ResponseEntity<Set<DefaultPartnerResource>> restructureEmployees(HttpServletRequest request, String organizationUid, DefaultEmployeeRestructureResource employeeStructure);
 }

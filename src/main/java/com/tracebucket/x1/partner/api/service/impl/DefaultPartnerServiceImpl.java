@@ -12,7 +12,9 @@ import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultOwner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartnerRole;
 import com.tracebucket.x1.partner.api.repository.jpa.DefaultPartnerRepository;
+import com.tracebucket.x1.partner.api.rest.resources.DefaultEmployeeRestructureResource;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerPositionAndOrganizationUnitResource;
+import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerResource;
 import com.tracebucket.x1.partner.api.service.DefaultPartnerService;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -335,6 +337,55 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
         List<DefaultPartner> partners = partnerRepository.getEmployeesAssignedToOrganizationAndPosition(organizationUid.getAggregateId(), organizationUnitUid.getId(), positionUid.getId());
         if(partners != null && partners.size() > 0) {
             return new HashSet<>(partners);
+        }
+        return null;
+    }
+
+    @Override
+    @PersistChanges(repository = "partnerRepository")
+    public Set<DefaultPartner> restructureEmployees(String tenantId, AggregateId organizationUid, HashMap<String, HashMap<String, ArrayList<Map<String, String>>>> employeeStructure) {
+        if(tenantId.equals(organizationUid.getAggregateId())) {
+            if(employeeStructure != null) {
+                Set<DefaultPartner> defaultPartners = new HashSet<DefaultPartner>();
+                employeeStructure.entrySet().stream().forEach(orgUnit -> {
+                    if(tenantId.equals(orgUnit.getKey())) {
+                        HashMap<String, ArrayList<Map<String, String>>> positions = orgUnit.getValue();
+                        if(positions != null) {
+                            positions.entrySet().stream().forEach(position -> {
+                                ArrayList<Map<String, String>> employeesList = position.getValue();
+                                if(employeesList != null) {
+                                    employeesList.stream().forEach(employees -> {
+                                        employees.entrySet().stream().forEach(employee -> {
+                                            DefaultPartner partner = findOne(tenantId, new AggregateId(employee.getKey()));
+                                            if(partner != null) {
+                                                partner.addPositionAndOrganization(new EntityId(employee.getValue()), new EntityId(position.getKey()), new EntityId(orgUnit.getKey()));
+                                                defaultPartners.add(partner);
+/*                                               Set<DefaultPartnerRole> partnerRoles = partner.getAllAssignedRoles();
+                                                if(partnerRoles != null) {
+                                                    DefaultPartnerRole employeeRole = partnerRoles.stream()
+                                                            .filter(partnerRole -> partnerRole.getEntityId().getId().equals(employee.getValue()))
+                                                            .findFirst()
+                                                            .orElse(null);
+                                                    if(employee != null && employee instanceof DefaultEmployee) {
+                                                        DefaultEmployee employee1 = (DefaultEmployee)employee;
+                                                        employee1.setOrganizationUnit(orgUnit.getKey());
+                                                        employee1.setPosition(position.getKey());
+                                                        defaultPartners.add(partner);
+                                                    }
+
+                                                }*/
+                                            }
+                                        });
+                                    });
+                                }
+                            });
+                        }
+                    }
+                });
+                if(defaultPartners.size() > 0) {
+                    return defaultPartners;
+                }
+            }
         }
         return null;
     }
