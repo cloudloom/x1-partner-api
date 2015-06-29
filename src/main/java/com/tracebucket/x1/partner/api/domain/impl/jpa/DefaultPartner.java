@@ -177,6 +177,7 @@ public class DefaultPartner extends BaseAggregateRoot implements Partner{
                 .orElse(null);
         if(roleFound != null && roleFound instanceof DefaultEmployee) {
             ((DefaultEmployee)roleFound).setPosition(positionUid.getId());
+            ((DefaultEmployee)roleFound).setOrganizationUnit(organizationUnitUid.getId());
         }
     }
 

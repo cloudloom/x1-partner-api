@@ -11,12 +11,14 @@ import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultOwner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartnerRole;
 import com.tracebucket.x1.partner.api.repository.jpa.DefaultPartnerRepository;
+import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerPositionAndOrganizationUnitResource;
 import com.tracebucket.x1.partner.api.service.DefaultPartnerService;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -282,6 +284,7 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
     }
 
     @Override
+    @PersistChanges(repository = "partnerRepository")
     public DefaultPartner addPositionAndOrganization(String tenantId, AggregateId partnerAggregateId, EntityId partnerRoleUid, EntityId positionUid, EntityId organizationUnitUid) {
         DefaultPartner partner = partnerRepository.findOne(partnerAggregateId, tenantId);
         if (partner != null) {
@@ -291,4 +294,32 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
         return null;
     }
 
+    @Override
+    @PersistChanges(repository = "partnerRepository")
+    public List<DefaultPartner> addPositionAndOrganization(String tenantId, String organizationUid, List<DefaultPartnerPositionAndOrganizationUnitResource> resource) {
+        if(tenantId.equals(organizationUid)) {
+            if (resource != null) {
+                List<DefaultPartner> partners = new ArrayList<DefaultPartner>();
+                resource.stream().forEach(res -> {
+                    DefaultPartner partner = partnerRepository.findOne(new AggregateId(res.getPartnerUid()), tenantId);
+                    if (partner != null) {
+                        partner.addPositionAndOrganization(new EntityId(res.getRoleUid()), new EntityId(res.getPositionUid()), new EntityId(res.getOrganizationUnitUid()));
+                        partners.add(partner);
+                    }
+                });
+                if(partners.size() > 0) {
+                    return partners;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public List<DefaultPartner> getEmployeesAssignedAndNotToOrganizationAndPosition(String tenantId, AggregateId organizationUid, EntityId organizationUnitUid, EntityId positionUid) {
+        if(tenantId.equals(organizationUid.getAggregateId())) {
+            return partnerRepository.getEmployeesAssignedAndNotToOrganizationAndPosition(organizationUnitUid.getId(), positionUid.getId());
+        }
+        return null;
+    }
 }

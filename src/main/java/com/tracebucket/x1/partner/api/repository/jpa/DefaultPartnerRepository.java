@@ -14,4 +14,9 @@ import java.util.List;
 public interface DefaultPartnerRepository extends BaseAggregateRepository<DefaultPartner, AggregateId> {
     @Query(value = "select p from com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartner p where p.owner.organizationUID = :organizationUid")
     public List<DefaultPartner> findPartnersByOrganization(@Param("organizationUid") String organizationUid);
+
+    @Query(value = "SELECT p.* FROM PARTNER p INNER JOIN PARTNER_ROLE pr ON p.ID = pr.PARTNER__ID \n" +
+            "INNER JOIN PARTNER_EMPLOYEE pe ON pe.PARTNER_ROLE__ID = pr.ID\n" +
+            "WHERE pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND (pe.ORGANIZATION_UNIT__ID = :organizationUid AND pe.POSITION__ID = :positionUid) OR (pe.ORGANIZATION_UNIT__ID IS NULL AND pe.POSITION__ID IS NULL)", nativeQuery = true)
+    public List<DefaultPartner> getEmployeesAssignedAndNotToOrganizationAndPosition(@Param("organizationUid") String organizationUid, @Param("positionUid") String positionUid);
 }
