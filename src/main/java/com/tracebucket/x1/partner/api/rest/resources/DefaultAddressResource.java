@@ -25,13 +25,16 @@ public class DefaultAddressResource extends BaseResource {
     @Size(min = 1, max = 250)
     private String region;
 
-    /*@Size(min = 1, max = 250)
-    private String city;*/
+    @Size(min = 1, max = 250)
+    private String city;
+
     @Size(min = 1, max = 250)
     private String district;
 
-
+    @Size(min = 1, max = 250)
     private String state;
+
+    @Size(min = 1, max = 250)
     private String country;
 
     @NotNull
@@ -74,14 +77,13 @@ public class DefaultAddressResource extends BaseResource {
         this.region = region;
     }
 
-    /*public String getCity() {
+    public String getCity() {
         return city;
     }
 
     public void setCity(String city) {
         this.city = city;
     }
-*/
     public String getDistrict() {
         return district;
     }
