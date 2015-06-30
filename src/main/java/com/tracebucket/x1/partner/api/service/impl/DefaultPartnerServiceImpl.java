@@ -342,6 +342,46 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
     }
 
     @Override
+    public Map<String, Map<String, ArrayList<DefaultPartner>>> getEmployeesAssignedToOrganizationAndPosition(String tenantId, AggregateId organizationUid) {
+        if(tenantId.equals(organizationUid.getAggregateId())) {
+            List<DefaultPartner> partners = partnerRepository.getEmployeesAssignedToOrganizationAndPosition(tenantId);
+            if(partners != null) {
+                Map<String, Map<String, ArrayList<DefaultPartner>>> employees = new HashMap<String, Map<String, ArrayList<DefaultPartner>>>();
+                partners.stream().forEach(partner -> {
+                    Set<DefaultPartnerRole> partnerRoles = partner.getAllAssignedRoles();
+                    if (partnerRoles != null) {
+                        partnerRoles.stream().forEach(partnerRole -> {
+                            if (partnerRole instanceof DefaultEmployee) {
+                                DefaultEmployee employee = (DefaultEmployee) partnerRole;
+                                if (employees.containsKey(employee.getOrganizationUnit())) {
+                                    Map<String, ArrayList<DefaultPartner>> positions = employees.get(employee.getOrganizationUnit());
+                                    if (positions.containsKey(employee.getPosition())) {
+                                        positions.get(employee.getPosition()).add(partner);
+                                    } else {
+                                        ArrayList<DefaultPartner> defaultEmployees = new ArrayList<DefaultPartner>();
+                                        defaultEmployees.add(partner);
+                                        positions.put(employee.getPosition(), defaultEmployees);
+                                    }
+                                } else {
+                                    Map<String, ArrayList<DefaultPartner>> positionEmployees = new HashMap<String, ArrayList<DefaultPartner>>();
+                                    ArrayList<DefaultPartner> defaultEmployees = new ArrayList<DefaultPartner>();
+                                    defaultEmployees.add(partner);
+                                    positionEmployees.put(employee.getPosition(), defaultEmployees);
+                                    employees.put(employee.getOrganizationUnit(), positionEmployees);
+                                }
+                            }
+                        });
+                    }
+                });
+                if(employees.size() > 0) {
+                    return employees;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
     @PersistChanges(repository = "partnerRepository")
     public Set<DefaultPartner> restructureEmployees(String tenantId, AggregateId organizationUid, HashMap<String, HashMap<String, ArrayList<Map<String, String>>>> employeeStructure) {
         if(tenantId.equals(organizationUid.getAggregateId())) {
