@@ -208,14 +208,14 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
                             foundPartners.add(p);
                         } else if((p.getWebsite() != null && p.getWebsite().toLowerCase().matches(searchTerm))) {
                             foundPartners.add(p);
-                        } else if(p.getPartnerRoles().stream().filter(pRoles -> pRoles.getName().toLowerCase().matches(searchTerm) ||
-                                                pRoles.getAddresses().stream().filter(addresses -> (addresses.getCity().toLowerCase().matches(searchTerm) ||
-                                                        addresses.getCountry().toLowerCase().matches(searchTerm) ||
-                                                        addresses.getRegion().toLowerCase().matches(searchTerm) ||
-                                                        addresses.getState().toLowerCase().matches(searchTerm) ||
-                                                        addresses.getDistrict().toLowerCase().matches(searchTerm) ||
-                                                        addresses.getStreet().toLowerCase().matches(searchTerm) ||
-                                                        addresses.getZip().toLowerCase().matches(searchTerm))).count() > 0
+                        } else if(p.getPartnerRoles().stream().filter(pRoles -> pRoles.getName() != null && pRoles.getName().toLowerCase().matches(searchTerm) ||
+                                                pRoles.getAddresses().stream().filter(addresses -> (addresses.getCity() != null && addresses.getCity().toLowerCase().matches(searchTerm) ||
+                                                        addresses.getCountry() != null && addresses.getCountry().toLowerCase().matches(searchTerm) ||
+                                                        addresses.getRegion() != null && addresses.getRegion().toLowerCase().matches(searchTerm) ||
+                                                        addresses.getState() != null && addresses.getState().toLowerCase().matches(searchTerm) ||
+                                                        addresses.getDistrict() != null && addresses.getDistrict().toLowerCase().matches(searchTerm) ||
+                                                        addresses.getStreet() != null && addresses.getStreet().toLowerCase().matches(searchTerm) ||
+                                                        addresses.getZip() != null && addresses.getZip().toLowerCase().matches(searchTerm))).count() > 0
 
                         ).count() > 0) {
                             foundPartners.add(p);
