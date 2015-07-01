@@ -5,6 +5,7 @@ import com.tracebucket.tron.ddd.domain.AggregateId;
 import com.tracebucket.tron.ddd.domain.EntityId;
 import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultAddress;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
+import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultEmployee;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultOwner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartner;
 import com.tracebucket.x1.partner.api.rest.exception.PartnerException;
@@ -21,10 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by sadath on 26-May-2015.
@@ -361,6 +359,40 @@ public class PartnerController implements Partner {
                 return new ResponseEntity<Set<DefaultPartnerResource>>(partnerResources, HttpStatus.OK);
             } else {
                 return new ResponseEntity(HttpStatus.NOT_MODIFIED);
+            }
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @Override
+    @RequestMapping(value = "/employees/organization/{organizationUid}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, Map<String, Set<DefaultPartnerResource>>>> getEmployeesAssignedToOrganizationAndPosition(HttpServletRequest request, @PathVariable("organizationUid") String organizationUid) {
+        String tenantId = request.getHeader("tenant_id");
+        if (tenantId != null) {
+            Map<String, Map<String, ArrayList<DefaultPartner>>> partners = partnerService.getEmployeesAssignedToOrganizationAndPosition(tenantId, new AggregateId(organizationUid));
+            if(partners != null) {
+                HashMap<String, HashMap<String, Set<DefaultPartnerResource>>> orgPosPartnerResources = new HashMap<String, HashMap<String, Set<DefaultPartnerResource>>>();
+                partners.entrySet().stream().forEach(orgUnit -> {
+                    orgUnit.getValue().entrySet().stream().forEach(position -> {
+                        ArrayList<DefaultPartner> defaultPartners = position.getValue();
+                        if(defaultPartners != null && defaultPartners.size() > 0) {
+                            Set<DefaultPartnerResource> partnerResources = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResources(defaultPartners, DefaultPartnerResource.class);
+                            if(partnerResources != null) {
+                                if(orgPosPartnerResources.containsKey(orgUnit.getKey())) {
+                                    orgPosPartnerResources.get(orgUnit.getKey()).put(position.getKey(), partnerResources);
+                                } else {
+                                    HashMap<String, Set<DefaultPartnerResource>> positions = new HashMap<String, Set<DefaultPartnerResource>>();
+                                    positions.put(position.getKey(), partnerResources);
+                                    orgPosPartnerResources.put(orgUnit.getKey(), positions);
+                                }
+                            }
+                        }
+                    });
+                });
+                return new ResponseEntity(orgPosPartnerResources, HttpStatus.OK);
+            } else {
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
             }
         } else {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);

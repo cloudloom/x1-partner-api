@@ -208,14 +208,14 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
                             foundPartners.add(p);
                         } else if((p.getWebsite() != null && p.getWebsite().toLowerCase().matches(searchTerm))) {
                             foundPartners.add(p);
-                        } else if(p.getPartnerRoles().stream().filter(pRoles -> pRoles.getName().toLowerCase().matches(searchTerm) ||
-                                                pRoles.getAddresses().stream().filter(addresses -> (addresses.getCity().toLowerCase().matches(searchTerm) ||
-                                                        addresses.getCountry().toLowerCase().matches(searchTerm) ||
-                                                        addresses.getRegion().toLowerCase().matches(searchTerm) ||
-                                                        addresses.getState().toLowerCase().matches(searchTerm) ||
-                                                        addresses.getDistrict().toLowerCase().matches(searchTerm) ||
-                                                        addresses.getStreet().toLowerCase().matches(searchTerm) ||
-                                                        addresses.getZip().toLowerCase().matches(searchTerm))).count() > 0
+                        } else if(p.getPartnerRoles().stream().filter(pRoles -> pRoles.getName() != null && pRoles.getName().toLowerCase().matches(searchTerm) ||
+                                                pRoles.getAddresses().stream().filter(addresses -> (addresses.getCity() != null && addresses.getCity().toLowerCase().matches(searchTerm) ||
+                                                        addresses.getCountry() != null && addresses.getCountry().toLowerCase().matches(searchTerm) ||
+                                                        addresses.getRegion() != null && addresses.getRegion().toLowerCase().matches(searchTerm) ||
+                                                        addresses.getState() != null && addresses.getState().toLowerCase().matches(searchTerm) ||
+                                                        addresses.getDistrict() != null && addresses.getDistrict().toLowerCase().matches(searchTerm) ||
+                                                        addresses.getStreet() != null && addresses.getStreet().toLowerCase().matches(searchTerm) ||
+                                                        addresses.getZip() != null && addresses.getZip().toLowerCase().matches(searchTerm))).count() > 0
 
                         ).count() > 0) {
                             foundPartners.add(p);
@@ -337,6 +337,46 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
         List<DefaultPartner> partners = partnerRepository.getEmployeesAssignedToOrganizationAndPosition(organizationUid.getAggregateId(), organizationUnitUid.getId(), positionUid.getId());
         if(partners != null && partners.size() > 0) {
             return new HashSet<>(partners);
+        }
+        return null;
+    }
+
+    @Override
+    public Map<String, Map<String, ArrayList<DefaultPartner>>> getEmployeesAssignedToOrganizationAndPosition(String tenantId, AggregateId organizationUid) {
+        if(tenantId.equals(organizationUid.getAggregateId())) {
+            List<DefaultPartner> partners = partnerRepository.getEmployeesAssignedToOrganizationAndPosition(tenantId);
+            if(partners != null) {
+                Map<String, Map<String, ArrayList<DefaultPartner>>> employees = new HashMap<String, Map<String, ArrayList<DefaultPartner>>>();
+                partners.stream().forEach(partner -> {
+                    Set<DefaultPartnerRole> partnerRoles = partner.getAllAssignedRoles();
+                    if (partnerRoles != null) {
+                        partnerRoles.stream().forEach(partnerRole -> {
+                            if (partnerRole instanceof DefaultEmployee) {
+                                DefaultEmployee employee = (DefaultEmployee) partnerRole;
+                                if (employees.containsKey(employee.getOrganizationUnit())) {
+                                    Map<String, ArrayList<DefaultPartner>> positions = employees.get(employee.getOrganizationUnit());
+                                    if (positions.containsKey(employee.getPosition())) {
+                                        positions.get(employee.getPosition()).add(partner);
+                                    } else {
+                                        ArrayList<DefaultPartner> defaultEmployees = new ArrayList<DefaultPartner>();
+                                        defaultEmployees.add(partner);
+                                        positions.put(employee.getPosition(), defaultEmployees);
+                                    }
+                                } else {
+                                    Map<String, ArrayList<DefaultPartner>> positionEmployees = new HashMap<String, ArrayList<DefaultPartner>>();
+                                    ArrayList<DefaultPartner> defaultEmployees = new ArrayList<DefaultPartner>();
+                                    defaultEmployees.add(partner);
+                                    positionEmployees.put(employee.getPosition(), defaultEmployees);
+                                    employees.put(employee.getOrganizationUnit(), positionEmployees);
+                                }
+                            }
+                        });
+                    }
+                });
+                if(employees.size() > 0) {
+                    return employees;
+                }
+            }
         }
         return null;
     }
