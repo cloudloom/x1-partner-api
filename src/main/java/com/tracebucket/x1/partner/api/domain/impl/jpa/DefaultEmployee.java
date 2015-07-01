@@ -51,9 +51,13 @@ public class DefaultEmployee extends DefaultPartnerRole implements Employee, Ser
     @JoinTable(name = "EMPLOYEE_EMAIL", joinColumns = @JoinColumn(name = "PARTNER__ID"))
     private Set<DefaultEmail> email = new HashSet<DefaultEmail>(0);
 
-    @Column(name = "POSITION__ID", unique = true)
+    @Column(name = "POSITION__ID")
     @Basic(fetch = FetchType.EAGER)
     private String position;
+
+    @Column(name = "ORGANIZATION_UNIT__ID")
+    @Basic(fetch = FetchType.EAGER)
+    private String organizationUnit;
 
     @Embedded
     private DefaultValidity validity;
@@ -175,5 +179,13 @@ public class DefaultEmployee extends DefaultPartnerRole implements Employee, Ser
 
     public void setSearchTerm(String searchTerm) {
         this.searchTerm = searchTerm;
+    }
+
+    public String getOrganizationUnit() {
+        return organizationUnit;
+    }
+
+    public void setOrganizationUnit(String organizationUnit) {
+        this.organizationUnit = organizationUnit;
     }
 }

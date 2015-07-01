@@ -7,7 +7,6 @@ import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultValidity;
 import com.tracebucket.x1.partner.api.dictionary.Salutation;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultEmployee;
 
-import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
 

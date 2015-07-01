@@ -14,4 +14,24 @@ import java.util.List;
 public interface DefaultPartnerRepository extends BaseAggregateRepository<DefaultPartner, AggregateId> {
     @Query(value = "select p from com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartner p where p.owner.organizationUID = :organizationUid")
     public List<DefaultPartner> findPartnersByOrganization(@Param("organizationUid") String organizationUid);
+
+    @Query(value = "SELECT p.* FROM PARTNER p INNER JOIN PARTNER_ROLE pr ON p.ID = pr.PARTNER__ID \n" +
+            "INNER JOIN PARTNER_EMPLOYEE pe ON pe.PARTNER_ROLE__ID = pr.ID\n" +
+            "WHERE p.ORGANIZATION__ID = :organizationUid and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND (pe.ORGANIZATION_UNIT__ID = :organizationUnitUid AND pe.POSITION__ID = :positionUid) OR (pe.ORGANIZATION_UNIT__ID IS NULL AND pe.POSITION__ID IS NULL)", nativeQuery = true)
+    public List<DefaultPartner> getEmployeesAssignedAndNotToOrganizationAndPosition(@Param("organizationUid") String organizationUid, @Param("organizationUnitUid") String organizationUnitUid, @Param("positionUid") String positionUid);
+
+    @Query(value = "SELECT p.* FROM PARTNER p INNER JOIN PARTNER_ROLE pr ON p.ID = pr.PARTNER__ID \n" +
+            "INNER JOIN PARTNER_EMPLOYEE pe ON pe.PARTNER_ROLE__ID = pr.ID\n" +
+            "WHERE p.ORGANIZATION__ID = :organizationUid and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND (pe.ORGANIZATION_UNIT__ID = :organizationUnitUid AND pe.POSITION__ID = :positionUid)", nativeQuery = true)
+    public List<DefaultPartner> getEmployeesAssignedToOrganizationAndPosition(@Param("organizationUid") String organizationUid, @Param("organizationUnitUid") String organizationUnitUid, @Param("positionUid") String positionUid);
+
+    @Query(value = "SELECT p.* FROM PARTNER p INNER JOIN PARTNER_ROLE pr ON p.ID = pr.PARTNER__ID \n" +
+            "INNER JOIN PARTNER_EMPLOYEE pe ON pe.PARTNER_ROLE__ID = pr.ID\n" +
+            "WHERE p.ORGANIZATION__ID = :organizationUid and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND (pe.ORGANIZATION_UNIT__ID IS NULL AND pe.POSITION__ID IS NULL)", nativeQuery = true)
+    public List<DefaultPartner> getEmployeesNotAssignedToOrganizationAndPosition(@Param("organizationUid") String organizationUid);
+
+    @Query(value = "SELECT p.* FROM PARTNER p INNER JOIN PARTNER_ROLE pr ON p.ID = pr.PARTNER__ID \n" +
+            "INNER JOIN PARTNER_EMPLOYEE pe ON pe.PARTNER_ROLE__ID = pr.ID\n" +
+            "WHERE p.ORGANIZATION__ID = :organizationUid and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND (pe.ORGANIZATION_UNIT__ID IS NOT NULL AND pe.POSITION__ID IS NOT NULL)", nativeQuery = true)
+    public List<DefaultPartner> getEmployeesAssignedToOrganizationAndPosition(@Param("organizationUid") String organizationUid);
 }
