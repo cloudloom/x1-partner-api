@@ -37,6 +37,7 @@ public interface DefaultPartnerService {
     public DefaultPartner addPosition(String tenantId, AggregateId partnerAggregateId, EntityId partnerRoleUid, EntityId positionUid);
     public Set<DefaultPartner> searchPartners(String tenantId, AggregateId organizationAggregateId, String searchTerm);
     public Boolean isPositionAssigned(String tenantId, String organizationUid, String positionUid, String organizationUnitUid);
+    public Boolean isOrganizationUnitAssigned(String tenantId, String organizationUid, String organizationUnitUid);
     public DefaultPartner addPositionAndOrganization(String tenantId, AggregateId partnerAggregateId, EntityId partnerRoleUid, EntityId positionUid, EntityId organizationUnitUid);
     public List<DefaultPartner> addPositionAndOrganization(String tenantId, String organizationUid, List<DefaultPartnerPositionAndOrganizationUnitResource> resource);
     public Map<Boolean, Set<DefaultPartner>> getEmployeesAssignedAndNotToOrganizationAndPosition(String tenantId, AggregateId organizationUid, EntityId organizationUnitUid, EntityId positionUid);

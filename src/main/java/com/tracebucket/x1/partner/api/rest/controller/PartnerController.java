@@ -277,6 +277,17 @@ public class PartnerController implements Partner {
     }
 
     @Override
+    @RequestMapping(value = "/partner/organization/{organizationUID}/organizationUnit/{organizationUnitUid}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> isOrganizationUnitAssigned(HttpServletRequest request, @PathVariable("organizationUID") String organizationUID, @PathVariable("organizationUnitUid") String organizationUnitUid) {
+        String tenantId = request.getHeader("tenant_id");
+        if (tenantId != null) {
+            return new ResponseEntity<Boolean>(partnerService.isOrganizationUnitAssigned(tenantId, organizationUID, organizationUnitUid), HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @Override
     @RequestMapping(value = "/partner/{partnerUid}/role/{roleUid}/position/{positionUid}/organizationUnit/{organizationUnitUid}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DefaultPartnerResource> addPositionAndOrganization(HttpServletRequest request, @PathVariable("partnerUid") String partnerAggregateId, @PathVariable("roleUid") String partnerRoleUid, @PathVariable("positionUid") String positionUid, @PathVariable("organizationUnitUid") String organizationUnitUid) {
         String tenantId = request.getHeader("tenant_id");
