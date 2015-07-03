@@ -23,6 +23,7 @@ public interface Partner {
     public void changeOwner(DefaultOwner newOwner);
     public void addPosition(EntityId partnerRoleUid, EntityId positionUid);
     public void addPositionAndOrganization(EntityId partnerRoleUid, EntityId positionUid, EntityId organizationUnitUid);
+    public void removePositionAndOrganization();
     public Set<DefaultPartnerRole> getAllAssignedRoles();
     public DefaultOwner getOwner();
     public void setOwner(DefaultOwner owner);

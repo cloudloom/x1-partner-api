@@ -181,6 +181,19 @@ public class DefaultPartner extends BaseAggregateRoot implements Partner{
         }
     }
 
+    @Override
+    @DomainMethod(event = "AddPosition")
+    public void removePositionAndOrganization() {
+        DefaultPartnerRole roleFound = partnerRoles.stream()
+                .filter(t -> t instanceof DefaultEmployee)
+                .findFirst()
+                .orElse(null);
+        if(roleFound != null && roleFound instanceof DefaultEmployee) {
+            ((DefaultEmployee)roleFound).setPosition(null);
+            ((DefaultEmployee)roleFound).setOrganizationUnit(null);
+        }
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }
