@@ -14,17 +14,17 @@ import javax.validation.constraints.Size;
  */
 public class DefaultPartnerResource extends BaseResource{
 
-    @NotNull
+/*    @NotNull
     @Size(min = 1, max = 150)
-    @Pattern(regexp = "^[A-Za-z]*$")
+    @Pattern(regexp = "^[A-Za-z]*$")*/
     private String title;
 
-    @Size(min = 1, max = 250)
-    @Pattern(regexp = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)")
+/*    @Size(min = 1, max = 250)
+    @Pattern(regexp = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)")*/
     private String image;
 
-    @Size(min = 1, max = 255)
-    @URL
+/*    @Size(min = 1, max = 255)
+    @URL*/
     private String website;
 
     private PartnerCategory partnerCategory;

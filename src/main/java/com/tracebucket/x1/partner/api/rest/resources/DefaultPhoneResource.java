@@ -13,9 +13,9 @@ public class DefaultPhoneResource extends BaseResource {
     @Size(min = 1, max = 50)
     @Pattern(regexp = "^[0-9\\-()+]*$")//numbers () only + -
     private String number;
-
+/*
     @Size(min = 1, max = 20)
-    @Pattern(regexp = "^[0-9\\-()]*$")//numbers () -
+    @Pattern(regexp = "^[0-9\\-()]*$")//numbers () -*/
     private String extension;
 
     private PhoneType phoneType;
