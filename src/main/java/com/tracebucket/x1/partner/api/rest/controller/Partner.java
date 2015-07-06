@@ -36,4 +36,5 @@ public interface Partner {
     public ResponseEntity<Map<Boolean, Set<DefaultPartnerResource>>> getEmployeesAssignedAndNotToOrganizationAndPosition(HttpServletRequest request, String organizationUid, String organizationUnitUid, String positionUid);
     public ResponseEntity<Set<DefaultPartnerResource>> restructureEmployees(HttpServletRequest request, String organizationUid, DefaultEmployeeRestructureResource employeeStructure);
     public ResponseEntity<Map<String, Map<String, Set<DefaultPartnerResource>>>> getEmployeesAssignedToOrganizationAndPosition(HttpServletRequest request, String organizationUid);
+    public ResponseEntity<DefaultPartnerMinimalResource> getEmployeesAssignedToOrganizationUnitAndPosition(HttpServletRequest request, String organizationUid, String organizationUnitUid, String positionUid);
 }

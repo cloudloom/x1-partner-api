@@ -8,6 +8,7 @@ import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultEmployee;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultOwner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartner;
+import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartnerRole;
 import com.tracebucket.x1.partner.api.rest.exception.PartnerException;
 import com.tracebucket.x1.partner.api.rest.resources.*;
 import com.tracebucket.x1.partner.api.service.DefaultPartnerService;
@@ -404,6 +405,39 @@ public class PartnerController implements Partner {
                 return new ResponseEntity(orgPosPartnerResources, HttpStatus.OK);
             } else {
                 return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @Override
+    @RequestMapping(value = "/employees/organization/{organizationUid}/organizationUnit/{organizationUnitUid}/position/{positionUid}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DefaultPartnerMinimalResource> getEmployeesAssignedToOrganizationUnitAndPosition(HttpServletRequest request, @PathVariable("organizationUid") String organizationUid, @PathVariable("organizationUnitUid") String organizationUnitUid, @PathVariable("positionUid") String positionUid) {
+        String tenantId = request.getHeader("tenant_id");
+        if (tenantId != null) {
+            Set<DefaultPartner> partners = partnerService.getEmployeesAssignedToOrganizationAndPosition(tenantId, new AggregateId(organizationUid), new EntityId(organizationUnitUid), new EntityId(positionUid));
+            if(partners != null) {
+                List<Map<String, String>> partnerList = new ArrayList<Map<String, String>>();
+                partners.stream().forEach(partner -> {
+                    Set<DefaultPartnerRole> partnerRoles = partner.getAllAssignedRoles();
+                    if(partnerRoles != null) {
+                        DefaultPartnerRole partnerRole = partnerRoles.stream().filter(role -> role instanceof DefaultEmployee).findFirst().orElse(null);
+                        if(partnerRole != null && partnerRole instanceof DefaultEmployee) {
+                            DefaultEmployee employee = (DefaultEmployee) partnerRole;
+                            Map<String, String> map = new HashMap<String, String>();
+                            map.put("partnerUid", partner.getAggregateId().getAggregateId());
+                            map.put("roleUid", employee.getEntityId().getId());
+                            map.put("name", employee.getFirstName() != null ? employee.getFirstName() + " " : "" + employee.getMiddleName() != null ? employee.getMiddleName() + " " : "" + employee.getLastName() != null ? employee.getLastName() : "");
+                            partnerList.add(map);
+                        }
+                    }
+                });
+                DefaultPartnerMinimalResource resource = new DefaultPartnerMinimalResource();
+                resource.setPartners(partnerList);
+                return new ResponseEntity(resource, HttpStatus.OK);
+            } else {
+                return new ResponseEntity(HttpStatus.OK);
             }
         } else {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
