@@ -39,7 +39,7 @@ public class DefaultAddressResource extends BaseResource {
 
     @NotNull
     @Size(min = 1, max = 20)
-    @Pattern(regexp = "^[a-zA-Z\\-/]*$")
+    @Pattern(regexp = "^[a-zA-Z0-9\\-/]*$")
     private String zip;
 
     private AddressType addressType;
