@@ -3,6 +3,7 @@ package com.tracebucket.x1.partner.api.rest.resources;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tracebucket.tron.assembler.BaseResource;
 import com.tracebucket.x1.partner.api.dictionary.Salutation;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
