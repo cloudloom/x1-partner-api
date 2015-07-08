@@ -8,6 +8,8 @@ import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultAddress;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
 import com.tracebucket.x1.partner.api.domain.Partner;
 import org.dozer.Mapper;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -43,6 +45,7 @@ public class DefaultPartner extends BaseAggregateRoot implements Partner{
 
     @OneToMany(cascade = CascadeType.ALL, /*orphanRemoval = true, */fetch = FetchType.EAGER)
     @JoinColumn(name = "PARTNER__ID")
+    @Fetch(value = FetchMode.JOIN)
     protected Set<DefaultPartnerRole> partnerRoles = new HashSet<DefaultPartnerRole>(0);
 
     public DefaultPartner() {

@@ -5,6 +5,8 @@ import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultPhone;
 import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultValidity;
 import com.tracebucket.x1.partner.api.dictionary.Salutation;
 import com.tracebucket.x1.partner.api.domain.Employee;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -45,10 +47,12 @@ public class DefaultEmployee extends DefaultPartnerRole implements Employee, Ser
 
     @ElementCollection(fetch = FetchType.EAGER)
     @JoinTable(name = "EMPLOYEE_PHONE", joinColumns = @JoinColumn(name = "PARTNER__ID"))
+    @Fetch(value = FetchMode.JOIN)
     private Set<DefaultPhone> phone = new HashSet<DefaultPhone>(0);
 
     @ElementCollection(fetch = FetchType.EAGER)
     @JoinTable(name = "EMPLOYEE_EMAIL", joinColumns = @JoinColumn(name = "PARTNER__ID"))
+    @Fetch(value = FetchMode.JOIN)
     private Set<DefaultEmail> email = new HashSet<DefaultEmail>(0);
 
     @Column(name = "POSITION__ID")

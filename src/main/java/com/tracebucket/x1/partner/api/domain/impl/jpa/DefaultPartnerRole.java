@@ -3,6 +3,8 @@ package com.tracebucket.x1.partner.api.domain.impl.jpa;
 import com.tracebucket.tron.ddd.domain.BaseEntity;
 import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultAddress;
 import com.tracebucket.x1.partner.api.domain.PartnerRole;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -24,6 +26,7 @@ public abstract class DefaultPartnerRole extends BaseEntity implements PartnerRo
 
     @ElementCollection(fetch = FetchType.EAGER)
     @JoinTable(name = "PARTNER_ADDRESS", joinColumns = @JoinColumn(name = "PARTNER__ID"))
+    @Fetch(value = FetchMode.JOIN)
     private Set<DefaultAddress> addresses = new HashSet<DefaultAddress>(0);
 
     public abstract String simpleName();
