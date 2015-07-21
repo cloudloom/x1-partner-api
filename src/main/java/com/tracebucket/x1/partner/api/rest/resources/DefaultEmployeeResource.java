@@ -3,7 +3,6 @@ package com.tracebucket.x1.partner.api.rest.resources;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tracebucket.tron.assembler.BaseResource;
 import com.tracebucket.x1.partner.api.dictionary.Salutation;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
@@ -46,6 +45,8 @@ public class DefaultEmployeeResource extends BaseResource {
 
     private String organizationUnit;
 
+    private String department;
+
     private DefaultValidityResource validity;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date dateOfBirth;
@@ -53,6 +54,8 @@ public class DefaultEmployeeResource extends BaseResource {
 
     @Size(min = 1, max = 250)
     private String searchTerm;
+
+    private String loginUid;
 
     public String getEmployeeID() {
         return employeeID;
@@ -164,5 +167,29 @@ public class DefaultEmployeeResource extends BaseResource {
 
     public void setOrganizationUnit(String organizationUnit) {
         this.organizationUnit = organizationUnit;
+    }
+
+    public Set<DefaultPhoneResource> getPhones() {
+        return phones;
+    }
+
+    public void setPhones(Set<DefaultPhoneResource> phones) {
+        this.phones = phones;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getLoginUid() {
+        return loginUid;
+    }
+
+    public void setLoginUid(String loginUid) {
+        this.loginUid = loginUid;
     }
 }

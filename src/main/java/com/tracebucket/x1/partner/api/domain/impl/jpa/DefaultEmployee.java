@@ -63,6 +63,10 @@ public class DefaultEmployee extends DefaultPartnerRole implements Employee, Ser
     @Basic(fetch = FetchType.EAGER)
     private String organizationUnit;
 
+    @Column(name = "DEPARTMENT__ID")
+    @Basic(fetch = FetchType.EAGER)
+    private String department;
+
     @Embedded
     private DefaultValidity validity;
 
@@ -78,6 +82,10 @@ public class DefaultEmployee extends DefaultPartnerRole implements Employee, Ser
     @Column(name = "SEARCH_TERM")
     @Basic(fetch = FetchType.EAGER)
     private String searchTerm;
+
+    @Column(name = "LOGIN__ID")
+    @Basic(fetch = FetchType.EAGER)
+    private String loginUid;
 
     public String getEmployeeID() {
         return employeeID;
@@ -192,4 +200,21 @@ public class DefaultEmployee extends DefaultPartnerRole implements Employee, Ser
     public void setOrganizationUnit(String organizationUnit) {
         this.organizationUnit = organizationUnit;
     }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getLoginUid() {
+        return loginUid;
+    }
+
+    public void setLoginUid(String loginUid) {
+        this.loginUid = loginUid;
+    }
+
 }

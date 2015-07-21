@@ -1,6 +1,5 @@
 package com.tracebucket.x1.partner.api.service.impl;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.tracebucket.tron.ddd.annotation.PersistChanges;
 import com.tracebucket.tron.ddd.domain.AggregateId;
 import com.tracebucket.tron.ddd.domain.EntityId;
@@ -12,9 +11,7 @@ import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultOwner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartnerRole;
 import com.tracebucket.x1.partner.api.repository.jpa.DefaultPartnerRepository;
-import com.tracebucket.x1.partner.api.rest.resources.DefaultEmployeeRestructureResource;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerPositionAndOrganizationUnitResource;
-import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerResource;
 import com.tracebucket.x1.partner.api.service.DefaultPartnerService;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
