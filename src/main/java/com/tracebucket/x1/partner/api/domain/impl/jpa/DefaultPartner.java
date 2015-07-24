@@ -1,6 +1,7 @@
 package com.tracebucket.x1.partner.api.domain.impl.jpa;
 
 import com.tracebucket.tron.ddd.annotation.DomainMethod;
+import com.tracebucket.tron.ddd.domain.AggregateId;
 import com.tracebucket.tron.ddd.domain.BaseAggregateRoot;
 import com.tracebucket.tron.ddd.domain.EntityId;
 import com.tracebucket.x1.dictionary.api.domain.Address;
@@ -177,7 +178,7 @@ public class DefaultPartner extends BaseAggregateRoot implements Partner{
     }
 
     @Override
-    @DomainMethod(event = "AddPosition")
+    @DomainMethod(event = "AddPositionAndOrganization")
     public void addPositionAndOrganization(EntityId partnerRoleUid, EntityId positionUid, EntityId organizationUnitUid) {
         DefaultPartnerRole roleFound = partnerRoles.stream()
                 .filter(t -> t.getEntityId().getId().equals(partnerRoleUid.getId()))
@@ -190,7 +191,7 @@ public class DefaultPartner extends BaseAggregateRoot implements Partner{
     }
 
     @Override
-    @DomainMethod(event = "AddPosition")
+    @DomainMethod(event = "RemovePositionAndOrganization")
     public void removePositionAndOrganization() {
         DefaultPartnerRole roleFound = partnerRoles.stream()
                 .filter(t -> t instanceof DefaultEmployee)
@@ -243,5 +244,31 @@ public class DefaultPartner extends BaseAggregateRoot implements Partner{
     @Override
     public String getWebsite() {
         return website;
+    }
+
+    @Override
+    @DomainMethod(event = "AddDepartment")
+    public void addDepartment(EntityId partnerRoleUid, EntityId departmentUid) {
+        DefaultPartnerRole roleFound = partnerRoles.parallelStream()
+                .filter(t -> t.getEntityId().getId().equals(partnerRoleUid.getId()))
+                .findFirst()
+                .orElse(null);
+        if(roleFound != null && roleFound instanceof DefaultEmployee) {
+            ((DefaultEmployee)roleFound).setDepartment(departmentUid.getId());
+        }
+    }
+
+    @Override
+    @DomainMethod(event = "AddOrganizationUnitPositionAndDepartment")
+    public void addDepartmentPositionAndOrganizationUnit(EntityId roleUid, String organizationUnitUid, String positionUid, String departmentUid){
+        DefaultPartnerRole roleFound = partnerRoles.parallelStream()
+                .filter(t -> t.getEntityId().getId().equals(roleUid.getId()))
+                .findFirst()
+                .orElse(null);
+        if(roleFound != null && roleFound instanceof DefaultEmployee) {
+            ((DefaultEmployee)roleFound).setDepartment(departmentUid);
+            ((DefaultEmployee)roleFound).setPosition(positionUid);
+            ((DefaultEmployee)roleFound).setOrganizationUnit(organizationUnitUid);
+        }
     }
 }

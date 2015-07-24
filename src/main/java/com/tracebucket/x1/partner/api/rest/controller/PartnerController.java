@@ -443,4 +443,71 @@ public class PartnerController implements Partner {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
     }
+
+    @Override
+    @RequestMapping(value = "/partner/{partnerUid}/role/{roleUid}/department/{departmentUid}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DefaultPartnerResource> addDepartment(HttpServletRequest request, @PathVariable("partnerUid") String partnerAggregateId, @PathVariable("roleUid") String partnerRoleUid, @PathVariable("departmentUid") String departmentUid) {
+        String tenantId = request.getHeader("tenant_id");
+        if (tenantId != null) {
+            DefaultPartner partner = partnerService.addDepartment(tenantId, new AggregateId(partnerAggregateId), new EntityId(partnerRoleUid), new EntityId(departmentUid));
+            if (partner != null) {
+                DefaultPartnerResource partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(partner, DefaultPartnerResource.class);
+                return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
+            }
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
+    @Override
+    @RequestMapping(value = "/partner/organizationUnit/department/position", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DefaultPartnerResource> addDepartmentPositionAndOrganizationUnit(HttpServletRequest request, @RequestBody DefaultEmployeeResource employeeResource) {
+        String tenantId = request.getHeader("tenant_id");
+        if (tenantId != null) {
+            DefaultPartner partner = partnerService.addDepartmentPositionAndOrganizationUnit(tenantId, new AggregateId(employeeResource.getPartnerUid()), new EntityId(employeeResource.getRoleUid()), employeeResource.getOrganizationUnit(), employeeResource.getPosition(), employeeResource.getDepartment());
+            if (partner != null) {
+                DefaultPartnerResource partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(partner, DefaultPartnerResource.class);
+                return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
+            } else {
+                return new ResponseEntity(HttpStatus.NOT_MODIFIED);
+            }
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @Override
+    @RequestMapping(value = "/partners/organizationUnit/department", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Set<DefaultPartnerResource>> getEmployeesAssignedToOrganizationUnitAndDepartment(HttpServletRequest request, @RequestBody DefaultEmployeeResource employeeResource) {
+        String tenantId = request.getHeader("tenant_id");
+        if (tenantId != null) {
+            Set<DefaultPartner> partners = partnerService.getEmployeesAssignedToOrganizationUnitAndDepartment(tenantId, new AggregateId(employeeResource.getOrganization()), new EntityId(employeeResource.getOrganizationUnit()), new EntityId(employeeResource.getDepartment()));
+            if (partners != null) {
+                Set<DefaultPartnerResource> partnerResources = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResources(partners, DefaultPartnerResource.class);
+                return new ResponseEntity<Set<DefaultPartnerResource>>(partnerResources, HttpStatus.OK);
+            } else {
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @Override
+    @RequestMapping(value = "/partners/organizationUnit/position/department", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Set<DefaultPartnerResource>> getEmployeesAssignedToOrganizationUnitAndPositionAndDepartment(HttpServletRequest request, DefaultEmployeeResource employeeResource) {
+        String tenantId = request.getHeader("tenant_id");
+        if (tenantId != null) {
+            Set<DefaultPartner> partners = partnerService.getEmployeesAssignedToOrganizationUnitAndPositionAndDepartment(tenantId, new AggregateId(employeeResource.getOrganization()), new EntityId(employeeResource.getOrganizationUnit()), new EntityId(employeeResource.getPosition()), new EntityId(employeeResource.getDepartment()));
+            if (partners != null) {
+                Set<DefaultPartnerResource> partnerResources = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResources(partners, DefaultPartnerResource.class);
+                return new ResponseEntity<Set<DefaultPartnerResource>>(partnerResources, HttpStatus.OK);
+            } else {
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
 }

@@ -468,4 +468,44 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
         }
         return null;
     }
+
+    @Override
+    @PersistChanges(repository = "partnerRepository")
+    public DefaultPartner addDepartment(String tenantId, AggregateId partnerAggregateId, EntityId partnerRoleUid, EntityId departmentUid) {
+        DefaultPartner partner = partnerRepository.findOne(partnerAggregateId, tenantId);
+        if(partner != null) {
+            partner.addDepartment(partnerRoleUid, departmentUid);
+            return partner;
+        }
+        return null;
+    }
+
+    @Override
+    @PersistChanges(repository = "partnerRepository")
+    public DefaultPartner addDepartmentPositionAndOrganizationUnit(String tenantId, AggregateId partnerUid, EntityId roleUid, String organizationUnitUid, String positionUid, String departmentUid) {
+        DefaultPartner partner = partnerRepository.findOne(partnerUid, tenantId);
+        if(partner != null) {
+            partner.addDepartmentPositionAndOrganizationUnit(roleUid, organizationUnitUid, positionUid, departmentUid);
+            return partner;
+        }
+        return null;
+    }
+
+    @Override
+    public Set<DefaultPartner> getEmployeesAssignedToOrganizationUnitAndDepartment(String tenantId, AggregateId organizationUid, EntityId organizationUnitUid, EntityId departmentUid) {
+        List<DefaultPartner> partners = partnerRepository.getEmployeesAssignedToOrganizationUnitAndDepartment(organizationUid.getAggregateId(), organizationUnitUid.getId(), departmentUid.getId());
+        if(partners != null && partners.size() > 0) {
+            return new HashSet<>(partners);
+        }
+        return null;
+    }
+
+    @Override
+    public Set<DefaultPartner> getEmployeesAssignedToOrganizationUnitAndPositionAndDepartment(String tenantId, AggregateId organizationUid, EntityId organizationUnitUid, EntityId positionUid, EntityId departmentUid) {
+        List<DefaultPartner> partners = partnerRepository.getEmployeesAssignedToOrganizationUnitAndPositionAndDepartment(organizationUid.getAggregateId(), organizationUnitUid.getId(), positionUid.getId(), departmentUid.getId());
+        if(partners != null && partners.size() > 0) {
+            return new HashSet<>(partners);
+        }
+        return null;
+    }
 }

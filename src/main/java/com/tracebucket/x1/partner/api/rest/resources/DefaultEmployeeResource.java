@@ -43,9 +43,15 @@ public class DefaultEmployeeResource extends BaseResource {
 
     private String position;//no validation required
 
+    private String organization;
+
     private String organizationUnit;
 
     private String department;
+
+    private String partnerUid;
+
+    private String roleUid;
 
     private DefaultValidityResource validity;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
@@ -191,5 +197,29 @@ public class DefaultEmployeeResource extends BaseResource {
 
     public void setLoginUid(String loginUid) {
         this.loginUid = loginUid;
+    }
+
+    public String getPartnerUid() {
+        return partnerUid;
+    }
+
+    public void setPartnerUid(String partnerUid) {
+        this.partnerUid = partnerUid;
+    }
+
+    public String getRoleUid() {
+        return roleUid;
+    }
+
+    public void setRoleUid(String roleUid) {
+        this.roleUid = roleUid;
+    }
+
+    public String getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(String organization) {
+        this.organization = organization;
     }
 }
