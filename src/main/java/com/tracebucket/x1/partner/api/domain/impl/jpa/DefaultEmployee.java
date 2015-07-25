@@ -83,9 +83,9 @@ public class DefaultEmployee extends DefaultPartnerRole implements Employee, Ser
     @Basic(fetch = FetchType.EAGER)
     private String searchTerm;
 
-    @Column(name = "LOGIN__ID")
+    @Column(name = "USERNAME", unique = true)
     @Basic(fetch = FetchType.EAGER)
-    private String loginUid;
+    private String userName;
 
     public String getEmployeeID() {
         return employeeID;
@@ -209,12 +209,11 @@ public class DefaultEmployee extends DefaultPartnerRole implements Employee, Ser
         this.department = department;
     }
 
-    public String getLoginUid() {
-        return loginUid;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setLoginUid(String loginUid) {
-        this.loginUid = loginUid;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
-
 }

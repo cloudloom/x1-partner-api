@@ -61,7 +61,7 @@ public class DefaultEmployeeResource extends BaseResource {
     @Size(min = 1, max = 250)
     private String searchTerm;
 
-    private String loginUid;
+    private String userName;
 
     public String getEmployeeID() {
         return employeeID;
@@ -191,12 +191,12 @@ public class DefaultEmployeeResource extends BaseResource {
         this.department = department;
     }
 
-    public String getLoginUid() {
-        return loginUid;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setLoginUid(String loginUid) {
-        this.loginUid = loginUid;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getPartnerUid() {
