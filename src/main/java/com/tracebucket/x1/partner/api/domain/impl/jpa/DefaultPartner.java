@@ -271,4 +271,18 @@ public class DefaultPartner extends BaseAggregateRoot implements Partner{
             ((DefaultEmployee)roleFound).setOrganizationUnit(organizationUnitUid);
         }
     }
+
+    @Override
+    @DomainMethod(event = "AddUserName")
+    public void addUserName(String userName) {
+        Set<DefaultPartnerRole> roles = this.getAllAssignedRoles();
+        if(roles != null && roles.size() > 0) {
+            roles.stream().forEach(role -> {
+                if(role instanceof DefaultEmployee) {
+                    DefaultEmployee employee = (DefaultEmployee) role;
+                    employee.setUserName(userName);
+                }
+            });
+        }
+    }
 }

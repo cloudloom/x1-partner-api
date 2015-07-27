@@ -12,6 +12,7 @@ import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartnerRole;
 import com.tracebucket.x1.partner.api.repository.jpa.DefaultPartnerRepository;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerPositionAndOrganizationUnitResource;
+import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerUsername;
 import com.tracebucket.x1.partner.api.service.DefaultPartnerService;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,11 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
     @Override
     public DefaultPartner findOne(String tenantId, AggregateId aggregateId) {
         return partnerRepository.findOne(aggregateId, tenantId);
+    }
+
+    @Override
+    public DefaultPartner getEmployee(String tenantId, AggregateId partnerAggregateId, EntityId roleEntityId) {
+        return null;
     }
 
     @Override
@@ -554,5 +560,27 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
     @Override
     public List<DefaultPartner> getEmployeesWhoAreNotUsers(String tenantId) {
         return partnerRepository.getEmployeesWhoAreNotUsers(tenantId);
+    }
+
+    @Override
+    @PersistChanges(repository = "partnerRepository")
+    public Set<DefaultPartner> addUsername(String tenantId, List<DefaultPartnerUsername> userNames) {
+        if(userNames != null && userNames.size() > 0) {
+            Set<DefaultPartner> updateEmployeesUsername = new HashSet<DefaultPartner>();
+            userNames.stream().forEach(user -> {
+                Map<String, String> details = user.getUserName();
+                if(details.containsKey("partnerUid") && details.containsKey("roleUid") && details.containsKey("userName")) {
+                    DefaultPartner partner = partnerRepository.getEmployee(tenantId, details.get("partnerUid"), details.get("roleUid"));
+                    if(partner != null) {
+                        partner.addUserName(details.get("userName"));
+                        updateEmployeesUsername.add(partner);
+                    }
+                }
+            });
+            if(updateEmployeesUsername.size() > 0) {
+                return updateEmployeesUsername;
+            }
+        }
+        return null;
     }
 }

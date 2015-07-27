@@ -34,4 +34,5 @@ public interface Partner {
     public String getWebsite();
     public void addDepartment(EntityId partnerRoleUid, EntityId departmentUid);
     public void addDepartmentPositionAndOrganizationUnit(EntityId roleUid, String organizationUnitUid, String positionUid, String departmentUid);
+    public void addUserName(String userName);
 }

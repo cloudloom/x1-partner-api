@@ -155,6 +155,23 @@ public class PartnerController implements Partner {
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
+    @Override
+    @RequestMapping(value = "/partner/employees/username", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Set<DefaultPartnerResource>> addUsername(HttpServletRequest request, @RequestBody List<DefaultPartnerUsername> userNames) {
+        String tenantId = request.getHeader("tenant_id");
+        if (tenantId != null) {
+            Set<DefaultPartner> partners = partnerService.addUsername(tenantId, userNames);
+            if (partners != null && partners.size() > 0) {
+                Set<DefaultPartnerResource> partnerResources = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResources(partners, DefaultPartnerResource.class);
+                return new ResponseEntity<Set<DefaultPartnerResource>>(partnerResources, HttpStatus.OK);
+            } else {
+                return new ResponseEntity(HttpStatus.NOT_MODIFIED);
+            }
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
     @RequestMapping(value = "/partner/partnerrole/{partnerRoleUid}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DefaultPartnerResource> updatePartnerRole(HttpServletRequest request, @Valid @RequestBody DefaultPartnerResource partner, @PathVariable("partnerRoleUid") String partnerRoleUid) {
         String tenantId = request.getHeader("tenant_id");

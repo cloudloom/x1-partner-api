@@ -7,6 +7,7 @@ import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultOwner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartner;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerPositionAndOrganizationUnitResource;
+import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerUsername;
 
 import java.util.*;
 
@@ -44,4 +45,7 @@ public interface DefaultPartnerService {
     public DefaultPartner getLoggedInEmployeeDetails(String tenantId, String username);
     public Map<String, String> getLoggedInEmployeeMinimalDetails(String tenantId, String username);
     public List<DefaultPartner> getEmployeesWhoAreNotUsers(String tenantId);
+    public Set<DefaultPartner> addUsername(String tenantId, List<DefaultPartnerUsername> userNames);
+    public DefaultPartner getEmployee(String tenantId, AggregateId partnerAggregateId, EntityId roleEntityId);
+
 }

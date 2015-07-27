@@ -20,6 +20,7 @@ public interface Partner {
     public ResponseEntity<DefaultPartnerResource> setPartnerCategory(HttpServletRequest request, PartnerCategory partnerCategory, String partnerAggregateId);
     public ResponseEntity<DefaultPartnerResource> movePartnerToCategory(HttpServletRequest request, PartnerCategory newPartnerCategory, String partnerAggregateId);
     public ResponseEntity<DefaultPartnerResource> addPartnerRole(HttpServletRequest request, DefaultPartnerResource partner);
+    public ResponseEntity<Set<DefaultPartnerResource>> addUsername(HttpServletRequest request, List<DefaultPartnerUsername> userNames);
     public ResponseEntity<DefaultPartnerResource> addAddressToRole(HttpServletRequest request, String partnerAggregateId, String partnerRoleUid,DefaultAddressResource address);
     public ResponseEntity<DefaultPartnerResource> moveRoleAddressTo(HttpServletRequest request, String partnerAggregateId, String partnerRoleUid,DefaultAddressResource address);
     public ResponseEntity<DefaultPartnerResource> changeOwner(HttpServletRequest request, String partnerAggregateId, DefaultOwnerResource newOwner);
