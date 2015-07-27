@@ -49,4 +49,9 @@ public interface DefaultPartnerRepository extends BaseAggregateRepository<Defaul
             "INNER JOIN PARTNER_EMPLOYEE pe ON pe.PARTNER_ROLE__ID = pr.ID\n" +
             "WHERE p.ORGANIZATION__ID = :tenantId and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND pe.userName = :username", nativeQuery = true)
     public DefaultPartner getLoggedInEmployeeDetails(@Param("tenantId") String tenantId, @Param("username") String username);
+
+    @Query(value = "SELECT p.* FROM PARTNER p INNER JOIN PARTNER_ROLE pr ON p.ID = pr.PARTNER__ID \n" +
+            "INNER JOIN PARTNER_EMPLOYEE pe ON pe.PARTNER_ROLE__ID = pr.ID\n" +
+            "WHERE p.ORGANIZATION__ID = :tenantId and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND pe.userName IS NULL and pe.user = false", nativeQuery = true)
+    public List<DefaultPartner> getEmployeesWhoAreNotUsers(@Param("tenantId") String tenantId);
 }

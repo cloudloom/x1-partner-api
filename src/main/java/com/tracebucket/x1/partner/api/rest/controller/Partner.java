@@ -41,5 +41,5 @@ public interface Partner {
     public ResponseEntity<Set<DefaultPartnerResource>> getEmployeesAssignedToOrganizationUnitAndPositionAndDepartment(HttpServletRequest request, DefaultEmployeeResource employeeResource);
     public ResponseEntity<DefaultPartnerResource> getLoggedInEmployeeDetails(HttpServletRequest request, Principal principal);
     public ResponseEntity<DefaultLoggedInEmployeeMinimalResource> getLoggedInEmployeeMinimalDetails(HttpServletRequest request, Principal principal);
-
+    public ResponseEntity<Set<DefaultPartnerResource>> getEmployeesWhoAreNotUsers(HttpServletRequest request);
 }

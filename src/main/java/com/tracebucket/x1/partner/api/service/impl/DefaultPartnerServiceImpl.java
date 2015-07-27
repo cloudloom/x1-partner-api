@@ -543,4 +543,9 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
         }
         return null;
     }
+
+    @Override
+    public List<DefaultPartner> getEmployeesWhoAreNotUsers(String tenantId) {
+        return partnerRepository.getEmployeesWhoAreNotUsers(tenantId);
+    }
 }

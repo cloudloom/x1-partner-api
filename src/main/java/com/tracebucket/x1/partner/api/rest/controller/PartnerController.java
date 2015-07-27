@@ -554,4 +554,21 @@ public class PartnerController implements Partner {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
     }
+
+    @Override
+    @RequestMapping(value = "/employees/not/user", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Set<DefaultPartnerResource>> getEmployeesWhoAreNotUsers(HttpServletRequest request) {
+        String tenantId = request.getHeader("tenant_id");
+        if (tenantId != null) {
+                List<DefaultPartner> partners = partnerService.getEmployeesWhoAreNotUsers(tenantId);
+                if (partners != null) {
+                    Set<DefaultPartnerResource> partnerResources = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResources(partners, DefaultPartnerResource.class);
+                    return new ResponseEntity<Set<DefaultPartnerResource>>(partnerResources, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity(HttpStatus.NOT_FOUND);
+                }
+            } else {
+                return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+            }
+    }
 }
