@@ -225,7 +225,10 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
                                 DefaultEmployee employee = (DefaultEmployee)partnerRole;
                                 if(employee.getName() != null && employee.getName().toLowerCase().matches(searchTerm)) {
                                     foundPartners.add(p);
-                                } else if(employee.getMiddleName() != null && employee.getMiddleName().toLowerCase().matches(searchTerm)){
+                                }else if(employee.getFirstName() != null && employee.getFirstName().toLowerCase().matches(searchTerm)) {
+                                    foundPartners.add(p);
+                                }
+                                else if(employee.getMiddleName() != null && employee.getMiddleName().toLowerCase().matches(searchTerm)){
                                     foundPartners.add(p);
                                 }  else if(employee.getLastName() != null && employee.getLastName().toLowerCase().matches(searchTerm)){
                                     foundPartners.add(p);
