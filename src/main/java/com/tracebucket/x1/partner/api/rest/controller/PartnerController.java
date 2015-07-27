@@ -556,7 +556,7 @@ public class PartnerController implements Partner {
     }
 
     @Override
-    @RequestMapping(value = "/employees/not/user", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/employees/user/notassigned", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Set<DefaultPartnerResource>> getEmployeesWhoAreNotUsers(HttpServletRequest request) {
         String tenantId = request.getHeader("tenant_id");
         if (tenantId != null) {

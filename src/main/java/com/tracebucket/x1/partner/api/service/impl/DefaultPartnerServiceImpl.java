@@ -533,9 +533,13 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
                         details.put("firstName", emp.getFirstName());
                         details.put("middleName", emp.getMiddleName());
                         details.put("lastName", emp.getLastName());
-                        details.put("validFrom", emp.getValidity().getValidFrom().toString());
-                        details.put("validTill", emp.getValidity().getValidTill().toString());
-                        details.put("dateOfBirth", emp.getDateOfBirth().toString());
+                        if(emp.getValidity() != null) {
+                            details.put("validFrom", emp.getValidity().getValidFrom().toString());
+                            details.put("validTill", emp.getValidity().getValidTill().toString());
+                        }
+                        if(emp.getDateOfBirth() != null) {
+                            details.put("dateOfBirth", emp.getDateOfBirth().toString());
+                        }
                     }
                 });
             }
