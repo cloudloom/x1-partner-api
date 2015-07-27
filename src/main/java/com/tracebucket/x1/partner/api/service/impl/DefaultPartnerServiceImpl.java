@@ -508,4 +508,39 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
         }
         return null;
     }
+
+    @Override
+    public DefaultPartner getLoggedInEmployeeDetails(String tenantId, String username) {
+        return partnerRepository.getLoggedInEmployeeDetails(tenantId, username);
+    }
+
+    @Override
+    public Map<String, String> getLoggedInEmployeeMinimalDetails(String tenantId, String username) {
+        DefaultPartner employee = partnerRepository.getLoggedInEmployeeDetails(tenantId, username);
+        if(employee != null) {
+            Map<String, String> details = new HashMap<String, String>();
+            details.put("uid", employee.getAggregateId().getAggregateId());
+            details.put("organizationUid", employee.getOwner().getOrganizationUID());
+            Set<DefaultPartnerRole> roles = employee.getAllAssignedRoles();
+            if(roles != null && roles.size() > 0) {
+                roles.stream().forEach(role -> {
+                    if(role instanceof DefaultEmployee) {
+                        DefaultEmployee emp = (DefaultEmployee) role;
+                        details.put("organizationUnitUid", emp.getOrganizationUnit());
+                        details.put("departmentUid", emp.getDepartment());
+                        details.put("positionUid", emp.getPosition());
+                        details.put("username", emp.getUserName());
+                        details.put("firstName", emp.getFirstName());
+                        details.put("middleName", emp.getMiddleName());
+                        details.put("lastName", emp.getLastName());
+                        details.put("validFrom", emp.getValidity().getValidFrom().toString());
+                        details.put("validTill", emp.getValidity().getValidTill().toString());
+                        details.put("dateOfBirth", emp.getDateOfBirth().toString());
+                    }
+                });
+            }
+            return details;
+        }
+        return null;
+    }
 }

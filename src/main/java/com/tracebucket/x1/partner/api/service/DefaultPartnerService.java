@@ -41,5 +41,6 @@ public interface DefaultPartnerService {
     public DefaultPartner addDepartmentPositionAndOrganizationUnit(String tenantId, AggregateId partnerUid, EntityId roleUid, String organizationUnitUid, String positionUid, String departmentUid);
     public Set<DefaultPartner> getEmployeesAssignedToOrganizationUnitAndDepartment(String tenantId, AggregateId organizationUid, EntityId organizationUnitUid, EntityId departmentUid);
     public Set<DefaultPartner> getEmployeesAssignedToOrganizationUnitAndPositionAndDepartment(String tenantId, AggregateId organizationUid, EntityId organizationUnitUid, EntityId positionUid, EntityId departmentUid);
-
+    public DefaultPartner getLoggedInEmployeeDetails(String tenantId, String username);
+    public Map<String, String> getLoggedInEmployeeMinimalDetails(String tenantId, String username);
 }

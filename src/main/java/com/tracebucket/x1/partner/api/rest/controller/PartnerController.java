@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.*;
 
 /**
@@ -505,6 +506,49 @@ public class PartnerController implements Partner {
                 return new ResponseEntity<Set<DefaultPartnerResource>>(partnerResources, HttpStatus.OK);
             } else {
                 return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @Override
+    @RequestMapping(value = "/employee/loggedIn", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DefaultPartnerResource> getLoggedInEmployeeDetails(HttpServletRequest request, Principal principal) {
+        String tenantId = request.getHeader("tenant_id");
+        if (tenantId != null) {
+            if(principal.getName() != null) {
+                DefaultPartner partner = partnerService.getLoggedInEmployeeDetails(tenantId, principal.getName());
+                if (partner != null) {
+                    DefaultPartnerResource partnerResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResource(partner, DefaultPartnerResource.class);
+                    return new ResponseEntity<DefaultPartnerResource>(partnerResource, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity(HttpStatus.NOT_FOUND);
+                }
+            } else {
+                return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+            }
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @Override
+    @RequestMapping(value = "/employee/loggedIn/minimal", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DefaultLoggedInEmployeeMinimalResource> getLoggedInEmployeeMinimalDetails(HttpServletRequest request, Principal principal) {
+        String tenantId = request.getHeader("tenant_id");
+        if (tenantId != null) {
+            if(principal.getName() != null) {
+                Map<String, String> partner = partnerService.getLoggedInEmployeeMinimalDetails(tenantId, principal.getName());
+                if (partner != null) {
+                    DefaultLoggedInEmployeeMinimalResource loggedInEmployee = new DefaultLoggedInEmployeeMinimalResource();
+                    loggedInEmployee.setLoggedInEmployee(partner);
+                    return new ResponseEntity<DefaultLoggedInEmployeeMinimalResource>(loggedInEmployee, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity(HttpStatus.NOT_FOUND);
+                }
+            } else {
+                return new ResponseEntity(HttpStatus.UNAUTHORIZED);
             }
         } else {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
