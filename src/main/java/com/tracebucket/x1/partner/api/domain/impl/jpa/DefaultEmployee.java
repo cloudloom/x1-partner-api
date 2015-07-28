@@ -182,6 +182,10 @@ public class DefaultEmployee extends DefaultPartnerRole implements Employee, Ser
     }
 
     public void setUser(boolean user) {
+        this.user = false;
+    }
+
+    public void setAsUser(boolean user) {
         this.user = user;
     }
 

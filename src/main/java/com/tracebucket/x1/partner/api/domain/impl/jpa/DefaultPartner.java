@@ -281,6 +281,7 @@ public class DefaultPartner extends BaseAggregateRoot implements Partner{
                 if(role instanceof DefaultEmployee) {
                     DefaultEmployee employee = (DefaultEmployee) role;
                     employee.setUserName(userName);
+                    employee.setAsUser(true);
                 }
             });
         }
