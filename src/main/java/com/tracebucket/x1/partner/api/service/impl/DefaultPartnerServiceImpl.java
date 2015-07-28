@@ -535,13 +535,27 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
                 roles.stream().forEach(role -> {
                     if(role instanceof DefaultEmployee) {
                         DefaultEmployee emp = (DefaultEmployee) role;
-                        details.put("organizationUnitUid", emp.getOrganizationUnit());
-                        details.put("departmentUid", emp.getDepartment());
-                        details.put("positionUid", emp.getPosition());
-                        details.put("username", emp.getUserName());
-                        details.put("firstName", emp.getFirstName());
-                        details.put("middleName", emp.getMiddleName());
-                        details.put("lastName", emp.getLastName());
+                        if(emp.getOrganizationUnit() != null) {
+                            details.put("organizationUnitUid", emp.getOrganizationUnit());
+                        }
+                        if(emp.getDepartment() != null) {
+                            details.put("departmentUid", emp.getDepartment());
+                        }
+                        if(emp.getPosition() != null) {
+                            details.put("positionUid", emp.getPosition());
+                        }
+                        if(emp.getUserName() != null) {
+                            details.put("username", emp.getUserName());
+                        }
+                        if(emp.getFirstName() != null) {
+                            details.put("firstName", emp.getFirstName());
+                        }
+                        if(emp.getMiddleName() != null) {
+                            details.put("middleName", emp.getMiddleName());
+                        }
+                        if(emp.getLastName() != null) {
+                            details.put("lastName", emp.getLastName());
+                        }
                         if(emp.getValidity() != null) {
                             details.put("validFrom", emp.getValidity().getValidFrom().toString());
                             details.put("validTill", emp.getValidity().getValidTill().toString());
