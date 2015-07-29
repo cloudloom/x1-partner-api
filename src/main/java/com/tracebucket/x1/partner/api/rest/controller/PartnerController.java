@@ -590,7 +590,7 @@ public class PartnerController implements Partner {
     }
 
     @Override
-    @RequestMapping(value = "/employees/userNames", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/employees/userNames", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Set<DefaultPartnerResource>> getEmployeesByLoginNames(HttpServletRequest request, @RequestBody List<String> userNames) {
         String tenantId = request.getHeader("tenant_id");
         if (tenantId != null) {
