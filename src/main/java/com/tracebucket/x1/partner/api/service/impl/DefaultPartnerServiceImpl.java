@@ -51,6 +51,11 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
     }
 
     @Override
+    public List<DefaultPartner> getEmployeesByLoginNames(String tenantId, List<String> userNames) {
+        return partnerRepository.getEmployeesByLoginNames(tenantId, userNames);
+    }
+
+    @Override
     public List<DefaultPartner> findAll(String tenantId) {
         return partnerRepository.findAll(tenantId);
     }

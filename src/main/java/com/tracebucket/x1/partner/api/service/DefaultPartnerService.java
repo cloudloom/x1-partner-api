@@ -47,5 +47,5 @@ public interface DefaultPartnerService {
     public List<DefaultPartner> getEmployeesWhoAreNotUsers(String tenantId);
     public Set<DefaultPartner> addUsername(String tenantId, List<DefaultPartnerUsername> userNames);
     public DefaultPartner getEmployee(String tenantId, AggregateId partnerAggregateId, EntityId roleEntityId);
-
+    public List<DefaultPartner> getEmployeesByLoginNames(String tenantId, List<String> userNames);
 }
