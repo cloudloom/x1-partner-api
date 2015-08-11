@@ -100,12 +100,15 @@ public class DefaultPartner extends BaseAggregateRoot implements Partner{
                 .findFirst().orElse(null);
         if(roleFound != null){
             roleFound.getAddresses().clear();
+            boolean isUser = false;
             if(roleFound instanceof DefaultEmployee) {
+                isUser = ((DefaultEmployee) roleFound).isUser();
                 DefaultEmployee employee = (DefaultEmployee) roleFound;
                 employee.getPhone().clear();
                 employee.getEmail().clear();
             }
             mapper.map(partnerRole, roleFound);
+            ((DefaultEmployee) roleFound).setAsUser(isUser);
         }
     }
 
