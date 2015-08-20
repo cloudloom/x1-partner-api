@@ -488,13 +488,13 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
     public Set<DefaultPartner> addEmployeesToPositions(String tenantId, AggregateId organizationUid, HashMap<String, HashMap<String, ArrayList<Map<String, String>>>> employeeStructure) {
         if(tenantId.equals(organizationUid.getAggregateId())) {
             if(employeeStructure != null) {
+                final StringBuilder foundPosition = new StringBuilder();
                 Set<DefaultPartner> defaultPartners = new HashSet<DefaultPartner>();
-                StringBuffer foundPosition = new StringBuffer();
                 employeeStructure.entrySet().stream().forEach(orgUnit -> {
                     HashMap<String, ArrayList<Map<String, String>>> positions = orgUnit.getValue();
                     if(positions != null) {
                         positions.entrySet().stream().forEach(position -> {
-                            if(foundPosition.length() == 0) {
+                            if(foundPosition != null) {
                                 foundPosition.append(position.getKey());
                                 ArrayList<Map<String, String>> employeesList = position.getValue();
                                 if (employeesList != null && employeesList.size() > 0) {
