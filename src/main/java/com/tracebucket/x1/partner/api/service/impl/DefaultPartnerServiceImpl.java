@@ -508,39 +508,71 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
                         });
                     }
                 });
-                Map<String, Map<String, ArrayList<DefaultPartner>>> currentEmployees = getEmployeesAssignedToOrganizationAndPosition(tenantId, organizationUid);
-                if(currentEmployees != null && currentEmployees.size() > 0) {
-                    currentEmployees.entrySet().forEach(orgUnitUid -> {
-                        orgUnitUid.getValue().entrySet().forEach(posUid -> {
-                            employeeStructure.entrySet().stream().forEach(orgUnit -> {
-                                HashMap<String, ArrayList<Map<String, String>>> positions = orgUnit.getValue();
-                                if (positions != null) {
-                                    positions.entrySet().stream().forEach(position -> {
-                                        if(position.getKey().equals(posUid.getKey())) {
-                                            posUid.getValue().forEach(partner -> {
-                                                boolean found = false;
-                                                for (Map.Entry<String, HashMap<String, ArrayList<Map<String, String>>>> orgEntry : employeeStructure.entrySet()) {
-                                                    for (Map.Entry<String, ArrayList<Map<String, String>>> posEntry : orgEntry.getValue().entrySet()) {
-                                                        for (Map<String, String> empEntry : posEntry.getValue()) {
-                                                            for (Map.Entry<String, String> emp : empEntry.entrySet()) {
-                                                                if (partner.getAggregateId().getAggregateId().equals(emp.getKey())) {
-                                                                    found = true;
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                                if (!found) {
-                                                    partner.removePositionAndOrganization();
-                                                    defaultPartners.add(partner);
-                                                }
-                                            });
+                String orgUnitUid1 = null;
+                String posUid1 = null;
+                for(Map.Entry<String, HashMap<String, ArrayList<Map<String, String>>>> entrySet : employeeStructure.entrySet()) {
+                    orgUnitUid1 = entrySet.getKey();
+                    if(entrySet.getValue() != null) {
+                        HashMap<String, ArrayList<Map<String, String>>> positionEntry = entrySet.getValue();
+                        for(Map.Entry<String, ArrayList<Map<String, String>>> entry : positionEntry.entrySet()) {
+                            posUid1 = entry.getKey();
+                            break;
+                        }
+                    }
+                }
+                List<DefaultPartner> partners = partnerRepository.getEmployeesAssignedToOrganizationAndPosition(organizationUid.getAggregateId(), orgUnitUid1, posUid1);
+                if(partners != null && partners.size() > 0) {
+                    Map<String, Map<String, ArrayList<DefaultPartner>>> currentEmployees = new HashMap<String, Map<String, ArrayList<DefaultPartner>>>();
+                    partners.stream().forEach(partner -> {
+                        Set<DefaultPartnerRole> partnerRoles = partner.getAllAssignedRoles();
+                        if (partnerRoles != null) {
+                            partnerRoles.stream().forEach(partnerRole -> {
+                                if (partnerRole instanceof DefaultEmployee) {
+                                    DefaultEmployee employee = (DefaultEmployee) partnerRole;
+                                    if (currentEmployees.containsKey(employee.getOrganizationUnit())) {
+                                        Map<String, ArrayList<DefaultPartner>> positions = currentEmployees.get(employee.getOrganizationUnit());
+                                        if (positions.containsKey(employee.getPosition())) {
+                                            positions.get(employee.getPosition()).add(partner);
+                                        } else {
+                                            ArrayList<DefaultPartner> defaultEmployees = new ArrayList<DefaultPartner>();
+                                            defaultEmployees.add(partner);
+                                            positions.put(employee.getPosition(), defaultEmployees);
                                         }
-                                    });
+                                    } else {
+                                        Map<String, ArrayList<DefaultPartner>> positionEmployees = new HashMap<String, ArrayList<DefaultPartner>>();
+                                        ArrayList<DefaultPartner> defaultEmployees = new ArrayList<DefaultPartner>();
+                                        defaultEmployees.add(partner);
+                                        positionEmployees.put(employee.getPosition(), defaultEmployees);
+                                        currentEmployees.put(employee.getOrganizationUnit(), positionEmployees);
+                                    }
                                 }
                             });
-                        });
+                        }
                     });
+                    if(currentEmployees.size() > 0) {
+                        currentEmployees.entrySet().forEach(orgUnitUid -> {
+                            orgUnitUid.getValue().entrySet().forEach(posUid -> {
+                                posUid.getValue().forEach(partner -> {
+                                    boolean found = false;
+                                    for (Map.Entry<String, HashMap<String, ArrayList<Map<String, String>>>> orgEntry : employeeStructure.entrySet()) {
+                                        for (Map.Entry<String, ArrayList<Map<String, String>>> posEntry : orgEntry.getValue().entrySet()) {
+                                            for (Map<String, String> empEntry : posEntry.getValue()) {
+                                                for (Map.Entry<String, String> emp : empEntry.entrySet()) {
+                                                    if (partner.getAggregateId().getAggregateId().equals(emp.getKey())) {
+                                                        found = true;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if (!found) {
+                                        partner.removePositionAndOrganization();
+                                        defaultPartners.add(partner);
+                                    }
+                                });
+                            });
+                        });
+                    }
                 }
                 if(defaultPartners.size() > 0) {
                     return defaultPartners;
