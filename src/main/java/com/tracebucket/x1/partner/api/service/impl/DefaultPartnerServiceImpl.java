@@ -115,7 +115,7 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
         if(partner != null) {
             Set<DefaultPartnerRole> partnerRoles = updatePartnerRole.getAllAssignedRoles();
             if(partnerRoles != null && partnerRoles.size() > 0) {
-                DefaultPartnerRole updateRole = partnerRoles.parallelStream()
+                DefaultPartnerRole updateRole = partnerRoles.stream()
                         .filter(t -> t.getEntityId().equals(partnerRoleEntityId))
                         .findFirst().get();
                 if(updateRole != null) {
