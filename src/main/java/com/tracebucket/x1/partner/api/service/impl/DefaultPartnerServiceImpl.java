@@ -485,6 +485,70 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
 
     @Override
     @PersistChanges(repository = "partnerRepository")
+    public Set<DefaultPartner> addEmployeesToPositions(String tenantId, AggregateId organizationUid, HashMap<String, HashMap<String, ArrayList<Map<String, String>>>> employeeStructure) {
+        if(tenantId.equals(organizationUid.getAggregateId())) {
+            if(employeeStructure != null) {
+                Set<DefaultPartner> defaultPartners = new HashSet<DefaultPartner>();
+                StringBuffer foundPosition = new StringBuffer();
+                employeeStructure.entrySet().stream().forEach(orgUnit -> {
+                    HashMap<String, ArrayList<Map<String, String>>> positions = orgUnit.getValue();
+                    if(positions != null) {
+                        positions.entrySet().stream().forEach(position -> {
+                            if(foundPosition.length() == 0) {
+                                foundPosition.append(position.getKey());
+                                ArrayList<Map<String, String>> employeesList = position.getValue();
+                                if (employeesList != null && employeesList.size() > 0) {
+                                    employeesList.stream().forEach(employees -> {
+                                        employees.entrySet().stream().forEach(employee -> {
+                                            DefaultPartner partner = findOne(tenantId, new AggregateId(employee.getKey()));
+                                            if (partner != null) {
+                                                partner.addPositionAndOrganization(new EntityId(employee.getValue()), new EntityId(position.getKey()), new EntityId(orgUnit.getKey()));
+                                                defaultPartners.add(partner);
+                                            }
+                                        });
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+                Map<String, Map<String, ArrayList<DefaultPartner>>> currentEmployees = getEmployeesAssignedToOrganizationAndPosition(tenantId, organizationUid);
+                if(currentEmployees != null && currentEmployees.size() > 0) {
+                    currentEmployees.entrySet().forEach(orgUnitUid -> {
+                        orgUnitUid.getValue().entrySet().forEach(posUid -> {
+                            if(foundPosition != null && foundPosition.length() > 0 && foundPosition.toString().equals(posUid)) {
+                                posUid.getValue().forEach(partner -> {
+                                    boolean found = false;
+                                    for (Map.Entry<String, HashMap<String, ArrayList<Map<String, String>>>> orgEntry : employeeStructure.entrySet()) {
+                                        for (Map.Entry<String, ArrayList<Map<String, String>>> posEntry : orgEntry.getValue().entrySet()) {
+                                            for (Map<String, String> empEntry : posEntry.getValue()) {
+                                                for (Map.Entry<String, String> emp : empEntry.entrySet()) {
+                                                    if (partner.getAggregateId().getAggregateId().equals(emp.getKey())) {
+                                                        found = true;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if (!found) {
+                                        partner.removePositionAndOrganization();
+                                        defaultPartners.add(partner);
+                                    }
+                                });
+                            }
+                        });
+                    });
+                }
+                if(defaultPartners.size() > 0) {
+                    return defaultPartners;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    @PersistChanges(repository = "partnerRepository")
     public DefaultPartner addDepartment(String tenantId, AggregateId partnerAggregateId, EntityId partnerRoleUid, EntityId departmentUid) {
         DefaultPartner partner = partnerRepository.findOne(partnerAggregateId, tenantId);
         if(partner != null) {

@@ -3,6 +3,8 @@ package com.tracebucket.x1.partner.api.rest.controller;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
 import com.tracebucket.x1.partner.api.rest.resources.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
@@ -44,4 +46,5 @@ public interface Partner {
     public ResponseEntity<DefaultLoggedInEmployeeMinimalResource> getLoggedInEmployeeMinimalDetails(HttpServletRequest request, Principal principal);
     public ResponseEntity<Set<DefaultPartnerResource>> getEmployeesWhoAreNotUsers(HttpServletRequest request);
     public ResponseEntity<Set<DefaultPartnerResource>> getEmployeesByLoginNames(HttpServletRequest request, List<String> userNames);
+    public ResponseEntity<Set<DefaultPartnerResource>> addEmployeesToPositions(HttpServletRequest request, String organizationUid, DefaultEmployeeRestructureResource employeeStructure);
 }

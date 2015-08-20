@@ -396,6 +396,23 @@ public class PartnerController implements Partner {
     }
 
     @Override
+    @RequestMapping(value = "/employees/organization/{organizationUid}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Set<DefaultPartnerResource>> addEmployeesToPositions(HttpServletRequest request, @PathVariable("organizationUid") String organizationUid, @RequestBody DefaultEmployeeRestructureResource employeeStructure) {
+        String tenantId = request.getHeader("tenant_id");
+        if (tenantId != null) {
+            Set<DefaultPartner> partners = partnerService.addEmployeesToPositions(tenantId, new AggregateId(organizationUid), employeeStructure.getEmployeeStructure());
+            if(partners != null) {
+                Set<DefaultPartnerResource> partnerResources = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResources(partners, DefaultPartnerResource.class);
+                return new ResponseEntity<Set<DefaultPartnerResource>>(partnerResources, HttpStatus.OK);
+            } else {
+                return new ResponseEntity(HttpStatus.NOT_MODIFIED);
+            }
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @Override
     @RequestMapping(value = "/employees/organization/{organizationUid}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, Map<String, Set<DefaultPartnerResource>>>> getEmployeesAssignedToOrganizationAndPosition(HttpServletRequest request, @PathVariable("organizationUid") String organizationUid) {
         String tenantId = request.getHeader("tenant_id");
