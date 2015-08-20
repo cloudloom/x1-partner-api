@@ -446,8 +446,19 @@ public class PartnerController implements Partner {
                             Map<String, String> map = new HashMap<String, String>();
                             map.put("partnerUid", partner.getAggregateId().getAggregateId());
                             map.put("roleUid", employee.getEntityId().getId());
-                            String empName = employee.getFirstName() != null ? employee.getFirstName() + " " : "" + employee.getMiddleName() != null ? employee.getMiddleName() + " " : "" + employee.getLastName() != null ? employee.getLastName() : "";
-                            map.put("name", empName);
+                            StringBuffer empName = new StringBuffer();
+                            if(employee.getFirstName() != null) {
+                                empName.append(employee.getFirstName());
+                            }
+                            if(employee.getMiddleName() != null) {
+                                empName.append(" ");
+                                empName.append(employee.getMiddleName());
+                            }
+                            if(employee.getLastName() != null) {
+                                empName.append(" ");
+                                empName.append(employee.getLastName());
+                            }
+                            map.put("name", empName.toString());
                             partnerList.add(map);
                         }
                     }
