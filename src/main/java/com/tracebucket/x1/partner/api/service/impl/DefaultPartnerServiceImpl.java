@@ -488,26 +488,22 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
     public Set<DefaultPartner> addEmployeesToPositions(String tenantId, AggregateId organizationUid, HashMap<String, HashMap<String, ArrayList<Map<String, String>>>> employeeStructure) {
         if(tenantId.equals(organizationUid.getAggregateId())) {
             if(employeeStructure != null) {
-                final StringBuilder foundPosition = new StringBuilder();
                 Set<DefaultPartner> defaultPartners = new HashSet<DefaultPartner>();
                 employeeStructure.entrySet().stream().forEach(orgUnit -> {
                     HashMap<String, ArrayList<Map<String, String>>> positions = orgUnit.getValue();
                     if(positions != null) {
                         positions.entrySet().stream().forEach(position -> {
-                            if(foundPosition != null) {
-                                foundPosition.append(position.getKey());
-                                ArrayList<Map<String, String>> employeesList = position.getValue();
-                                if (employeesList != null && employeesList.size() > 0) {
-                                    employeesList.stream().forEach(employees -> {
-                                        employees.entrySet().stream().forEach(employee -> {
-                                            DefaultPartner partner = findOne(tenantId, new AggregateId(employee.getKey()));
-                                            if (partner != null) {
+                            ArrayList<Map<String, String>> employeesList = position.getValue();
+                            if (employeesList != null && employeesList.size() > 0) {
+                                employeesList.stream().forEach(employees -> {
+                                    employees.entrySet().stream().forEach(employee -> {
+                                        DefaultPartner partner = findOne(tenantId, new AggregateId(employee.getKey()));
+                                        if (partner != null) {
                                                 partner.addPositionAndOrganization(new EntityId(employee.getValue()), new EntityId(position.getKey()), new EntityId(orgUnit.getKey()));
                                                 defaultPartners.add(partner);
-                                            }
-                                        });
+                                        }
                                     });
-                                }
+                                });
                             }
                         });
                     }
@@ -516,26 +512,33 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
                 if(currentEmployees != null && currentEmployees.size() > 0) {
                     currentEmployees.entrySet().forEach(orgUnitUid -> {
                         orgUnitUid.getValue().entrySet().forEach(posUid -> {
-                            if(foundPosition != null && foundPosition.length() > 0 && foundPosition.toString().equals(posUid)) {
-                                posUid.getValue().forEach(partner -> {
-                                    boolean found = false;
-                                    for (Map.Entry<String, HashMap<String, ArrayList<Map<String, String>>>> orgEntry : employeeStructure.entrySet()) {
-                                        for (Map.Entry<String, ArrayList<Map<String, String>>> posEntry : orgEntry.getValue().entrySet()) {
-                                            for (Map<String, String> empEntry : posEntry.getValue()) {
-                                                for (Map.Entry<String, String> emp : empEntry.entrySet()) {
-                                                    if (partner.getAggregateId().getAggregateId().equals(emp.getKey())) {
-                                                        found = true;
+                            employeeStructure.entrySet().stream().forEach(orgUnit -> {
+                                HashMap<String, ArrayList<Map<String, String>>> positions = orgUnit.getValue();
+                                if (positions != null) {
+                                    positions.entrySet().stream().forEach(position -> {
+                                        if(position.getKey().equals(posUid.getKey())) {
+                                            posUid.getValue().forEach(partner -> {
+                                                boolean found = false;
+                                                for (Map.Entry<String, HashMap<String, ArrayList<Map<String, String>>>> orgEntry : employeeStructure.entrySet()) {
+                                                    for (Map.Entry<String, ArrayList<Map<String, String>>> posEntry : orgEntry.getValue().entrySet()) {
+                                                        for (Map<String, String> empEntry : posEntry.getValue()) {
+                                                            for (Map.Entry<String, String> emp : empEntry.entrySet()) {
+                                                                if (partner.getAggregateId().getAggregateId().equals(emp.getKey())) {
+                                                                    found = true;
+                                                                }
+                                                            }
+                                                        }
                                                     }
                                                 }
-                                            }
+                                                if (!found) {
+                                                    partner.removePositionAndOrganization();
+                                                    defaultPartners.add(partner);
+                                                }
+                                            });
                                         }
-                                    }
-                                    if (!found) {
-                                        partner.removePositionAndOrganization();
-                                        defaultPartners.add(partner);
-                                    }
-                                });
-                            }
+                                    });
+                                }
+                            });
                         });
                     });
                 }
