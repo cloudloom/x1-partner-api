@@ -27,8 +27,8 @@ public class DefaultEmployeeResource extends BaseResource {
     @Pattern(regexp = "^[A-Za-z]*$")
     protected String lastName;
 
-    @Size(min = 1, max = 250)
-    @Pattern(regexp = "^[A-Za-z]*$")
+/*    @Size(min = 1, max = 250)
+    @Pattern(regexp = "^[A-Za-z]*$")*/
     protected String middleName;
 
     @Valid
