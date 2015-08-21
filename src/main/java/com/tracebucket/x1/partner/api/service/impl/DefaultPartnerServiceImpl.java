@@ -566,7 +566,7 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
                                         }
                                     }
                                     if (!found) {
-                                        partner.removePositionAndOrganization();
+                                        partner.removeDepartmentAndPositionAndOrganization();
                                         defaultPartners.add(partner);
                                     }
                                 });
