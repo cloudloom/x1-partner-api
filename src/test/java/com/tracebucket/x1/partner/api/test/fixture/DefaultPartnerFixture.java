@@ -26,7 +26,7 @@ public class DefaultPartnerFixture {
 
         Set<DefaultPhone> empPhone = new HashSet<>();
         DefaultPhone phone = new DefaultPhone();
-        phone.setNumber(9441009922L);
+        phone.setNumber("9441009922");
         phone.setDefaultPhone(true);
         phone.setPhoneType(PhoneType.MOBILE);
         empPhone.add(phone);
@@ -58,7 +58,7 @@ public class DefaultPartnerFixture {
 
         Set<DefaultPhone> empPhone = new HashSet<>();
         DefaultPhone phone = new DefaultPhone();
-        phone.setNumber(9441009922L);
+        phone.setNumber("9441009922");
         phone.setDefaultPhone(true);
         phone.setPhoneType(PhoneType.MOBILE);
         empPhone.add(phone);
