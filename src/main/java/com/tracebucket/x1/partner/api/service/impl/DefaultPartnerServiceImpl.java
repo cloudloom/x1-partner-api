@@ -43,37 +43,39 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
     @Override
     public DefaultPartner findOne(String tenantId, AggregateId aggregateId) {
         DefaultPartner partner = partnerRepository.findOne(aggregateId, tenantId);
-        Set<DefaultPartnerRole> partnerRoles = partner.getAllAssignedRoles();
-        if(partnerRoles != null && partnerRoles.size() > 0) {
-            partnerRoles.stream().forEach(role -> {
-                if(role instanceof DefaultEmployee) {
-                    DefaultEmployee employee = (DefaultEmployee) role;
-                    if(employee.getNotifyTo() != null && employee.getNotifyTo().size() > 0) {
-                        Set<String> mgr = employee.getNotifyTo();
-                        Map<String, String> m = new HashMap<String, String>();
-                        mgr.stream().forEach(mg -> {
-                            DefaultPartner partner1 = findOne(tenantId, new AggregateId(mg));
-                            if(partner1 != null) {
-                                Set<DefaultPartnerRole> roles = partner1.getAllAssignedRoles();
-                                if(roles != null && roles.size() > 0) {
-                                    roles.stream().forEach(role1 -> {
-                                        if(role1 instanceof DefaultEmployee) {
-                                            DefaultEmployee employee1 = (DefaultEmployee) role1;
-                                            String firstName = employee1.getFirstName();
-                                            String middleName = employee1.getMiddleName();
-                                            String lastName = employee1.getLastName();
-                                            m.put(mg, firstName + (middleName != null ? (" " + middleName) : "" )+ (" " + lastName));
-                                        }
-                                    });
+        if(partner != null) {
+            Set<DefaultPartnerRole> partnerRoles = partner.getAllAssignedRoles();
+            if (partnerRoles != null && partnerRoles.size() > 0) {
+                partnerRoles.stream().forEach(role -> {
+                    if (role instanceof DefaultEmployee) {
+                        DefaultEmployee employee = (DefaultEmployee) role;
+                        if (employee.getNotifyTo() != null && employee.getNotifyTo().size() > 0) {
+                            Set<String> mgr = employee.getNotifyTo();
+                            Map<String, String> m = new HashMap<String, String>();
+                            mgr.stream().forEach(mg -> {
+                                DefaultPartner partner1 = findOne(tenantId, new AggregateId(mg));
+                                if (partner1 != null) {
+                                    Set<DefaultPartnerRole> roles = partner1.getAllAssignedRoles();
+                                    if (roles != null && roles.size() > 0) {
+                                        roles.stream().forEach(role1 -> {
+                                            if (role1 instanceof DefaultEmployee) {
+                                                DefaultEmployee employee1 = (DefaultEmployee) role1;
+                                                String firstName = employee1.getFirstName();
+                                                String middleName = employee1.getMiddleName();
+                                                String lastName = employee1.getLastName();
+                                                m.put(mg, firstName + (middleName != null ? (" " + middleName) : "") + (" " + lastName));
+                                            }
+                                        });
+                                    }
                                 }
+                            });
+                            if (m.size() > 0) {
+                                employee.setNotificationsTo(m);
                             }
-                        });
-                        if(m.size() > 0) {
-                            employee.setNotificationsTo(m);
                         }
                     }
-                }
-            });
+                });
+            }
         }
         return partner;
     }
