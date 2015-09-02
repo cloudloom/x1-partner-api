@@ -87,7 +87,7 @@ public class DefaultEmployee extends DefaultPartnerRole implements Employee, Ser
 
     @ElementCollection(fetch = FetchType.EAGER)
     @JoinTable(name = "EMPLOYEE_MANAGER", joinColumns = @JoinColumn(name = "PARTNER__ID"))
-    @Column(name = "NOTIFY_TO)")
+    @Column(name = "NOTIFY_TO")
     @Fetch(value = FetchMode.JOIN)
     private Set<String> notifyTo = new HashSet<String>(0);
 
