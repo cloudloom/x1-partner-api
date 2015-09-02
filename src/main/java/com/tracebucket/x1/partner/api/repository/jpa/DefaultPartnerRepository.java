@@ -27,6 +27,11 @@ public interface DefaultPartnerRepository extends BaseAggregateRepository<Defaul
 
     @Query(value = "SELECT p.* FROM PARTNER p INNER JOIN PARTNER_ROLE pr ON p.ID = pr.PARTNER__ID \n" +
             "INNER JOIN PARTNER_EMPLOYEE pe ON pe.PARTNER_ROLE__ID = pr.ID\n" +
+            "WHERE p.ORGANIZATION__ID = :organizationUid and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND (pe.ORGANIZATION_UNIT__ID = :organizationUnitUid)", nativeQuery = true)
+    public List<DefaultPartner> getEmployeesAssignedToOrganizationUnit(@Param("organizationUid") String organizationUid, @Param("organizationUnitUid") String organizationUnitUid);
+
+    @Query(value = "SELECT p.* FROM PARTNER p INNER JOIN PARTNER_ROLE pr ON p.ID = pr.PARTNER__ID \n" +
+            "INNER JOIN PARTNER_EMPLOYEE pe ON pe.PARTNER_ROLE__ID = pr.ID\n" +
             "WHERE p.ORGANIZATION__ID = :organizationUid and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND (pe.ORGANIZATION_UNIT__ID IS NULL AND pe.POSITION__ID IS NULL)", nativeQuery = true)
     public List<DefaultPartner> getEmployeesNotAssignedToOrganizationAndPosition(@Param("organizationUid") String organizationUid);
 

@@ -10,9 +10,7 @@ import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Vishwajit on 10-06-2015.
@@ -86,6 +84,15 @@ public class DefaultEmployee extends DefaultPartnerRole implements Employee, Ser
     @Column(name = "USERNAME", unique = true)
     @Basic(fetch = FetchType.EAGER)
     private String userName;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @JoinTable(name = "EMPLOYEE_MANAGER", joinColumns = @JoinColumn(name = "PARTNER__ID"))
+    @Column(name = "NOTIFY_TO)")
+    @Fetch(value = FetchMode.JOIN)
+    private Set<String> notifyTo = new HashSet<String>(0);
+
+    @Transient
+    private Map<String, String> notificationsTo = new HashMap<String, String>();
 
     public String getEmployeeID() {
         return employeeID;
@@ -219,5 +226,21 @@ public class DefaultEmployee extends DefaultPartnerRole implements Employee, Ser
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public Set<String> getNotifyTo() {
+        return notifyTo;
+    }
+
+    public void setNotifyTo(Set<String> notifyTo) {
+        this.notifyTo = notifyTo;
+    }
+
+    public Map<String, String> getNotificationsTo() {
+        return notificationsTo;
+    }
+
+    public void setNotificationsTo(Map<String, String> notificationsTo) {
+        this.notificationsTo = notificationsTo;
     }
 }

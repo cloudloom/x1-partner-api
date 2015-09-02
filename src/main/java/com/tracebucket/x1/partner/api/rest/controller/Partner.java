@@ -32,6 +32,7 @@ public interface Partner {
     public ResponseEntity<DefaultPartnerResource> addPositionAndOrganization(HttpServletRequest request, String partnerAggregateId, String partnerRoleUid, String positionUid, String organizationUnitUid);
     public ResponseEntity<Set<DefaultPartnerResource>> addPositionAndOrganization(HttpServletRequest request, String organizationUid, List<DefaultPartnerPositionAndOrganizationUnitResource> resource);
     public ResponseEntity<Set<DefaultPartnerResource>> getEmployeesAssignedToOrganizationAndPosition(HttpServletRequest request, String organizationUid, String organizationUnitUid, String positionUid);
+    public ResponseEntity<Set<DefaultPartnerResource>> getEmployeesAssignedToOrganizationUnit(HttpServletRequest request, String organizationUid, String organizationUnitUid);
     public ResponseEntity<Map<Boolean, Set<DefaultPartnerResource>>> getEmployeesAssignedAndNotToOrganizationAndPosition(HttpServletRequest request, String organizationUid, String organizationUnitUid, String positionUid);
     public ResponseEntity<Set<DefaultPartnerResource>> restructureEmployees(HttpServletRequest request, String organizationUid, DefaultEmployeeRestructureResource employeeStructure);
     public ResponseEntity<Map<String, Map<String, Set<DefaultPartnerResource>>>> getEmployeesAssignedToOrganizationAndPosition(HttpServletRequest request, String organizationUid);

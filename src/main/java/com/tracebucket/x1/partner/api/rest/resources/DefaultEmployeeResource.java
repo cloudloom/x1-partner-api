@@ -7,8 +7,7 @@ import com.tracebucket.x1.partner.api.dictionary.Salutation;
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.Date;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Vishwajit on 12-06-2015.
@@ -62,6 +61,10 @@ public class DefaultEmployeeResource extends BaseResource {
     private String searchTerm;
 
     private String userName;
+
+    private Set<String> notifyTo = new HashSet<String>(0);
+
+    private Map<String, String> notificationsTo = new HashMap<String, String>();
 
     public String getEmployeeID() {
         return employeeID;
@@ -221,5 +224,13 @@ public class DefaultEmployeeResource extends BaseResource {
 
     public void setOrganization(String organization) {
         this.organization = organization;
+    }
+
+    public Set<String> getNotifyTo() {
+        return notifyTo;
+    }
+
+    public void setNotifyTo(Set<String> notifyTo) {
+        this.notifyTo = notifyTo;
     }
 }

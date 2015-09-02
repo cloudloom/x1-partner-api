@@ -358,6 +358,23 @@ public class PartnerController implements Partner {
     }
 
     @Override
+    @RequestMapping(value = "/partners/organization/{organizationUid}/organizationUnit/{organizationUnitUid}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Set<DefaultPartnerResource>> getEmployeesAssignedToOrganizationUnit(HttpServletRequest request, @PathVariable("organizationUid") String organizationUid, @PathVariable("organizationUnitUid") String organizationUnitUid) {
+        String tenantId = request.getHeader("tenant_id");
+        if (tenantId != null) {
+            Set<DefaultPartner> partners = partnerService.getEmployeesAssignedToOrganizationUnit(tenantId, new AggregateId(organizationUid), new EntityId(organizationUnitUid));
+            if (partners != null) {
+                Set<DefaultPartnerResource> partnerResources = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResources(partners, DefaultPartnerResource.class);
+                return new ResponseEntity<Set<DefaultPartnerResource>>(partnerResources, HttpStatus.OK);
+            } else {
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @Override
     @RequestMapping(value = "/partners/organization/{organizationUid}/organizationUnit/{organizationUnitUid}/position/{positionUid}/union", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<Boolean, Set<DefaultPartnerResource>>> getEmployeesAssignedAndNotToOrganizationAndPosition(HttpServletRequest request, @PathVariable("organizationUid") String organizationUid, @PathVariable("organizationUnitUid") String organizationUnitUid, @PathVariable("positionUid") String positionUid) {
         String tenantId = request.getHeader("tenant_id");
