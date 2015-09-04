@@ -43,7 +43,7 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
     @Override
     public DefaultPartner findOne(String tenantId, AggregateId aggregateId) {
         DefaultPartner partner = partnerRepository.findOne(aggregateId, tenantId);
-        if(partner != null) {
+/*        if(partner != null) {
             Set<DefaultPartnerRole> partnerRoles = partner.getAllAssignedRoles();
             if (partnerRoles != null && partnerRoles.size() > 0) {
                 partnerRoles.stream().forEach(role -> {
@@ -76,7 +76,7 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
                     }
                 });
             }
-        }
+        }*/
         return partner;
     }
 
@@ -93,7 +93,7 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
     @Override
     public List<DefaultPartner> findAll(String tenantId) {
         List<DefaultPartner> partners = partnerRepository.findAll(tenantId);
-        if(partners != null && partners.size() > 0) {
+/*        if(partners != null && partners.size() > 0) {
             partners.stream().forEach(partner -> {
                 Set<DefaultPartnerRole> partnerRoles = partner.getAllAssignedRoles();
                 if(partnerRoles != null && partnerRoles.size() > 0) {
@@ -128,7 +128,7 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
                     });
                 }
             });
-        }
+        }*/
         return partners;
     }
 
