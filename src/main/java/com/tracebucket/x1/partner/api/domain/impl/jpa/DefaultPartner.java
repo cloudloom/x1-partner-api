@@ -105,6 +105,7 @@ public class DefaultPartner extends BaseAggregateRoot implements Partner{
                 DefaultEmployee employee = (DefaultEmployee) roleFound;
                 employee.getPhone().clear();
                 employee.getEmail().clear();
+                employee.getNotifyTo().clear();
             }
             mapper.map(partnerRole, roleFound);
             ((DefaultEmployee) roleFound).setAsUser(isUser);
