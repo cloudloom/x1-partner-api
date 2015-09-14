@@ -3,6 +3,7 @@ package com.tracebucket.x1.partner.api.rest.controller;
 import com.tracebucket.tron.assembler.AssemblerResolver;
 import com.tracebucket.tron.ddd.domain.AggregateId;
 import com.tracebucket.tron.ddd.domain.EntityId;
+import com.tracebucket.tron.rest.exception.X1Exception;
 import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultAddress;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultEmployee;
@@ -608,7 +609,7 @@ public class PartnerController implements Partner {
                     loggedInEmployee.setLoggedInEmployee(partner);
                     return new ResponseEntity<DefaultLoggedInEmployeeMinimalResource>(loggedInEmployee, HttpStatus.OK);
                 } else {
-                    return new ResponseEntity(HttpStatus.NOT_FOUND);
+                    return new ResponseEntity("User '" + principal.getName() + "' is not mapped to any employee.", HttpStatus.PRECONDITION_REQUIRED);
                 }
             } else {
                 return new ResponseEntity(HttpStatus.UNAUTHORIZED);
