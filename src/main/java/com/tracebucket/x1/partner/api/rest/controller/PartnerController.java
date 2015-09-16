@@ -431,7 +431,7 @@ public class PartnerController implements Partner {
     }
 
     @Override
-    @RequestMapping(value = "/employees/userNames", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/employees/userNames/uids", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, String>> getEmployeesUserNameByPartnerUIDS(HttpServletRequest request, @RequestBody List<String> partnerUIDS) {
         String tenantId = request.getHeader("tenant_id");
         if (tenantId != null) {
