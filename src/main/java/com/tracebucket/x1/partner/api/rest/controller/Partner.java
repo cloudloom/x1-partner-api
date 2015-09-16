@@ -40,6 +40,7 @@ public interface Partner {
     public ResponseEntity<DefaultPartnerResource> addDepartment(HttpServletRequest request, String partnerAggregateId, String partnerRoleUid, String positionUid);
     public ResponseEntity<DefaultPartnerResource> addDepartmentPositionAndOrganizationUnit(HttpServletRequest request, DefaultEmployeeResource employeeResource);
     public ResponseEntity<Set<DefaultPartnerResource>> getEmployeesAssignedToOrganizationUnitAndDepartment(HttpServletRequest request, DefaultEmployeeResource employeeResource);
+    public ResponseEntity<Set<DefaultPartnerResource>> getEmployeesAssignedToOrganizationUnitAndDepartment(HttpServletRequest request, String organizationUnit, String department);
     public ResponseEntity<Set<DefaultPartnerResource>> getEmployeesAssignedToOrganizationUnitAndPositionAndDepartment(HttpServletRequest request, DefaultEmployeeResource employeeResource);
     public ResponseEntity<DefaultPartnerResource> getLoggedInEmployeeDetails(HttpServletRequest request, Principal principal);
     public ResponseEntity<DefaultLoggedInEmployeeMinimalResource> getLoggedInEmployeeMinimalDetails(HttpServletRequest request, Principal principal);

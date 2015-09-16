@@ -17,62 +17,62 @@ public interface DefaultPartnerRepository extends BaseAggregateRepository<Defaul
 
     @Query(value = "SELECT p.* FROM PARTNER p INNER JOIN PARTNER_ROLE pr ON p.ID = pr.PARTNER__ID \n" +
             "INNER JOIN PARTNER_EMPLOYEE pe ON pe.PARTNER_ROLE__ID = pr.ID\n" +
-            "WHERE p.ORGANIZATION__ID = :organizationUid and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND (pe.ORGANIZATION_UNIT__ID = :organizationUnitUid AND pe.POSITION__ID = :positionUid) OR (pe.ORGANIZATION_UNIT__ID IS NULL AND pe.POSITION__ID IS NULL)", nativeQuery = true)
+            "WHERE p.PASSIVE = false and p.ORGANIZATION__ID = :organizationUid and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND (pe.ORGANIZATION_UNIT__ID = :organizationUnitUid AND pe.POSITION__ID = :positionUid) OR (pe.ORGANIZATION_UNIT__ID IS NULL AND pe.POSITION__ID IS NULL)", nativeQuery = true)
     public List<DefaultPartner> getEmployeesAssignedAndNotToOrganizationAndPosition(@Param("organizationUid") String organizationUid, @Param("organizationUnitUid") String organizationUnitUid, @Param("positionUid") String positionUid);
 
     @Query(value = "SELECT p.* FROM PARTNER p INNER JOIN PARTNER_ROLE pr ON p.ID = pr.PARTNER__ID \n" +
             "INNER JOIN PARTNER_EMPLOYEE pe ON pe.PARTNER_ROLE__ID = pr.ID\n" +
-            "WHERE p.ORGANIZATION__ID = :organizationUid and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND (pe.ORGANIZATION_UNIT__ID = :organizationUnitUid AND pe.POSITION__ID = :positionUid)", nativeQuery = true)
+            "WHERE p.PASSIVE = false and p.ORGANIZATION__ID = :organizationUid and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND (pe.ORGANIZATION_UNIT__ID = :organizationUnitUid AND pe.POSITION__ID = :positionUid)", nativeQuery = true)
     public List<DefaultPartner> getEmployeesAssignedToOrganizationAndPosition(@Param("organizationUid") String organizationUid, @Param("organizationUnitUid") String organizationUnitUid, @Param("positionUid") String positionUid);
 
     @Query(value = "SELECT p.* FROM PARTNER p INNER JOIN PARTNER_ROLE pr ON p.ID = pr.PARTNER__ID \n" +
             "INNER JOIN PARTNER_EMPLOYEE pe ON pe.PARTNER_ROLE__ID = pr.ID\n" +
-            "WHERE p.ORGANIZATION__ID = :organizationUid and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND (pe.ORGANIZATION_UNIT__ID = :organizationUnitUid)", nativeQuery = true)
+            "WHERE p.PASSIVE = false and p.ORGANIZATION__ID = :organizationUid and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND (pe.ORGANIZATION_UNIT__ID = :organizationUnitUid)", nativeQuery = true)
     public List<DefaultPartner> getEmployeesAssignedToOrganizationUnit(@Param("organizationUid") String organizationUid, @Param("organizationUnitUid") String organizationUnitUid);
 
     @Query(value = "SELECT p.* FROM PARTNER p INNER JOIN PARTNER_ROLE pr ON p.ID = pr.PARTNER__ID \n" +
             "INNER JOIN PARTNER_EMPLOYEE pe ON pe.PARTNER_ROLE__ID = pr.ID\n" +
-            "WHERE p.ORGANIZATION__ID = :organizationUid and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND (pe.ORGANIZATION_UNIT__ID IS NULL AND pe.POSITION__ID IS NULL)", nativeQuery = true)
+            "WHERE p.PASSIVE = false and p.ORGANIZATION__ID = :organizationUid and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND (pe.ORGANIZATION_UNIT__ID IS NULL AND pe.POSITION__ID IS NULL)", nativeQuery = true)
     public List<DefaultPartner> getEmployeesNotAssignedToOrganizationAndPosition(@Param("organizationUid") String organizationUid);
 
     @Query(value = "SELECT p.* FROM PARTNER p INNER JOIN PARTNER_ROLE pr ON p.ID = pr.PARTNER__ID \n" +
             "INNER JOIN PARTNER_EMPLOYEE pe ON pe.PARTNER_ROLE__ID = pr.ID\n" +
-            "WHERE p.ORGANIZATION__ID = :organizationUid and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND (pe.ORGANIZATION_UNIT__ID IS NOT NULL AND pe.POSITION__ID IS NOT NULL)", nativeQuery = true)
+            "WHERE p.PASSIVE = false and p.ORGANIZATION__ID = :organizationUid and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND (pe.ORGANIZATION_UNIT__ID IS NOT NULL AND pe.POSITION__ID IS NOT NULL)", nativeQuery = true)
     public List<DefaultPartner> getEmployeesAssignedToOrganizationAndPosition(@Param("organizationUid") String organizationUid);
 
     @Query(value = "SELECT p.* FROM PARTNER p INNER JOIN PARTNER_ROLE pr ON p.ID = pr.PARTNER__ID \n" +
             "INNER JOIN PARTNER_EMPLOYEE pe ON pe.PARTNER_ROLE__ID = pr.ID\n" +
-            "WHERE p.ORGANIZATION__ID = :organizationUid and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND (pe.ORGANIZATION_UNIT__ID = :organizationUnitUid AND pe.DEPARTMENT__ID = :departmentUid)", nativeQuery = true)
+            "WHERE p.PASSIVE = false and p.ORGANIZATION__ID = :organizationUid and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND (pe.ORGANIZATION_UNIT__ID = :organizationUnitUid AND pe.DEPARTMENT__ID = :departmentUid)", nativeQuery = true)
     public List<DefaultPartner> getEmployeesAssignedToOrganizationUnitAndDepartment(@Param("organizationUid") String organizationUid, @Param("organizationUnitUid") String organizationUnitUid, @Param("departmentUid") String departmentUid);
 
     @Query(value = "SELECT p.* FROM PARTNER p INNER JOIN PARTNER_ROLE pr ON p.ID = pr.PARTNER__ID \n" +
             "INNER JOIN PARTNER_EMPLOYEE pe ON pe.PARTNER_ROLE__ID = pr.ID\n" +
-            "WHERE p.ORGANIZATION__ID = :organizationUid and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND (pe.ORGANIZATION_UNIT__ID = :organizationUnitUid AND pe.POSITION__ID = :positionUid AND pe.DEPARTMENT__ID = :departmentUid)", nativeQuery = true)
+            "WHERE p.PASSIVE = false and p.ORGANIZATION__ID = :organizationUid and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND (pe.ORGANIZATION_UNIT__ID = :organizationUnitUid AND pe.POSITION__ID = :positionUid AND pe.DEPARTMENT__ID = :departmentUid)", nativeQuery = true)
     public List<DefaultPartner> getEmployeesAssignedToOrganizationUnitAndPositionAndDepartment(@Param("organizationUid") String organizationUid, @Param("organizationUnitUid") String organizationUnitUid, @Param("positionUid") String positionUid, @Param("departmentUid") String departmentUid);
 
     @Query(value = "SELECT p.* FROM PARTNER p INNER JOIN PARTNER_ROLE pr ON p.ID = pr.PARTNER__ID \n" +
             "INNER JOIN PARTNER_EMPLOYEE pe ON pe.PARTNER_ROLE__ID = pr.ID\n" +
-            "WHERE p.ORGANIZATION__ID = :tenantId and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND pe.USERNAME = :username", nativeQuery = true)
+            "WHERE p.PASSIVE = false and p.ORGANIZATION__ID = :tenantId and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND pe.USERNAME = :username", nativeQuery = true)
     public DefaultPartner getLoggedInEmployeeDetails(@Param("tenantId") String tenantId, @Param("username") String username);
 
     @Query(value = "SELECT p.* FROM PARTNER p INNER JOIN PARTNER_ROLE pr ON p.ID = pr.PARTNER__ID \n" +
             "INNER JOIN PARTNER_EMPLOYEE pe ON pe.PARTNER_ROLE__ID = pr.ID\n" +
-            "WHERE p.ORGANIZATION__ID = :tenantId and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND pe.USERNAME IS NULL and pe.IS_USER = false", nativeQuery = true)
+            "WHERE p.PASSIVE = false and p.ORGANIZATION__ID = :tenantId and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND pe.USERNAME IS NULL and pe.IS_USER = false", nativeQuery = true)
     public List<DefaultPartner> getEmployeesWhoAreNotUsers(@Param("tenantId") String tenantId);
 
     @Query(value = "SELECT p.* FROM PARTNER p INNER JOIN PARTNER_ROLE pr ON p.ID = pr.PARTNER__ID \n" +
             "INNER JOIN PARTNER_EMPLOYEE pe ON pe.PARTNER_ROLE__ID = pr.ID\n" +
-            "WHERE p.ORGANIZATION__ID = :tenantId and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND pe.USERNAME = :username and pe.IS_USER = true", nativeQuery = true)
+            "WHERE p.PASSIVE = false and p.ORGANIZATION__ID = :tenantId and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND pe.USERNAME = :username and pe.IS_USER = true", nativeQuery = true)
     public DefaultPartner getEmployeeByUsername(@Param("tenantId") String tenantId, @Param("username") String username);
 
     @Query(value = "SELECT p.* FROM PARTNER p INNER JOIN PARTNER_ROLE pr ON p.ID = pr.PARTNER__ID \n" +
             "INNER JOIN PARTNER_EMPLOYEE pe ON pe.PARTNER_ROLE__ID = pr.ID\n" +
-            "WHERE p.ORGANIZATION__ID = :tenantId and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND p.ID = :partnerUid and pe.PARTNER_ROLE__ID = :roleUid", nativeQuery = true)
+            "WHERE p.PASSIVE = false and p.ORGANIZATION__ID = :tenantId and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND p.ID = :partnerUid and pe.PARTNER_ROLE__ID = :roleUid", nativeQuery = true)
     public DefaultPartner getEmployee(@Param("tenantId") String tenantId, @Param("partnerUid") String partnerUid, @Param("roleUid") String roleUid);
 
 
     @Query(value = "SELECT p.* FROM PARTNER p INNER JOIN PARTNER_ROLE pr ON p.ID = pr.PARTNER__ID \n" +
             "INNER JOIN PARTNER_EMPLOYEE pe ON pe.PARTNER_ROLE__ID = pr.ID\n" +
-            "WHERE p.ORGANIZATION__ID = :tenantId and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND pe.USERNAME IN(:userNames) and pe.IS_USER = true", nativeQuery = true)
+            "WHERE p.PASSIVE = false and p.ORGANIZATION__ID = :tenantId and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND pe.USERNAME IN(:userNames) and pe.IS_USER = true", nativeQuery = true)
     public List<DefaultPartner> getEmployeesByLoginNames(@Param("tenantId") String tenantId, @Param("userNames") List<String> userNames);
 }

@@ -559,7 +559,7 @@ public class PartnerController implements Partner {
     }
 
     @Override
-    @RequestMapping(value = "/partners/organizationUnit/department", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/partners/organizationUnit/department", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Set<DefaultPartnerResource>> getEmployeesAssignedToOrganizationUnitAndDepartment(HttpServletRequest request, @RequestBody DefaultEmployeeResource employeeResource) {
         String tenantId = request.getHeader("tenant_id");
         if (tenantId != null) {
@@ -569,6 +569,27 @@ public class PartnerController implements Partner {
                 return new ResponseEntity<Set<DefaultPartnerResource>>(partnerResources, HttpStatus.OK);
             } else {
                 return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @Override
+    @RequestMapping(value = "/employees/organizationUnit/department", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Set<DefaultPartnerResource>> getEmployeesAssignedToOrganizationUnitAndDepartment(HttpServletRequest request, @RequestParam("organizationUnit") String organizationUnit, @RequestParam("department") String department) {
+        String tenantId = request.getHeader("tenant_id");
+        if (tenantId != null) {
+            if(organizationUnit != null && department != null) {
+                Set<DefaultPartner> partners = partnerService.getEmployeesAssignedToOrganizationUnitAndDepartment(tenantId, new AggregateId(tenantId), new EntityId(organizationUnit), new EntityId(department));
+                if (partners != null) {
+                    Set<DefaultPartnerResource> partnerResources = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResources(partners, DefaultPartnerResource.class);
+                    return new ResponseEntity<Set<DefaultPartnerResource>>(partnerResources, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity(HttpStatus.NOT_FOUND);
+                }
+            } else {
+                throw new X1Exception("Organization Unit And Department Not Specified.", HttpStatus.PRECONDITION_REQUIRED);
             }
         } else {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
