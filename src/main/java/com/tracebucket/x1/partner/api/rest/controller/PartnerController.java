@@ -431,6 +431,22 @@ public class PartnerController implements Partner {
     }
 
     @Override
+    @RequestMapping(value = "/employees/userNames", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, String>> getEmployeesUserNameByPartnerUIDS(HttpServletRequest request, @RequestBody List<String> partnerUIDS) {
+        String tenantId = request.getHeader("tenant_id");
+        if (tenantId != null) {
+            Map<String, String> partners = partnerService.getEmployeesUserNameByPartnerUIDS(tenantId, partnerUIDS);
+            if(partners != null) {
+                return new ResponseEntity<Map<String, String>>(partners, HttpStatus.OK);
+            } else {
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @Override
     @RequestMapping(value = "/employees/organization/{organizationUid}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, Map<String, Set<DefaultPartnerResource>>>> getEmployeesAssignedToOrganizationAndPosition(HttpServletRequest request, @PathVariable("organizationUid") String organizationUid) {
         String tenantId = request.getHeader("tenant_id");

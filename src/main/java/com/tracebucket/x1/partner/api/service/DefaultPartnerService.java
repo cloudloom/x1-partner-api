@@ -8,7 +8,9 @@ import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultOwner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartner;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerPositionAndOrganizationUnitResource;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerUsername;
+import org.springframework.http.ResponseEntity;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -50,4 +52,5 @@ public interface DefaultPartnerService {
     public Set<DefaultPartner> addUsername(String tenantId, List<DefaultPartnerUsername> userNames);
     public DefaultPartner getEmployee(String tenantId, AggregateId partnerAggregateId, EntityId roleEntityId);
     public List<DefaultPartner> getEmployeesByLoginNames(String tenantId, List<String> userNames);
+    public Map<String, String> getEmployeesUserNameByPartnerUIDS(String tenantId, List<String> partnerUIDS);
 }

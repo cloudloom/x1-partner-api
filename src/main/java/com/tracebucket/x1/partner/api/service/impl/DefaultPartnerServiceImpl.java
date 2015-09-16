@@ -91,6 +91,27 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
     }
 
     @Override
+    public Map<String, String> getEmployeesUserNameByPartnerUIDS(String tenantId, List<String> partnerUIDS) {
+        if(partnerUIDS != null && partnerUIDS.size() > 0) {
+            Map<String, String> userNames = new HashMap<String, String>();
+            partnerUIDS.stream().forEach(partnerUid -> {
+                DefaultPartner partner = partnerRepository.findOne(new AggregateId(partnerUid), tenantId);
+                if(partner != null && partner.getAllAssignedRoles() != null) {
+                    Set<DefaultPartnerRole> partnerRoles = partner.getAllAssignedRoles();
+                    partnerRoles.stream().forEach(partnerRole -> {
+                        if(partnerRole instanceof DefaultEmployee) {
+                            DefaultEmployee employee = (DefaultEmployee) partnerRole;
+                            userNames.put(partner.getAggregateId().getAggregateId(), employee.getUserName());
+                        }
+                    });
+                }
+            });
+            return userNames;
+        }
+        return null;
+    }
+
+    @Override
     public List<DefaultPartner> findAll(String tenantId) {
         List<DefaultPartner> partners = partnerRepository.findAll(tenantId);
 /*        if(partners != null && partners.size() > 0) {
