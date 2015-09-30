@@ -5,17 +5,20 @@ import com.tracebucket.tron.ddd.domain.AggregateId;
 import com.tracebucket.tron.ddd.domain.EntityId;
 import com.tracebucket.x1.dictionary.api.domain.Address;
 import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultEmail;
+import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultValidity;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultEmployee;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultOwner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartnerRole;
 import com.tracebucket.x1.partner.api.repository.jpa.DefaultPartnerRepository;
+import com.tracebucket.x1.partner.api.rest.exception.PartnerException;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerPositionAndOrganizationUnitResource;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerUsername;
 import com.tracebucket.x1.partner.api.service.DefaultPartnerService;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -36,6 +39,25 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
 
     @Override
     public DefaultPartner save(String tenantId, DefaultPartner partner) {
+        Set<DefaultPartnerRole> roles = partner.getAllAssignedRoles();
+        if(roles != null && roles.size() > 0) {
+            roles.stream().forEach(role -> {
+                if(role instanceof DefaultEmployee) {
+                    DefaultEmployee employee = (DefaultEmployee) role;
+                    DefaultValidity validity = employee.getValidity();
+                    if(validity != null && validity.getValidFrom() != null && validity.getValidTill() != null) {
+                        if(validity.getValidFrom().after(validity.getValidTill())) {
+                            throw new PartnerException("Valid From Should Be Less Than Valid Till.", HttpStatus.PRECONDITION_REQUIRED);
+                        }
+                    }
+                    if(employee.getDateOfBirth() != null) {
+                        if(employee.getDateOfBirth().after(new Date())) {
+                            throw new PartnerException("Date Of Birth Cannot Be In Future.", HttpStatus.PRECONDITION_REQUIRED);
+                        }
+                    }
+                }
+            });
+        }
         partner.setOwner(new DefaultOwner(tenantId));
         return partnerRepository.save(partner);
     }
@@ -204,6 +226,25 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
     @Override
     @PersistChanges(repository = "partnerRepository")
     public DefaultPartner updatePartnerRole(String tenantId, DefaultPartner updatePartnerRole, EntityId partnerRoleEntityId) {
+        Set<DefaultPartnerRole> roles = updatePartnerRole.getAllAssignedRoles();
+        if(roles != null && roles.size() > 0) {
+            roles.stream().forEach(role -> {
+                if(role instanceof DefaultEmployee) {
+                    DefaultEmployee employee = (DefaultEmployee) role;
+                    DefaultValidity validity = employee.getValidity();
+                    if(validity != null && validity.getValidFrom() != null && validity.getValidTill() != null) {
+                        if(validity.getValidFrom().after(validity.getValidTill())) {
+                            throw new PartnerException("Valid From Should Be Less Than Valid Till.", HttpStatus.PRECONDITION_REQUIRED);
+                        }
+                    }
+                    if(employee.getDateOfBirth() != null) {
+                        if(employee.getDateOfBirth().after(new Date())) {
+                            throw new PartnerException("Date Of Birth Cannot Be In Future.", HttpStatus.PRECONDITION_REQUIRED);
+                        }
+                    }
+                }
+            });
+        }
         DefaultPartner partner = partnerRepository.findOne(updatePartnerRole.getAggregateId(), tenantId);
         if(partner != null) {
             Set<DefaultPartnerRole> partnerRoles = updatePartnerRole.getAllAssignedRoles();
