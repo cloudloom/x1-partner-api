@@ -4,8 +4,10 @@ import com.tracebucket.tron.ddd.domain.AggregateId;
 import com.tracebucket.tron.ddd.domain.EntityId;
 import com.tracebucket.x1.dictionary.api.domain.Address;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
+import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultEmployee;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultOwner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartner;
+import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartnerRole;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerPositionAndOrganizationUnitResource;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerUsername;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ import java.util.*;
 public interface DefaultPartnerService {
     public DefaultPartner save(String tenantId, DefaultPartner partner);
     public DefaultPartner findOne(String tenantId, AggregateId aggregateId);
+    public DefaultPartnerRole getPartnerRole(String tenantId, AggregateId aggregateId, EntityId entityId);
     public List<DefaultPartner> findAll(String tenantId);
     public boolean delete(String tenantId, AggregateId partnerAggregateId);
     public DefaultPartner setPartnerCategory(String tenantId, PartnerCategory partnerCategory, AggregateId partnerAggregateId);
@@ -50,7 +53,6 @@ public interface DefaultPartnerService {
     public Map<String, String> getLoggedInEmployeeMinimalDetails(String tenantId, String username);
     public List<DefaultPartner> getEmployeesWhoAreNotUsers(String tenantId);
     public Set<DefaultPartner> addUsername(String tenantId, List<DefaultPartnerUsername> userNames);
-    public DefaultPartner getEmployee(String tenantId, AggregateId partnerAggregateId, EntityId roleEntityId);
     public List<DefaultPartner> getEmployeesByLoginNames(String tenantId, List<String> userNames);
     public Map<String, String> getEmployeesUserNameByPartnerUIDS(String tenantId, List<String> partnerUIDS);
 }

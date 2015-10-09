@@ -79,6 +79,24 @@ public class PartnerController implements Partner {
         }
     }
 
+    @RequestMapping(value = "/partner/{partnerUid}/role/{roleUid}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DefaultPartnerRoleResource> getPartnerRole(HttpServletRequest request, @PathVariable("partnerUid") String partnerUid, @PathVariable("roleUid") String roleUid) {
+        String tenantId = request.getHeader("tenant_id");
+        if (tenantId != null) {
+            DefaultPartnerRole partnerRole = partnerService.getPartnerRole(tenantId, new AggregateId(partnerUid), new EntityId(roleUid));
+            DefaultPartnerRoleResource partnerRoleResource = null;
+
+            if (partnerRole != null) {
+                partnerRoleResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerRoleResource.class, DefaultPartnerRole.class).toResource(partnerRole, DefaultPartnerRoleResource.class);
+                return new ResponseEntity<DefaultPartnerRoleResource>(partnerRoleResource, HttpStatus.OK);
+            } else {
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
     @RequestMapping(value = "/partners", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Set<DefaultPartnerResource>> findAll(HttpServletRequest request) {
         String tenantId = request.getHeader("tenant_id");
@@ -240,7 +258,7 @@ public class PartnerController implements Partner {
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
-    @RequestMapping(value = "/partner/{partnerUid}/role/{roleUid}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/partner/{partnerUid}/has/role/{roleUid}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Boolean> hasPartnerRole(HttpServletRequest request, @PathVariable("partnerUid") String partnerAggregateId, @PathVariable("roleUid") String roleEntityId) {
         String tenantId = request.getHeader("tenant_id");
         if (tenantId != null) {
