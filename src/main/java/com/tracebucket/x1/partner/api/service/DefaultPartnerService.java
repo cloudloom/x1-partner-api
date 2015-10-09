@@ -21,7 +21,7 @@ import java.util.*;
 public interface DefaultPartnerService {
     public DefaultPartner save(String tenantId, DefaultPartner partner);
     public DefaultPartner findOne(String tenantId, AggregateId aggregateId);
-    public DefaultPartnerRole getPartnerRole(String tenantId, AggregateId aggregateId, EntityId entityId);
+    public DefaultEmployee getEmployee(String tenantId, AggregateId aggregateId, EntityId entityId);
     public List<DefaultPartner> findAll(String tenantId);
     public boolean delete(String tenantId, AggregateId partnerAggregateId);
     public DefaultPartner setPartnerCategory(String tenantId, PartnerCategory partnerCategory, AggregateId partnerAggregateId);

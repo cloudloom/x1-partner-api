@@ -103,14 +103,14 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
     }
 
     @Override
-    public DefaultPartnerRole getPartnerRole(String tenantId, AggregateId aggregateId, EntityId entityId) {
+    public DefaultEmployee getEmployee(String tenantId, AggregateId aggregateId, EntityId entityId) {
         DefaultPartner partner = partnerRepository.findOne(aggregateId, tenantId);
         if(partner != null) {
             Set<DefaultPartnerRole> partnerRoles = partner.getAllAssignedRoles();
             if(partnerRoles != null && partnerRoles.size() > 0) {
                 DefaultPartnerRole partnerRole = partnerRoles.stream().filter(role -> role.getEntityId().equals(entityId)).findFirst().orElse(null);
-                if(partnerRole != null) {
-                    return partnerRole;
+                if(partnerRole != null && partnerRole instanceof DefaultEmployee) {
+                    return (DefaultEmployee)partnerRole;
                 }
             }
         }

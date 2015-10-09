@@ -48,4 +48,5 @@ public interface Partner {
     public ResponseEntity<Set<DefaultPartnerResource>> getEmployeesByLoginNames(HttpServletRequest request, List<String> userNames);
     public ResponseEntity<Set<DefaultPartnerResource>> addEmployeesToPositions(HttpServletRequest request, String organizationUid, DefaultEmployeeRestructureResource employeeStructure);
     public ResponseEntity<Map<String, String>> getEmployeesUserNameByPartnerUIDS(HttpServletRequest request, List<String> partnerUIDS);
+    public ResponseEntity<DefaultEmployeeResource> getEmployee(HttpServletRequest request, String partnerUid, String roleUid);
 }

@@ -79,16 +79,16 @@ public class PartnerController implements Partner {
         }
     }
 
-    @RequestMapping(value = "/partner/{partnerUid}/role/{roleUid}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DefaultPartnerRoleResource> getPartnerRole(HttpServletRequest request, @PathVariable("partnerUid") String partnerUid, @PathVariable("roleUid") String roleUid) {
+    @RequestMapping(value = "/partner/{partnerUid}/employee/{roleUid}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DefaultEmployeeResource> getEmployee(HttpServletRequest request, @PathVariable("partnerUid") String partnerUid, @PathVariable("roleUid") String roleUid) {
         String tenantId = request.getHeader("tenant_id");
         if (tenantId != null) {
-            DefaultPartnerRole partnerRole = partnerService.getPartnerRole(tenantId, new AggregateId(partnerUid), new EntityId(roleUid));
-            DefaultPartnerRoleResource partnerRoleResource = null;
+            DefaultEmployee employee = partnerService.getEmployee(tenantId, new AggregateId(partnerUid), new EntityId(roleUid));
+            DefaultEmployeeResource employeeResource = null;
 
-            if (partnerRole != null) {
-                partnerRoleResource = assemblerResolver.resolveResourceAssembler(DefaultPartnerRoleResource.class, DefaultPartnerRole.class).toResource(partnerRole, DefaultPartnerRoleResource.class);
-                return new ResponseEntity<DefaultPartnerRoleResource>(partnerRoleResource, HttpStatus.OK);
+            if (employee != null) {
+                employeeResource = assemblerResolver.resolveResourceAssembler(DefaultEmployeeResource.class, DefaultEmployee.class).toResource(employee, DefaultEmployeeResource.class);
+                return new ResponseEntity<DefaultEmployeeResource>(employeeResource, HttpStatus.OK);
             } else {
                 return new ResponseEntity(HttpStatus.NOT_FOUND);
             }
