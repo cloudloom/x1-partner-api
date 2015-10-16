@@ -5,6 +5,8 @@ import com.tracebucket.tron.assembler.BaseResource;
 import com.tracebucket.x1.partner.api.dictionary.Salutation;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.*;
@@ -19,15 +21,15 @@ public class DefaultEmployeeResource extends BaseResource {
     private Salutation salutation;
 
     @Size(min = 1, max = 250)
-    @Pattern(regexp = "^[A-Za-z]*$")
+    @Pattern(regexp = "^[A-Za-z \\-]*$")
     protected String firstName;
 
     @Size(min = 1, max = 250)
-    @Pattern(regexp = "^[A-Za-z]*$")
+    @Pattern(regexp = "^[A-Za-z \\-]*$")
     protected String lastName;
 
 /*    @Size(min = 1, max = 250)
-    @Pattern(regexp = "^[A-Za-z]*$")*/
+    @Pattern(regexp = "^[A-Za-z \\-]*$")*/
     protected String middleName;
 
     @Valid
@@ -52,8 +54,10 @@ public class DefaultEmployeeResource extends BaseResource {
 
     private String roleUid;
 
+    @Valid
     private DefaultValidityResource validity;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @Past
     private Date dateOfBirth;
     private boolean user;
 
