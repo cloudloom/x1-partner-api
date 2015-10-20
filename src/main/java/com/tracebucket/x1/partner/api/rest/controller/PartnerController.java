@@ -98,7 +98,7 @@ public class PartnerController implements Partner {
     }
 
     @Override
-    @RequestMapping(value = "/notificationsTo/{userName}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/reporting/managers/{userName}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DefaultNotifyTo> notifyToByUsername(HttpServletRequest request, @PathVariable("userName")String userName) {
 /*        String tenantId = request.getHeader("tenant_id");
         if (tenantId != null) {
