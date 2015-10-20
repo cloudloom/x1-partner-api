@@ -97,6 +97,22 @@ public class PartnerController implements Partner {
         }
     }
 
+    @Override
+    @RequestMapping(value = "/notificationsTo/{userName}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DefaultNotifyTo> notifyToByUsername(HttpServletRequest request, @PathVariable("userName")String userName) {
+/*        String tenantId = request.getHeader("tenant_id");
+        if (tenantId != null) {
+            DefaultNotifyTo notifyTo = partnerService.notifyToByUsername(tenantId, userName);*/
+            DefaultNotifyTo notifyTo = partnerService.notifyToByUsername(null, userName);
+            if (notifyTo != null) {
+                return new ResponseEntity<DefaultNotifyTo>(notifyTo, HttpStatus.OK);
+            }
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        /*} else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }*/
+    }
+
     @RequestMapping(value = "/partners", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Set<DefaultPartnerResource>> findAll(HttpServletRequest request) {
         String tenantId = request.getHeader("tenant_id");

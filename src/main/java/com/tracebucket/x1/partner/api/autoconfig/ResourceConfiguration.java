@@ -29,6 +29,7 @@ public class ResourceConfiguration extends ResourceServerConfigurerAdapter {
                 // will respond with an HTTP 401 nonetheless.
                 // So we just put all other requests types under OAuth control and exclude OPTIONS.
 				.authorizeRequests()
+                .antMatchers("/notificationsTo/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/**").access("#oauth2.hasAnyScopeMatching('partner-read', 'scheduler-read')")
                 .antMatchers(HttpMethod.POST, "/**").access("#oauth2.hasScope('partner-write')")
                 .antMatchers(HttpMethod.PATCH, "/**").access("#oauth2.hasScope('partner-write')")

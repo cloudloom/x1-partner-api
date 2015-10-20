@@ -5,6 +5,7 @@ import com.tracebucket.tron.ddd.domain.AggregateId;
 import com.tracebucket.tron.ddd.domain.EntityId;
 import com.tracebucket.x1.dictionary.api.domain.Address;
 import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultEmail;
+import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultPhone;
 import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultValidity;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultEmployee;
@@ -13,6 +14,7 @@ import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartner;
 import com.tracebucket.x1.partner.api.domain.impl.jpa.DefaultPartnerRole;
 import com.tracebucket.x1.partner.api.repository.jpa.DefaultPartnerRepository;
 import com.tracebucket.x1.partner.api.rest.exception.PartnerException;
+import com.tracebucket.x1.partner.api.rest.resources.DefaultNotifyTo;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerPositionAndOrganizationUnitResource;
 import com.tracebucket.x1.partner.api.rest.resources.DefaultPartnerUsername;
 import com.tracebucket.x1.partner.api.service.DefaultPartnerService;
@@ -139,6 +141,55 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
                 }
             });
             return userNames;
+        }
+        return null;
+    }
+
+    @Override
+    public DefaultNotifyTo notifyToByUsername(String tenantId, String userName) {
+        List<String> userNames = new ArrayList<String>();
+        userNames.add(userName);
+        List<DefaultPartner> employees = partnerRepository.getEmployeesByLoginNames(userNames);
+        if(employees != null && employees.size() == 1) {
+            DefaultPartner partner = employees.get(0);
+            Set<DefaultPartnerRole> partnerRoles = partner.getAllAssignedRoles();
+            if(partnerRoles != null && partnerRoles.size() > 0) {
+                for(DefaultPartnerRole partnerRole : partnerRoles) {
+                    if(partnerRole instanceof DefaultEmployee) {
+                        DefaultEmployee employee = (DefaultEmployee) partnerRole;
+                        Set<String> notifyTo = employee.getNotifyTo();
+                        if(notifyTo != null && notifyTo.size() > 0) {
+                            DefaultNotifyTo defaultNotifyTo = new DefaultNotifyTo();
+                            notifyTo.stream().forEach(to -> {
+                                DefaultPartner reportingManager = partnerRepository.findOne(new AggregateId(to));
+                                if(reportingManager != null) {
+                                    Set<DefaultPartnerRole> partnerRoles1 = reportingManager.getAllAssignedRoles();
+                                    if(partnerRoles1 != null && partnerRoles1.size() > 0) {
+                                        partnerRoles1.stream().forEach(partnerRole1 -> {
+                                            if(partnerRole1 instanceof DefaultEmployee) {
+                                                DefaultEmployee reportingEmployee = (DefaultEmployee) partnerRole1;
+                                                Set<DefaultEmail> emails = reportingEmployee.getEmail();
+                                                if(emails != null && emails.size() > 0) {
+                                                    emails.stream().forEach(email -> {
+                                                        defaultNotifyTo.getEmails().add(email.getEmail());
+                                                    });
+                                                }
+                                                Set<DefaultPhone> phones = reportingEmployee.getPhone();
+                                                if(phones != null && phones.size() > 0) {
+                                                    phones.stream().forEach(phone -> {
+                                                        defaultNotifyTo.getPhoneNos().add(phone.getNumber());
+                                                    });
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                            return defaultNotifyTo;
+                        }
+                    }
+                }
+            }
         }
         return null;
     }
