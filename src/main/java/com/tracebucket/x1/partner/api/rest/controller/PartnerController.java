@@ -631,6 +631,32 @@ public class PartnerController implements Partner {
     }
 
     @Override
+    @RequestMapping(value = "/employees/users/organizationUnit/department", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Set<DefaultPartnerResource>> getEmployeeUsersAssignedToOrganizationUnitAndDepartment(HttpServletRequest request, @RequestParam(value = "organizationUnit", required = false) String organizationUnit, @RequestParam(value = "department", required = false) String department) {
+        String tenantId = request.getHeader("tenant_id");
+        if (tenantId != null) {
+            Set<DefaultPartner> partners = null;
+            if(organizationUnit != null && department != null) {
+                partners = partnerService.getEmployeeUsersAssignedToOrganizationUnitAndDepartment(tenantId, new AggregateId(tenantId), new EntityId(organizationUnit), new EntityId(department));
+            } else if(organizationUnit != null && department == null) {
+                partners = partnerService.getEmployeeUsersAssignedToOrganizationUnit(tenantId, new AggregateId(tenantId), new EntityId(organizationUnit));
+            } else if(organizationUnit == null && department == null) {
+                partners = partnerService.getEmployeeUsers(tenantId, new AggregateId(tenantId));
+            } else if(organizationUnit == null && department != null) {
+                throw new X1Exception("Organization Unit Not Specified. Specify Organization Unit Before Selecting Department.", HttpStatus.PRECONDITION_REQUIRED);
+            }
+            if (partners != null) {
+                Set<DefaultPartnerResource> partnerResources = assemblerResolver.resolveResourceAssembler(DefaultPartnerResource.class, DefaultPartner.class).toResources(partners, DefaultPartnerResource.class);
+                return new ResponseEntity<Set<DefaultPartnerResource>>(partnerResources, HttpStatus.OK);
+            } else {
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @Override
     @RequestMapping(value = "/partners/organizationUnit/position/department", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Set<DefaultPartnerResource>> getEmployeesAssignedToOrganizationUnitAndPositionAndDepartment(HttpServletRequest request, DefaultEmployeeResource employeeResource) {
         String tenantId = request.getHeader("tenant_id");

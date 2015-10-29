@@ -47,6 +47,21 @@ public interface DefaultPartnerRepository extends BaseAggregateRepository<Defaul
 
     @Query(value = "SELECT p.* FROM PARTNER p INNER JOIN PARTNER_ROLE pr ON p.ID = pr.PARTNER__ID \n" +
             "INNER JOIN PARTNER_EMPLOYEE pe ON pe.PARTNER_ROLE__ID = pr.ID\n" +
+            "WHERE p.PASSIVE = false and p.ORGANIZATION__ID = :organizationUid and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND (pe.ORGANIZATION_UNIT__ID = :organizationUnitUid AND pe.DEPARTMENT__ID = :departmentUid AND pe.IS_USER = true AND pe.USERNAME IS NOT NULL)", nativeQuery = true)
+    public List<DefaultPartner> getEmployeeUsersAssignedToOrganizationUnitAndDepartment(@Param("organizationUid") String organizationUid, @Param("organizationUnitUid") String organizationUnitUid, @Param("departmentUid") String departmentUid);
+
+    @Query(value = "SELECT p.* FROM PARTNER p INNER JOIN PARTNER_ROLE pr ON p.ID = pr.PARTNER__ID \n" +
+            "INNER JOIN PARTNER_EMPLOYEE pe ON pe.PARTNER_ROLE__ID = pr.ID\n" +
+            "WHERE p.PASSIVE = false and p.ORGANIZATION__ID = :organizationUid and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND (pe.ORGANIZATION_UNIT__ID = :organizationUnitUid AND pe.IS_USER = true AND pe.USERNAME IS NOT NULL)", nativeQuery = true)
+    public List<DefaultPartner> getEmployeeUsersAssignedToOrganizationUnit(@Param("organizationUid") String organizationUid, @Param("organizationUnitUid") String organizationUnitUid);
+
+    @Query(value = "SELECT p.* FROM PARTNER p INNER JOIN PARTNER_ROLE pr ON p.ID = pr.PARTNER__ID \n" +
+            "INNER JOIN PARTNER_EMPLOYEE pe ON pe.PARTNER_ROLE__ID = pr.ID\n" +
+            "WHERE p.PASSIVE = false and p.ORGANIZATION__ID = :organizationUid and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND (pe.IS_USER = true AND pe.USERNAME IS NOT NULL)", nativeQuery = true)
+    public List<DefaultPartner> getEmployeeUsers(@Param("organizationUid") String organizationUid);
+
+    @Query(value = "SELECT p.* FROM PARTNER p INNER JOIN PARTNER_ROLE pr ON p.ID = pr.PARTNER__ID \n" +
+            "INNER JOIN PARTNER_EMPLOYEE pe ON pe.PARTNER_ROLE__ID = pr.ID\n" +
             "WHERE p.PASSIVE = false and p.ORGANIZATION__ID = :organizationUid and pr.PARTNER_ROLE = 'PARTNER_EMPLOYEE' AND (pe.ORGANIZATION_UNIT__ID = :organizationUnitUid AND pe.POSITION__ID = :positionUid AND pe.DEPARTMENT__ID = :departmentUid)", nativeQuery = true)
     public List<DefaultPartner> getEmployeesAssignedToOrganizationUnitAndPositionAndDepartment(@Param("organizationUid") String organizationUid, @Param("organizationUnitUid") String organizationUnitUid, @Param("positionUid") String positionUid, @Param("departmentUid") String departmentUid);
 

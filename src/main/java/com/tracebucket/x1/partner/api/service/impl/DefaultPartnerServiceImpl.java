@@ -818,6 +818,33 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
     }
 
     @Override
+    public Set<DefaultPartner> getEmployeeUsersAssignedToOrganizationUnitAndDepartment(String tenantId, AggregateId organizationUid, EntityId organizationUnitUid, EntityId departmentUid) {
+        List<DefaultPartner> partners = partnerRepository.getEmployeeUsersAssignedToOrganizationUnitAndDepartment(organizationUid.getAggregateId(), organizationUnitUid.getId(), departmentUid.getId());
+        if(partners != null && partners.size() > 0) {
+            return new HashSet<>(partners);
+        }
+        return null;
+    }
+
+    @Override
+    public Set<DefaultPartner> getEmployeeUsersAssignedToOrganizationUnit(String tenantId, AggregateId organizationUid, EntityId organizationUnitUid) {
+        List<DefaultPartner> partners = partnerRepository.getEmployeeUsersAssignedToOrganizationUnit(organizationUid.getAggregateId(), organizationUnitUid.getId());
+        if(partners != null && partners.size() > 0) {
+            return new HashSet<>(partners);
+        }
+        return null;
+    }
+
+    @Override
+    public Set<DefaultPartner> getEmployeeUsers(String tenantId, AggregateId organizationUid) {
+        List<DefaultPartner> partners = partnerRepository.getEmployeeUsers(organizationUid.getAggregateId());
+        if(partners != null && partners.size() > 0) {
+            return new HashSet<>(partners);
+        }
+        return null;
+    }
+
+    @Override
     public Set<DefaultPartner> getEmployeesAssignedToOrganizationUnitAndPositionAndDepartment(String tenantId, AggregateId organizationUid, EntityId organizationUnitUid, EntityId positionUid, EntityId departmentUid) {
         List<DefaultPartner> partners = partnerRepository.getEmployeesAssignedToOrganizationUnitAndPositionAndDepartment(organizationUid.getAggregateId(), organizationUnitUid.getId(), positionUid.getId(), departmentUid.getId());
         if(partners != null && partners.size() > 0) {

@@ -3,6 +3,7 @@ package com.tracebucket.x1.partner.api.rest.controller;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
 import com.tracebucket.x1.partner.api.rest.resources.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
@@ -41,6 +42,7 @@ public interface Partner {
     public ResponseEntity<DefaultPartnerResource> addDepartmentPositionAndOrganizationUnit(HttpServletRequest request, DefaultEmployeeResource employeeResource);
     public ResponseEntity<Set<DefaultPartnerResource>> getEmployeesAssignedToOrganizationUnitAndDepartment(HttpServletRequest request, DefaultEmployeeResource employeeResource);
     public ResponseEntity<Set<DefaultPartnerResource>> getEmployeesAssignedToOrganizationUnitAndDepartment(HttpServletRequest request, String organizationUnit, String department);
+    public ResponseEntity<Set<DefaultPartnerResource>> getEmployeeUsersAssignedToOrganizationUnitAndDepartment(HttpServletRequest request, String organizationUnit, String department);
     public ResponseEntity<Set<DefaultPartnerResource>> getEmployeesAssignedToOrganizationUnitAndPositionAndDepartment(HttpServletRequest request, DefaultEmployeeResource employeeResource);
     public ResponseEntity<DefaultPartnerResource> getLoggedInEmployeeDetails(HttpServletRequest request, Principal principal);
     public ResponseEntity<DefaultLoggedInEmployeeMinimalResource> getLoggedInEmployeeMinimalDetails(HttpServletRequest request, Principal principal);
