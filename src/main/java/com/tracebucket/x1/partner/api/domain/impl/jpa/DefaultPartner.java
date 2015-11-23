@@ -6,6 +6,7 @@ import com.tracebucket.tron.ddd.domain.EntityId;
 import com.tracebucket.x1.dictionary.api.domain.Address;
 import com.tracebucket.x1.dictionary.api.domain.jpa.impl.DefaultAddress;
 import com.tracebucket.x1.partner.api.dictionary.PartnerCategory;
+import com.tracebucket.x1.partner.api.dictionary.enums.converter.PartnerCategoryConverter;
 import com.tracebucket.x1.partner.api.domain.Partner;
 import org.dozer.Mapper;
 import org.hibernate.annotations.Fetch;
@@ -34,8 +35,8 @@ public class DefaultPartner extends BaseAggregateRoot implements Partner{
     @Basic(fetch = FetchType.EAGER)
     protected String website;
 
-    @Column(name = "PARTNER_CATEGORY", nullable = false, columnDefinition = "ENUM('INDIVIDUAL', 'GROUP', 'ORGANIZATION') default 'ORGANIZATION'")
-    @Enumerated(EnumType.STRING)
+    @Column(name = "PARTNER_CATEGORY")
+    @Convert(converter = PartnerCategoryConverter.class)
     @Basic(fetch = FetchType.EAGER)
     protected PartnerCategory partnerCategory;
 
