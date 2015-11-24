@@ -5,6 +5,7 @@ import com.tracebucket.tron.ddd.jpa.CustomRepositoryFactoryBean;
 import com.tracebucket.tron.embedded.mysql.EmbeddedMysqlDatabaseBuilder;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.h2.Driver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +13,7 @@ import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.*;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
@@ -41,16 +43,27 @@ import java.beans.PropertyVetoException;
 public class JpaDevConfiguration {
     private static final Logger log = LoggerFactory.getLogger(JpaDevConfiguration.class);
 
-    @Value("${dialect}")
-    private String dialect;
     @Value("${show_sql}")
     private String showSql;
     @Value("${generateDdl}")
     private String generateDdl;
+    @Value("${db.username}")
+    private String userName;
+    @Value("${db.password}")
+    private String password;
+    @Value("${db.name}")
+    private String dbName;
+    @Value("${user.home}")
+    private String homeDirectory;
 
-    @Bean(destroyMethod = "shutdown")
-    public EmbeddedDatabase dataSource() {
-        return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2).build();
+    @Bean
+    public DataSource dataSource() {
+        SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
+        dataSource.setUsername(userName);
+        dataSource.setPassword(password);
+        dataSource.setUrl("jdbc:h2:file:" + homeDirectory + "/" + dbName + ";AUTO_SERVER=TRUE");
+        dataSource.setDriverClass(Driver.class);
+        return dataSource;
     }
 
     @Bean
@@ -59,7 +72,6 @@ public class JpaDevConfiguration {
         HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
         jpaVendorAdapter.setShowSql(Boolean.parseBoolean(showSql));
         jpaVendorAdapter.setGenerateDdl(Boolean.parseBoolean(generateDdl));
-        jpaVendorAdapter.setDatabasePlatform(dialect);
         return jpaVendorAdapter;
     }
 
