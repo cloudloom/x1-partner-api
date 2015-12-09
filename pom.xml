@@ -6,7 +6,7 @@
 
     <groupId>com.tracebucket.x1.partner</groupId>
     <artifactId>x1-partner-api</artifactId>
-    <version>2.1</version>
+    <version>2.2</version>
     <packaging>jar</packaging>
     <name>x1-partner-api</name>
     <description>X1 Partner API and Default implementation</description>
