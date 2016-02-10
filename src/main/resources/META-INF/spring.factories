@@ -7,5 +7,4 @@ com.tracebucket.x1.partner.api.autoconfig.JpaStagingConfiguration,\
 com.tracebucket.x1.partner.api.autoconfig.ServiceConfiguration,\
 com.tracebucket.x1.partner.api.autoconfig.WebConfiguration,\
 com.tracebucket.x1.partner.api.autoconfig.ExceptionAdviceConfiguration,\
-com.tracebucket.x1.partner.api.autoconfig.ResourceConfiguration,\
 com.tracebucket.x1.partner.api.autoconfig.I18NConfiguration
