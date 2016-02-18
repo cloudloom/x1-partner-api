@@ -48,7 +48,7 @@ public class PartnerController implements Partner {
             try {
                 partner = partnerService.save(tenantId, partner);
             } catch (DataIntegrityViolationException dive) {
-                throw new PartnerException("Partner With title : " + partnerResource.getTitle() + "Exists", HttpStatus.CONFLICT);
+                throw new PartnerException(dive.getMessage(), HttpStatus.CONFLICT);
             }
 
             if (partner != null) {
