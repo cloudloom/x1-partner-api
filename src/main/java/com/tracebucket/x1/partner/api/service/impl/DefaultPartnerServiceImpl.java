@@ -557,7 +557,7 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
         if(tenantId.equals(organizationUid.getAggregateId())) {
             Map<Boolean, Set<DefaultPartner>> partners = new HashMap<Boolean, Set<DefaultPartner>>();
             List<DefaultPartner> partnersAssigned = partnerRepository.getEmployeesAssignedToOrganizationAndPosition(organizationUid.getAggregateId(), organizationUnitUid.getId(), positionUid.getId());
-            List<DefaultPartner> partnersNotAssigned = partnerRepository.getEmployeesNotAssignedToOrganizationAndPosition(organizationUid.getAggregateId());
+            List<DefaultPartner> partnersNotAssigned = partnerRepository.getEmployeesNotAssignedToOrganizationAndPosition(organizationUid.getAggregateId(), organizationUnitUid.getId());
             if(partnersAssigned != null) {
                 partners.put(true, new HashSet<>(partnersAssigned));
             }
