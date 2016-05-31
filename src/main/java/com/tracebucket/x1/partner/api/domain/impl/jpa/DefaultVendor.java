@@ -40,10 +40,6 @@ public class DefaultVendor extends DefaultPartnerRole implements Vendor,Serializ
     @Basic(fetch = FetchType.EAGER)
     protected String middleName;
 
-    @Column(name = "ADDRESS")
-    @Basic(fetch = FetchType.EAGER)
-    protected Address address;
-
     @ElementCollection(fetch = FetchType.EAGER)
     @JoinTable(name = "VENDOR_PHONE", joinColumns = @JoinColumn(name = "PARTNER__ID"))
     @Fetch(value = FetchMode.JOIN)
@@ -106,14 +102,6 @@ public class DefaultVendor extends DefaultPartnerRole implements Vendor,Serializ
 
     public void setMiddleName(String middleName) {
         this.middleName = middleName;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
     }
 
     public Set<DefaultPhone> getPhone() {

@@ -45,6 +45,8 @@ public class DefaultPartnerResource extends BaseResource{
 
     private DefaultTransportProviderResource transportProvider;
 
+    private DefaultVendorResource vendor;
+
     @Valid
     private DefaultEmployeeResource employee;
 
@@ -142,5 +144,13 @@ public class DefaultPartnerResource extends BaseResource{
 
     public void setEmployee(DefaultEmployeeResource employee) {
         this.employee = employee;
+    }
+
+    public DefaultVendorResource getVendor() {
+        return vendor;
+    }
+
+    public void setVendor(DefaultVendorResource vendor) {
+        this.vendor = vendor;
     }
 }

@@ -16,26 +16,16 @@ public class DefaultVendorResource extends BaseResource {
     private static final String simpleName = "Vendor";
     private String vendorID;
 
-    @Size(min = 1, max = 250)
-    @Pattern(regexp = "^[A-Za-z \\-]*$")
     protected String firstName;
-
-    @Size(min = 1, max = 250)
-    @Pattern(regexp = "^[A-Za-z \\-]*$")
 
     protected String lastName;
 
-    @Size(min = 1, max = 250)
-    @Pattern(regexp = "^[A-Za-z \\-]*$")
     protected String middleName;
 
-    @Valid
     private Set<DefaultPhoneResource> phones;
 
-    @Valid
     private Set<DefaultEmailResource> email;
 
-    @Valid
     private Set<DefaultAddressResource> addresses;
     private String organizationUnit;
     private boolean user;
