@@ -125,6 +125,14 @@ public class DefaultPartnerServiceImpl implements DefaultPartnerService {
     }
 
     @Override
+    public Boolean isUserAnEmployee(String tenantId, String userName) {
+        List<DefaultPartner> employees = partnerRepository.getEmployeesByLoginNames(tenantId, Arrays.asList(userName));
+        if(employees != null && employees.size() > 0)
+            return true;
+        return false;
+    }
+
+    @Override
     public Map<String, String> getEmployeesUserNameByPartnerUIDS(String tenantId, List<String> partnerUIDS) {
         if(partnerUIDS != null && partnerUIDS.size() > 0) {
             Map<String, String> userNames = new HashMap<String, String>();

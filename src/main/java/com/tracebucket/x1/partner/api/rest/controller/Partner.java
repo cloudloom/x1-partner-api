@@ -52,4 +52,5 @@ public interface Partner {
     public ResponseEntity<Map<String, String>> getEmployeesUserNameByPartnerUIDS(HttpServletRequest request, List<String> partnerUIDS);
     public ResponseEntity<DefaultEmployeeResource> getEmployee(HttpServletRequest request, String partnerUid, String roleUid);
     public ResponseEntity<DefaultNotifyTo> notifyToByUsername(HttpServletRequest request, String userName);
+    public ResponseEntity<Boolean> isUserAnEmployee(HttpServletRequest request, String userName);
 }

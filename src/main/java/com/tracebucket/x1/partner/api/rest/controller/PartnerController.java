@@ -113,6 +113,17 @@ public class PartnerController implements Partner {
         }*/
     }
 
+    @Override
+    @RequestMapping(value = "/employee/user/{userName}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> isUserAnEmployee(HttpServletRequest request, @PathVariable(value = "userName") String userName) {
+        String tenantId = request.getHeader("tenant_id");
+        if (tenantId != null) {
+              return new ResponseEntity<Boolean>(partnerService.isUserAnEmployee(tenantId, userName), HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
     @RequestMapping(value = "/partners", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Set<DefaultPartnerResource>> findAll(HttpServletRequest request) {
         String tenantId = request.getHeader("tenant_id");

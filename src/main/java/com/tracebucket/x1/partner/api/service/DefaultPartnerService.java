@@ -58,6 +58,7 @@ public interface DefaultPartnerService {
     public List<DefaultPartner> getEmployeesWhoAreNotUsers(String tenantId);
     public Set<DefaultPartner> addUsername(String tenantId, List<DefaultPartnerUsername> userNames);
     public List<DefaultPartner> getEmployeesByLoginNames(String tenantId, List<String> userNames);
+    public Boolean isUserAnEmployee(String tenantId, String userName);
     public Map<String, String> getEmployeesUserNameByPartnerUIDS(String tenantId, List<String> partnerUIDS);
     public DefaultNotifyTo notifyToByUsername(String tenantId, String userName);
 
