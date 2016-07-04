@@ -7,6 +7,7 @@ import java.util.Map;
  * Created by sadath on 27-Jul-2015.
  */
 public class DefaultPartnerUsername {
+    //keys:partnerUid & roleUid & userName
     private Map<String, String> userName = new HashMap<String, String>();
 
     public Map<String, String> getUserName() {

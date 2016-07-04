@@ -13,6 +13,7 @@ import java.util.Set;
 
 /**
  * Created by sadath on 05-Aug-14.
+ * JPA Entity For PartnerRole
  */
 @Entity
 @Table(name = "PARTNER_ROLE")
@@ -31,21 +32,37 @@ public abstract class DefaultPartnerRole extends BaseEntity implements PartnerRo
 
     public abstract String simpleName();
 
+    /**
+     * Get Name
+     * @return
+     */
     @Override
     public String getName() {
         return name;
     }
 
+    /**
+     * Set Name
+     * @param name
+     */
     @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Get Addresses
+     * @return
+     */
     @Override
     public Set<DefaultAddress> getAddresses() {
         return addresses;
     }
 
+    /**
+     * Set Addresses
+     * @param addresses
+     */
     @Override
     public void setAddresses(Set<DefaultAddress> addresses) {
         if(addresses != null) {
